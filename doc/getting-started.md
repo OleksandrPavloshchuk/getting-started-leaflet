@@ -1,7 +1,7 @@
-# Creating the simplest test application for Google Maps
+# Creating the simplest test application for Leaflet
 
 ## Purpose
-To understand, how does GoogleMaps widget works.
+To understand, how does Leaflet widget works.
 
 ## Requirements
 Use Node version ^22.12. Install command:
