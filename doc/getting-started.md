@@ -11,14 +11,20 @@ nvm install 22.12.0
 ```
 
 ## Steps
-Create project template using Reat + Vite: 
+Create frontend project template using Reat + Vite: 
 ```shell
 
 npm create vite@latest getting-started-google-maps -- --template react-ts
 ```
 
-Run application:
+Run frontend application:
 ```shell
 
 npm run dev
+```
+
+Run backend application:
+```shell
+
+npx ts-node server.ts
 ```
