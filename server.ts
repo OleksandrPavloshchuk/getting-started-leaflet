@@ -23,7 +23,7 @@ const SQL = "SELECT " +
     " name ILIKE CONCAT('%',CAST($2 as text),'%') " +
     " AND " +
     " ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') " +
-    " ORDER BY name";
+    " ORDER BY city, name";
 
 // Middleware
 app.use(cors());

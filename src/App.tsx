@@ -3,6 +3,7 @@ import {type Location} from "./data/locations.ts";
 import {LocationsDropdown} from "./components/LocationsDropdown.tsx";
 import {MapView} from "./components/MapView.tsx";
 import {Paper, Stack} from "@mantine/core";
+import {getCountryData} from "./data/flags.ts";
 
 export default function App() {
     const [selected, setSelected] = useState<Location | undefined>(undefined);
@@ -15,9 +16,16 @@ export default function App() {
         console.log('Selected location', selected);
     };
 
-    const handleSelect = (location: Location|undefined) => {
+    const handleSelect = (location: Location | undefined) => {
         setSelected(location);
     }
+
+    const getLocationText = (loc: Location) =>
+        <strong>
+            <span style={{margin: 6}}>{getCountryData(loc.country)?.flag}</span>
+            <span style={{margin: 6}}>{loc.city}</span>-
+            <span style={{margin: 6}}>{loc.name}</span>
+        </strong>
 
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
@@ -26,11 +34,11 @@ export default function App() {
                     <LocationsDropdown onSelect={handleSelect}/>
                     {
                         selected &&
-                        <div><strong>{selected.name}</strong></div>
+                        <div><strong>{getLocationText(selected)}</strong></div>
                     }
                     <button onClick={handleSubmit}>Submit</button>
                     <div>
-                        <MapView selected={selected} />
+                        <MapView selected={selected}/>
                     </div>
                 </Stack>
             </Paper>

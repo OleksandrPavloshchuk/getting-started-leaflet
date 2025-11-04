@@ -1,6 +1,7 @@
 import {useMemo, useState} from "react";
 import {Combobox, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
+import {getCountryData} from "../data/flags.ts";
 
 const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
@@ -17,7 +18,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
 
     useMemo(() => {
             const normalized = query?.toLowerCase().trim();
-            if (!normalized || !normalized.includes(", ")) {
+            if (!normalized || !normalized.includes(",")) {
                 return [];
             }
 
@@ -66,7 +67,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             const selected = locations.find((item) => item.id === key);
             onSelect(selected);
             combobox.closeDropdown();
-            setQuery(selected?.name ?? "");
+            setQuery(selected ? selected.city + ", " + selected.name : "");
         }
     }
 
@@ -107,7 +108,9 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                                 (locations
                                         .map((item) => (
                                             <Combobox.Option value={item.id} key={item.id}>
-                                                {item.country.toUpperCase()}: {item.city} - {item.name}
+                                                <span style={{margin: 6}}>{getCountryData(item.country)?.flag}</span>
+                                                <span style={{width: 300, margin: 6}}>{item.city}</span>-
+                                                <span style={{margin: 6}}>{item.name}</span>
                                             </Combobox.Option>
                                         ))
                                 ) : (
