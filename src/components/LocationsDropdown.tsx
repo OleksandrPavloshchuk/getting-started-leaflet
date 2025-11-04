@@ -2,22 +2,56 @@ import {useMemo, useState} from "react";
 import {Combobox, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
 
+const ENDPOINT_URI = "http://localhost:4000/api/locations";
+
 type Props = {
-    locations: Location[],
     onSelect: (loc: Location | undefined) => void
 }
 
-export const LocationsDropdown: React.FC<Props> = ({locations, onSelect}) => {
+export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const combobox = useCombobox();
     const [query, setQuery] = useState('');
-    const filtered = useMemo(() => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [locations, setLocations] = useState<Location[]|undefined>([]);
+
+    useMemo(() => {
             const normalized = query?.toLowerCase().trim();
-            if (!normalized) {
-                return locations;
+            if (!normalized || !normalized.includes(", ")) {
+                return [];
             }
-            return locations.filter((loc)=> loc.name.toLowerCase().includes(normalized));
+
+            const controller = new AbortController(); // для можливості скасувати запит
+            const fetchData = async () => {
+                setLoading(true);
+                setError(null);
+
+                try {
+                    const res = await fetch(
+                        `${ENDPOINT_URI}?q=${encodeURIComponent(query)}`,
+                        {signal: controller.signal}
+                    );
+
+                    if (!res.ok) {
+                        throw `HTTP ${res.status}`;
+                    }
+
+                    const data: Location[] = await res.json();
+                    setLocations(data);
+                } catch (e) {
+                    setError(`Retrieve error: ${e}`);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchData();
+
+            // Скасувати запит, якщо query змінився швидко
+            return () => controller.abort();
+
         },
-        [query, locations]
+        [query]
     );
 
     // Simple filter by name:
@@ -28,50 +62,61 @@ export const LocationsDropdown: React.FC<Props> = ({locations, onSelect}) => {
     };
 
     const handleSelect = (key: string) => {
-        const selected = locations.find((item) => item.id === key);
-        onSelect(selected);
-        combobox.closeDropdown();
-        setQuery(selected?.name ?? "");
+        if (locations) {
+            const selected = locations.find((item) => item.id === key);
+            onSelect(selected);
+            combobox.closeDropdown();
+            setQuery(selected?.name ?? "");
+        }
     }
 
     return (
-        <Combobox
-            withinPortal={false}
-            zIndex={9999}
-            store={combobox}
-            onOptionSubmit={(v) => handleSelect(v)}
-        >
-            <Combobox.Target>
-                <input
-                    type="text"
-                    placeholder="Select location"
-                    value={query ?? ''}
-                    onChange={(event) =>
-                        handleChange(event.currentTarget.value)
-                    }
+        <>
+            {loading && <p>Loading...</p>}
+            {error && <p style={{color: "red"}}>Error: {error}</p>}
+            <Combobox
+                withinPortal={false}
+                zIndex={9999}
+                store={combobox}
+                onOptionSubmit={(v) => handleSelect(v)}
+            >
+                <Combobox.Target>
+                    <input
+                        type="text"
+                        placeholder="Type city, hotel name — e.g. 'London, Hilton'. You may skip hotel name. Comma is mandatory."
+                        value={query ?? ''}
+                        onChange={(event) =>
+                            handleChange(event.currentTarget.value)
+                        }
+                        style={{
+                            padding: '6px',
+                            borderRadius: '6px',
+                            border: '1px solid #ccc',
+                        }}
+                    />
+                </Combobox.Target>
+                <Combobox.Dropdown
                     style={{
-                        padding: '6px',
-                        borderRadius: '6px',
-                        border: '1px solid #ccc',
+                        maxHeight: '200px',
+                        overflowY: 'auto',
                     }}
-                />
-            </Combobox.Target>
-            <Combobox.Dropdown>
-                <Combobox.Options>
-                    {
-                        filtered && filtered.length > 0 ?
-                            (filtered
-                            .map((item) => (
-                                <Combobox.Option value={item.id} key={item.id}>
-                                    {item.name}
-                                </Combobox.Option>
-                            ))
-                            ) : (
-                                <Combobox.Empty>Nothing is found</Combobox.Empty>
-                            )
-                    }
-                </Combobox.Options>
-            </Combobox.Dropdown>
-        </Combobox>
+                >
+                    <Combobox.Options>
+                        {
+                            locations && locations.length > 0 ?
+                                (locations
+                                        .map((item) => (
+                                            <Combobox.Option value={item.id} key={item.id}>
+                                                {item.country.toUpperCase()}: {item.city} - {item.name}
+                                            </Combobox.Option>
+                                        ))
+                                ) : (
+                                    <Combobox.Empty>Nothing is found</Combobox.Empty>
+                                )
+                        }
+                    </Combobox.Options>
+                </Combobox.Dropdown>
+            </Combobox>
+        </>
     );
 }
