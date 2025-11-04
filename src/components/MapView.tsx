@@ -11,7 +11,7 @@ const markerIcon = new L.Icon({
     iconAnchor: [12, 41]
 });
 
-type Props = {selected : Location | null};
+type Props = {selected : Location | undefined};
 
 // Helper component for map recentering
 const Recenter : React.FC<{lat: number, lng:number}> = ({lat, lng}) => {
