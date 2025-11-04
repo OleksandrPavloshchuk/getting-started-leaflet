@@ -29,7 +29,7 @@ export const MapView : React.FC<Props> = ({selected}) => {
         <MapContainer
             center = {defaultCenter as [number, number]}
             zoom = {6}
-            style={{ width: 600, height: 400, borderRadius: 6 }}
+            style={{ width: 800, height: 640, borderRadius: 6 }}
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
