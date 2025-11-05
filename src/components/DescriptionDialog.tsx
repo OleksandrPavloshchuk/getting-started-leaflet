@@ -31,6 +31,7 @@ export const DescriptionDialog: React.FC<Props> = ({location}) => {
           Show description
       </span>
             <Modal
+                trapFocus={false}
                 zIndex={9999}
                 title={location.name}
                 opened={opened}

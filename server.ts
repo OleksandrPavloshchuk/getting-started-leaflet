@@ -17,7 +17,7 @@ const pool = new Pool({
 const SQL = "SELECT " +
     " id, name, longitude as lng, latitude as lat, " +
     " ext -> 'hotel' ->> 'city' city, " +
-    " ext -> 'hotel' ->> 'country' country, " +
+    " UPPER(ext -> 'hotel' ->> 'country') country, " +
     " ext -> 'hotel' ->> 'thumbnail' thumbnail, " +
     " ext -> 'hotel' ->> 'address' address, " +
     " ext -> 'hotel' ->> 'hotel_description' description, " +
@@ -27,7 +27,7 @@ const SQL = "SELECT " +
     " name ILIKE CONCAT('%',CAST($2 as text),'%') " +
     " AND " +
     " ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') " +
-    " ORDER BY city, name";
+    " ORDER BY country, city, name";
 
 // Middleware
 app.use(cors());

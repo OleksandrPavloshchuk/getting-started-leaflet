@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
-import {getCountryData} from "../data/flags.ts";
+import {LocationInfo} from "./LocationInfo.tsx";
 
 const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
@@ -100,14 +100,10 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                     <Combobox.Options>
                         {
                             locations && locations.length > 0 ?
-                                (locations
-                                        .map((item) => (
-                                            <Combobox.Option value={item.id} key={item.id}>
-                                                <span style={{margin: 6}}>{getCountryData(item.country)?.flag}</span>
-                                                <span style={{width: 300, margin: 6}}>{item.city}</span>-
-                                                <span style={{margin: 6}}>{item.name}</span>
-                                            </Combobox.Option>
-                                        ))
+                                (locations.map((item) =>
+                                        <Combobox.Option value={item.id} key={item.id}>
+                                            <LocationInfo location={item}/>
+                                        </Combobox.Option>)
                                 ) : (
                                     <Combobox.Empty>Nothing is found</Combobox.Empty>
                                 )

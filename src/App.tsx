@@ -2,8 +2,8 @@ import {useState} from "react";
 import {type Location} from "./data/locations.ts";
 import {LocationsDropdown} from "./components/LocationsDropdown.tsx";
 import {MapView} from "./components/MapView.tsx";
-import {Paper, Stack} from "@mantine/core";
-import {getCountryData} from "./data/flags.ts";
+import {Button, Paper, Stack} from "@mantine/core";
+import {LocationInfo} from "./components/LocationInfo.tsx";
 
 export default function App() {
     const [selected, setSelected] = useState<Location | undefined>(undefined);
@@ -22,9 +22,7 @@ export default function App() {
 
     const getLocationText = (loc: Location) =>
         <strong>
-            <span style={{margin: 6}}>{getCountryData(loc.country)?.flag}</span>
-            <span style={{margin: 6}}>{loc.city}</span>-
-            <span style={{margin: 6}}>{loc.name}</span>
+            <LocationInfo location={loc}/>
         </strong>
 
     return (
@@ -36,7 +34,7 @@ export default function App() {
                         selected &&
                         <div><strong>{getLocationText(selected)}</strong></div>
                     }
-                    <button onClick={handleSubmit}>Submit</button>
+                    <Button onClick={handleSubmit}>Submit</Button>
                     <div>
                         <MapView selected={selected}/>
                     </div>

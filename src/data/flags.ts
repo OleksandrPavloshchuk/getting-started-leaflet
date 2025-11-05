@@ -1,5 +1,5 @@
-export const getCountryData = (iso: string) =>
-    FLAGS.find( (item) => item.iso==iso.trim().toUpperCase());
+export const getCountryData = (iso: string|undefined) =>
+    FLAGS.find( (item) => item.iso==iso?.trim().toUpperCase());
 
 const FLAGS = [
     {

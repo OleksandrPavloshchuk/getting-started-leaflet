@@ -25,7 +25,7 @@ const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
     return null;
 };
 
-const getStarsString= (val:number) => {
+const getStarsString = (val: number) => {
     switch (Math.ceil(val)) {
         case 0:
             return "";
@@ -66,16 +66,16 @@ export const MapView: React.FC<Props> = ({selected}) => {
                                 {selected.thumbnail &&
                                     <>
                                         <Image src={selected.thumbnail}
-                                             width={200} height={150} radius="md" />
+                                               width={200} height={150} radius="md"/>
                                         <br/>
                                     </>
                                 }
                                 {selected.address &&
                                     <>{selected.address}<br/></>
                                 }
-                                {getStarsString(selected.stars)}<br/>
+                                {selected.stars >= 1 && <>{getStarsString(selected.stars)}<br/></>}
                                 {selected.description &&
-                                    <DescriptionDialog location={selected} />
+                                    <DescriptionDialog location={selected}/>
                                 }
                             </p>
                         </Popup>
