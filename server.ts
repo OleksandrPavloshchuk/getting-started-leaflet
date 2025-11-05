@@ -17,7 +17,9 @@ const pool = new Pool({
 const SQL = "SELECT " +
     " id, name, longitude as lng, latitude as lat, " +
     " ext -> 'hotel' ->> 'city' city, " +
-    " ext -> 'hotel' ->> 'country' country " +
+    " ext -> 'hotel' ->> 'country' country, " +
+    " ext -> 'hotel' ->> 'thumbnail' thumbnail, " +
+    " ext -> 'hotel' ->> 'address' address" +
     " FROM nuitee_hotel " +
     " WHERE " +
     " name ILIKE CONCAT('%',CAST($2 as text),'%') " +
