@@ -76,7 +76,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             {error && <p style={{color: "red"}}>Error: {error}</p>}
             <Combobox
                 withinPortal={false}
-                zIndex={9999}
+                zIndex={8000}
                 store={combobox}
                 onOptionSubmit={(v) => handleSelect(v)}
             >

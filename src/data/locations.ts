@@ -6,5 +6,7 @@ export type Location = {
     lat: number;
     lng: number;
     thumbnail: string;
-    address: string;
+    address: string,
+    description: string;
+    stars: number;
 };

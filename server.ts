@@ -19,7 +19,9 @@ const SQL = "SELECT " +
     " ext -> 'hotel' ->> 'city' city, " +
     " ext -> 'hotel' ->> 'country' country, " +
     " ext -> 'hotel' ->> 'thumbnail' thumbnail, " +
-    " ext -> 'hotel' ->> 'address' address" +
+    " ext -> 'hotel' ->> 'address' address, " +
+    " ext -> 'hotel' ->> 'hotel_description' description, " +
+    " CAST (ext -> 'hotel' ->> 'stars' as decimal) stars " +
     " FROM nuitee_hotel " +
     " WHERE " +
     " name ILIKE CONCAT('%',CAST($2 as text),'%') " +

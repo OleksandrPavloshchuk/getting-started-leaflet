@@ -3,6 +3,9 @@ import {MapContainer, TileLayer, Marker, Popup, useMap} from "react-leaflet";
 import type {Location} from "../data/locations.ts";
 import L from "leaflet";
 
+import {DescriptionDialog} from "./DescriptionDialog.tsx";
+import {Image} from "@mantine/core";
+
 // Simple marker
 const markerIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -21,6 +24,25 @@ const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
     }, [lat, lng, map]);
     return null;
 };
+
+const getStarsString= (val:number) => {
+    switch (Math.ceil(val)) {
+        case 0:
+            return "";
+        case 1:
+            return "⭐️";
+        case 2:
+            return "⭐️⭐️";
+        case 3:
+            return "⭐️⭐️⭐️";
+        case 4:
+            return "⭐️⭐️⭐️⭐️";
+        case 5:
+            return "⭐️⭐️⭐️⭐️⭐️";
+        default:
+            return "⭐️⭐️⭐️⭐️⭐️+";
+    }
+}
 
 export const MapView: React.FC<Props> = ({selected}) => {
     const defaultCenter = [49.0, 31.0];
@@ -43,13 +65,17 @@ export const MapView: React.FC<Props> = ({selected}) => {
                                 <strong>{selected.name}</strong><br/>
                                 {selected.thumbnail &&
                                     <>
-                                        <img src={selected.thumbnail}
-                                             width={200} height={150}/>
+                                        <Image src={selected.thumbnail}
+                                             width={200} height={150} radius="md" />
                                         <br/>
                                     </>
                                 }
                                 {selected.address &&
-                                    <span>{selected.address}</span>
+                                    <>{selected.address}<br/></>
+                                }
+                                {getStarsString(selected.stars)}<br/>
+                                {selected.description &&
+                                    <DescriptionDialog location={selected} />
                                 }
                             </p>
                         </Popup>
