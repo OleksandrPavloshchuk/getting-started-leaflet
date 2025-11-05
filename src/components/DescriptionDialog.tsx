@@ -37,6 +37,9 @@ export const DescriptionDialog: React.FC<Props> = ({location}) => {
                 onClose={() => setOpened(false)}
                 withinPortal={true}
                 styles={{
+                    root: {
+                        borderRadius: 6
+                    },
                     title: {
                         fontWeight: 'bold'
                     },

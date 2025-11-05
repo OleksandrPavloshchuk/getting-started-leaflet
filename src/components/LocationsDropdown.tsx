@@ -1,5 +1,5 @@
 import {useMemo, useState} from "react";
-import {Combobox, useCombobox} from "@mantine/core";
+import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
 import {getCountryData} from "../data/flags.ts";
 
@@ -14,7 +14,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [locations, setLocations] = useState<Location[]|undefined>([]);
+    const [locations, setLocations] = useState<Location[] | undefined>([]);
 
     useMemo(() => {
             const normalized = query?.toLowerCase().trim();
@@ -81,18 +81,14 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                 onOptionSubmit={(v) => handleSelect(v)}
             >
                 <Combobox.Target>
-                    <input
-                        type="text"
+                    <TextInput
                         placeholder="Type city, hotel name — e.g. 'London, Hilton'. You may skip hotel name. Comma is mandatory."
-                        value={query ?? ''}
                         onChange={(event) =>
                             handleChange(event.currentTarget.value)
                         }
-                        style={{
-                            padding: '6px',
-                            borderRadius: '6px',
-                            border: '1px solid #ccc',
-                        }}
+                        onFocus={() => combobox.openDropdown()}
+                        onClick={() => combobox.openDropdown()}
+                        onBlur={() => combobox.closeDropdown()}
                     />
                 </Combobox.Target>
                 <Combobox.Dropdown
