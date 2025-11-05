@@ -67,7 +67,6 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             const selected = locations.find((item) => item.id === key);
             onSelect(selected);
             combobox.closeDropdown();
-            setQuery(selected ? selected.city + ", " + selected.name : "");
         }
     }
 
