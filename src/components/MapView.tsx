@@ -40,12 +40,17 @@ export const MapView: React.FC<Props> = ({selected}) => {
                     <Marker position={[selected.lat, selected.lng]} icon={markerIcon}>
                         <Popup>
                             <p style={{textAlign: 'center'}}>
-                                <strong>{selected.name}</strong>
+                                <strong>{selected.name}</strong><br/>
                                 {selected.thumbnail &&
-                                    <div><img src={selected.thumbnail}
-                                              width={200} height={150} /></div>
+                                    <>
+                                        <img src={selected.thumbnail}
+                                             width={200} height={150}/>
+                                        <br/>
+                                    </>
                                 }
-                                <span>{selected.address}</span>
+                                {selected.address &&
+                                    <span>{selected.address}</span>
+                                }
                             </p>
                         </Popup>
                     </Marker>

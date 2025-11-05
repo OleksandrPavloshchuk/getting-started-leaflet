@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as cors from "cors";
-import { Pool } from "pg";
+import {Pool} from "pg";
 
 const app = express();
 const port = 4000;
@@ -40,18 +40,18 @@ app.get("/api/locations", async (req, res) => {
     }
 
     let [cityLike, nameLike] = q.split(/,/);
-    cityLike = cityLike ? cityLike.replace("_"," ") : "";
-    nameLike = nameLike ? nameLike.replace("_"," ") : "";
+    cityLike = cityLike ? cityLike.replace("_", " ") : "";
+    nameLike = nameLike ? nameLike.replace("_", " ") : "";
 
     try {
         const result = await pool.query(SQL,
-            [`%${cityLike}%`,`%${nameLike}%`]
+            [cityLike, nameLike]
         );
 
         res.json(result.rows);
     } catch (err) {
         console.error("Database error:", err);
-        res.status(500).json({ error: "Database query failed" });
+        res.status(500).json({error: "Database query failed"});
     }
 });
 
