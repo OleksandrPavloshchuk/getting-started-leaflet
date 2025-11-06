@@ -33,7 +33,7 @@ const SQL = "SELECT " +
 app.use(cors());
 app.use(express.json());
 
-// Ендпойнт для пошуку
+// Endpoint:
 app.get("/api/locations", async (req, res) => {
     const q = (req.query.q as string)?.trim() ?? "";
 
@@ -45,16 +45,14 @@ app.get("/api/locations", async (req, res) => {
     cityLike = cityLike ? cityLike.replace("_", " ") : "";
     nameLike = nameLike ? nameLike.replace("_", " ") : "";
 
-    try {
-        const result = await pool.query(SQL,
-            [cityLike, nameLike]
-        );
-
-        res.json(result.rows);
-    } catch (err) {
-        console.error("Database error:", err);
-        res.status(500).json({error: "Database query failed"});
-    }
+    const start = performance.now();
+    pool.query(SQL,  [cityLike, nameLike])
+        .then( (result) => res.json(result.rows))
+        .catch((err) => {
+            console.error("Database error:", err);
+            res.status(500).json({error: "Database query failed"});
+        })
+        .finally(()=> console.log(`Executed in ${performance.now() - start} ms`));
 });
 
 app.listen(port, () => {
