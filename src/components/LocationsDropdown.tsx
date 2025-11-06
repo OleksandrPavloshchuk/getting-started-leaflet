@@ -1,8 +1,9 @@
-import {useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {retrieveLocations} from "../services/retrieveLocations.ts";
+import {useDebouncedValue} from "@mantine/hooks";
 
 // const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
@@ -13,12 +14,17 @@ type Props = {
 export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const combobox = useCombobox();
     const [query, setQuery] = useState('');
+    const [debouncedQuery] = useDebouncedValue(query, 300);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [locations, setLocations] = useState<Location[] | undefined>([]);
 
     useMemo(
-        () => retrieveLocations(query, setLoading, setError, setLocations),
+        () => {
+            if (debouncedQuery.length >= 3) {
+                retrieveLocations(query, setLoading, setError, setLocations);
+            }
+        },
         [query]
     );
 
