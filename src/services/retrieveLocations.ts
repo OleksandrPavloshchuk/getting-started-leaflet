@@ -10,40 +10,31 @@ export const retrieveLocations = (
 ) => {
     const normalized = query?.toLowerCase().trim();
     if (!normalized) {
-        return [];
+        setLocations([]);
+        return;
     }
     const [city, name] = normalized.split(/,/);
     if (!city || city.trim().length < 2 || !name || name === "") {
-        return [];
+        setLocations([]);
+        return;
     }
 
-    const controller = new AbortController(); // для можливості скасувати запит
-    const fetchData = async () => {
-        setLoading(true);
-        setError(null);
+    // For request cancellation
+    const controller = new AbortController();
 
-        try {
-            const res = await fetch(
-                `${ENDPOINT_URI}?q=${encodeURIComponent(query)}`,
-                {signal: controller.signal}
-            );
-
+    fetch(`${ENDPOINT_URI}?q=${encodeURIComponent(query)}`,
+        {signal: controller.signal})
+        .then((res) => {
             if (!res.ok) {
-                throw `HTTP ${res.status}`;
+                throw new Error(`HTTP ${res.status}`);
             }
+            return res.json();
+        })
+        .then((locations: Location[]) => setLocations(locations))
+        .catch((e: Error) => setError(`Retrieve error: ${e}`))
+        .finally(() => setLoading(false));
 
-            const data: Location[] = await res.json();
-            setLocations(data);
-        } catch (e) {
-            setError(`Retrieve error: ${e}`);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    fetchData();
-
-    // Скасувати запит, якщо query змінився швидко
+    // Cancel too fast request
     return () => controller.abort();
 
 }
