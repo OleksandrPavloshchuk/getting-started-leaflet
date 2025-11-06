@@ -18,7 +18,11 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
 
     useMemo(() => {
             const normalized = query?.toLowerCase().trim();
-            if (!normalized || !normalized.includes(",")) {
+            if (!normalized) {
+                return [];
+            }
+            const [city, name] = normalized.split(/,/);
+            if (!city || city.trim().length < 2 || !name || name==="") {
                 return [];
             }
 
@@ -82,7 +86,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             >
                 <Combobox.Target>
                     <TextInput
-                        placeholder="Type city, hotel name — e.g. 'London, Hilton'. You may skip hotel name. Comma is mandatory."
+                        placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
                         onChange={(event) =>
                             handleChange(event.currentTarget.value)
                         }
