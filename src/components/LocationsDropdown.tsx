@@ -5,8 +5,6 @@ import {LocationInfo} from "./LocationInfo.tsx";
 import {retrieveLocations} from "../services/retrieveLocations.ts";
 import {useDebouncedValue} from "@mantine/hooks";
 
-// const ENDPOINT_URI = "http://localhost:4000/api/locations";
-
 type Props = {
     onSelect: (loc: Location | undefined) => void
 }

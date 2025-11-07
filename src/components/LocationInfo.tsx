@@ -6,9 +6,9 @@ type Props = { location: Location | undefined };
 
 export const LocationInfo: React.FC<Props> = ({location}) =>
     location
-        ? <>
+        ? <div style={{display: "flex"}}>
             <abbr title={getCountryData(location.country)?.name}>{getCountryData(location.country)?.flag}</abbr>&nbsp;
-            {location?.city}&nbsp;-&nbsp;
-            {location?.name}
-        </>
+            {location.city}&nbsp;-&nbsp;
+            {location.name}&nbsp;<span style={{marginLeft: "auto"}}>{location.type}</span>
+        </div>
         : <div/>;

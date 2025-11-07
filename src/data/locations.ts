@@ -9,4 +9,5 @@ export type Location = {
     address: string,
     description: string;
     stars: number;
+    type: string;
 };

@@ -21,6 +21,7 @@ const SQL = "SELECT " +
     " ext -> 'hotel' ->> 'thumbnail' thumbnail, " +
     " ext -> 'hotel' ->> 'address' address, " +
     " ext -> 'hotel' ->> 'hotel_description' description, " +
+    " ext -> 'details' ->> 'hotel_type' type, " +
     " CAST (ext -> 'hotel' ->> 'stars' as decimal) stars " +
     " FROM nuitee_hotel " +
     " WHERE " +
