@@ -45,14 +45,19 @@ app.get("/api/locations", async (req, res) => {
     cityLike = cityLike ? cityLike.replace("_", " ") : "";
     nameLike = nameLike ? nameLike.replace("_", " ") : "";
 
+    let count = -1;
+
     const start = performance.now();
     pool.query(SQL,  [cityLike, nameLike])
-        .then( (result) => res.json(result.rows))
+        .then( (result) => {
+            count = result.rows.length;
+            return res.json(result.rows);
+        })
         .catch((err) => {
             console.error("Database error:", err);
             res.status(500).json({error: "Database query failed"});
         })
-        .finally(()=> console.log(`Executed in ${performance.now() - start} ms`));
+        .finally(()=> console.log(`Executed in ${performance.now() - start} ms, Rows: ${count}`));
 });
 
 app.listen(port, () => {
