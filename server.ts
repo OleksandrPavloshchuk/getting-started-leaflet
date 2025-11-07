@@ -5,7 +5,7 @@ import {Pool} from "pg";
 const app = express();
 const port = 4000;
 
-// Підключення до PostgreSQL
+// PostgreSQL connection
 const pool = new Pool({
     host: "localhost",
     port: 5432,
@@ -39,7 +39,7 @@ app.get("/api/locations", async (req, res) => {
     const q = (req.query.q as string)?.trim() ?? "";
 
     if (!q) {
-        return res.json([]); // мінімум два символи
+        return res.json([]);
     }
 
     let [cityLike, nameLike] = q.split(/,/);
