@@ -20,11 +20,6 @@ export default function App() {
         setSelected(location);
     }
 
-    const getLocationText = (loc: Location) =>
-        <strong>
-            <LocationInfo location={loc}/>
-        </strong>
-
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
             <Paper withBorder radius="md" p="lg">
@@ -32,7 +27,7 @@ export default function App() {
                     <LocationsDropdown onSelect={handleSelect}/>
                     {
                         selected &&
-                        <div><strong>{getLocationText(selected)}</strong></div>
+                        <div><strong><LocationInfo location={selected} /></strong></div>
                     }
                     <Button onClick={handleSubmit}>Submit</Button>
                     <div>
