@@ -22,6 +22,7 @@ export const retrieveLocations = (
     // For request cancellation
     const controller = new AbortController();
 
+    setError(null);
     setLoading(true);
     fetch(`${ENDPOINT_URI}?q=${encodeURIComponent(query)}`,
         {signal: controller.signal})
