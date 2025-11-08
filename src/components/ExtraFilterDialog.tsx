@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Modal} from "@mantine/core";
+import {ActionIcon, Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
 import {type Country} from "../data/countries.ts";
 import {IconCancel, IconCheck, IconFilterSearch} from "@tabler/icons-react";
@@ -41,16 +41,17 @@ export const ExtraFilterDialog: React.FC<Props> = (
 
     return (
         <>
-        <span
-            title="Extra filter"
-            onClick={() => setOpened(true)}
-            style={{
-                cursor: 'pointer',
-                padding: 9,
-                borderRadius: 6,
-                backgroundColor: country || argHotelTypeIds.length > 0 ? 'lightgrey' : 'white'
-            }}
-        ><IconFilterSearch size={20} color={"var(--mantine-color-blue-filled)"}/></span>
+            <ActionIcon
+                onClick={() => setOpened(true)}
+                variant="white"
+                size="lg"
+                style={{
+                    backgroundColor: country || argHotelTypeIds.length > 0 ? 'lightgrey' : 'white'
+                }}
+                title="Extra Filter">
+                <IconFilterSearch size={20}/>
+            </ActionIcon>
+
             <Modal
                 title="Extra Filter"
                 trapFocus={false}
@@ -89,18 +90,22 @@ export const ExtraFilterDialog: React.FC<Props> = (
                             <CountriesDropdown argCountry={country} returnCountry={setCountry}/>
                         </td>
                         <td>
-                            <IconCheck
-                                style={{cursor: 'pointer'}}
-                                title="Set extra filter"
+                            <ActionIcon
                                 onClick={handleSet}
-                                size={20} color={"var(--mantine-color-blue-filled)"}/>
+                                variant="white"
+                                size="lg"
+                                title="Set Extra Filter">
+                                <IconCheck size={20}/>
+                            </ActionIcon>
                         </td>
                         <td>
-                            <IconCancel
-                                style={{cursor: 'pointer'}}
-                                title="Clear extra filter"
-                                onClick={handleClear} size={20}
-                                color={"var(--mantine-color-blue-filled)"}/>
+                            <ActionIcon
+                                onClick={handleClear}
+                                variant="white"
+                                size="lg"
+                                title="Clear Extra Filter">
+                                <IconCancel size={20}/>
+                            </ActionIcon>
                         </td>
                     </tr>
                     <tr>
