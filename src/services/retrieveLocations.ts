@@ -4,6 +4,8 @@ const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
 export const retrieveLocations = (
     query: string,
+    countryIsoCode: string | undefined,
+    hotelTypesIds: string[],
     setLoading: (loading: boolean) => void,
     setError: (error: string | null) => void,
     setLocations: (locations: Location[]) => void
@@ -24,7 +26,10 @@ export const retrieveLocations = (
 
     setError(null);
     setLoading(true);
-    fetch(`${ENDPOINT_URI}?q=${encodeURIComponent(query)}`,
+    const types = hotelTypesIds.join(",");
+    const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query)}&c=${countryIsoCode}&t=${encodeURIComponent(types)}`;
+    console.log('TRACE', 'types', types, 'uri', uri);
+    fetch(uri,
         {signal: controller.signal})
         .then((res) => {
             if (!res.ok) {

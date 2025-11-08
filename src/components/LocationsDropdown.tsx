@@ -24,7 +24,13 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     useMemo(
         () => {
             if (debouncedQuery.length >= 3) {
-                retrieveLocations(query, setLoading, setError, setLocations);
+                retrieveLocations(
+                    query,
+                    country?.iso ? country?.iso : '',
+                    hotelTypeIds,
+                    setLoading,
+                    setError,
+                    setLocations);
             }
         },
         [query]
