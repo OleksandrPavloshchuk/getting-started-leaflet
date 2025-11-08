@@ -28,7 +28,6 @@ export const retrieveLocations = (
     setLoading(true);
     const types = hotelTypesIds.join(",");
     const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query)}&c=${countryIsoCode}&t=${encodeURIComponent(types)}`;
-    console.log('TRACE', 'types', types, 'uri', uri);
     fetch(uri,
         {signal: controller.signal})
         .then((res) => {
