@@ -1,5 +1,5 @@
 import type {Location} from "../data/locations.ts";
-import {getCountryData} from "../data/flags.ts";
+import {getCountryData} from "../data/countries.ts";
 import React from "react";
 
 type Props = { location: Location | undefined };

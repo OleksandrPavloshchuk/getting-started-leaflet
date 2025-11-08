@@ -32,6 +32,9 @@ npx ts-node server.ts
 ## Additional indexes on table NUITEE_HOTEL
 
 ```sql
+grant create on database nb to nb;
+CREATE EXTENSION IF NOT EXISTS pg_trgm with schema public;
+       
 create index idx_nuitee_hotel_city
     on public.nuitee_hotel (((ext -> 'hotel'::text) ->> 'city'::text));
 create index idx_nuitee_hotel_city_trgm

@@ -1,11 +1,11 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {retrieveLocations} from "../services/retrieveLocations.ts";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
-import type {Country} from "../data/flags.ts";
+import type {Country} from "../data/countries.ts";
 
 type Props = {
     onSelect: (loc: Location | undefined) => void
@@ -19,6 +19,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const [error, setError] = useState<string | null>(null);
     const [locations, setLocations] = useState<Location[] | undefined>([]);
     const [country, setCountry] = useState<Country | undefined>(undefined);
+    const [hotelTypeIds, setHotelTypeIds] = useState<string[]>([]);
 
     useMemo(
         () => {
@@ -27,14 +28,6 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             }
         },
         [query]
-    );
-
-    useEffect(() => {
-            if (country) {
-                console.log("TRACE", country);
-            }
-        },
-        [country]
     );
 
     // Simple filter by name:
@@ -79,7 +72,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                             </Combobox.Target>
                             <Combobox.Dropdown
                                 style={{
-                                    maxHeight: '200px',
+                                    maxHeight: '300px',
                                     overflowY: 'auto',
                                 }}
                             >
@@ -99,7 +92,12 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                         </Combobox>
                     </td>
                     <td>
-                        <ExtraFilterDialog returnCountry={setCountry} argCountry={country}/>
+                        <ExtraFilterDialog
+                            argCountry={country}
+                            returnCountry={setCountry}
+                            argHotelTypeIds={hotelTypeIds}
+                            returnHotelTypeIds={setHotelTypeIds}
+                        />
                     </td>
                 </tr>
                 </tbody>

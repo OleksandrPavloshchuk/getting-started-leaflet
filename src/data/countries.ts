@@ -1,5 +1,5 @@
 export const getCountryData = (iso: string|undefined) =>
-    FLAGS.find( (item) => item.iso==iso?.trim().toUpperCase());
+    COUNTRIES.find( (item) => item.iso==iso?.trim().toUpperCase());
 
 export type Country = {
     iso: string,
@@ -8,7 +8,7 @@ export type Country = {
     flag: string
 }
 
-export const FLAGS: Country[] = [
+export const COUNTRIES: Country[] = [
     {
         "iso": "AD",
         "name": "Andorra",

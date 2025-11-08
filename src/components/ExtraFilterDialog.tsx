@@ -1,35 +1,42 @@
 import {useEffect, useState} from "react";
 import {Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
-import {type Country} from "../data/flags.ts";
+import {type Country} from "../data/countries.ts";
 import {IconCancel, IconCheck, IconFilterSearch} from "@tabler/icons-react";
+import {TypesSelector} from "./TypesSelector.tsx";
 
 type Props = {
     argCountry: Country | undefined,
-    returnCountry: (country: Country | undefined) => void
+    returnCountry: (country: Country | undefined) => void,
+    argHotelTypeIds: string[],
+    returnHotelTypeIds: (hotelTypeIds: string[]) => void
 }
 
-export const ExtraFilterDialog: React.FC<Props> = ({argCountry, returnCountry}) => {
+export const ExtraFilterDialog: React.FC<Props> = (
+    {argCountry, returnCountry, argHotelTypeIds, returnHotelTypeIds}) => {
     const [opened, setOpened] = useState(false);
     const [country, setCountry] = useState<Country | undefined>(argCountry);
+    const [hotelTypeIds, setHotelTypeIds] = useState<string[]>([]);
 
     useEffect(() => {
         setCountry(argCountry);
     }, [argCountry]);
 
+    useEffect(() => {
+        setHotelTypeIds(argHotelTypeIds);
+    }, [argHotelTypeIds]);
+
     const handleSet = () => {
         returnCountry(country);
+        returnHotelTypeIds(hotelTypeIds);
         setOpened(false);
     }
 
     const handleClear = () => {
         setCountry(undefined);
         returnCountry(undefined);
+        returnHotelTypeIds([]);
         setOpened(false);
-    }
-
-    const handleSelectCountry = (country: Country | undefined) => {
-        setCountry(country);
     }
 
     return (
@@ -41,7 +48,7 @@ export const ExtraFilterDialog: React.FC<Props> = ({argCountry, returnCountry}) 
                 cursor: 'pointer',
                 padding: 9,
                 borderRadius: 6,
-                backgroundColor: country ? 'lightgrey' : 'white'
+                backgroundColor: country || argHotelTypeIds.length > 0 ? 'lightgrey' : 'white'
             }}
         ><IconFilterSearch size={20} color={"var(--mantine-color-blue-filled)"}/></span>
             <Modal
@@ -79,7 +86,7 @@ export const ExtraFilterDialog: React.FC<Props> = ({argCountry, returnCountry}) 
                     <tbody>
                     <tr>
                         <td>
-                            <CountriesDropdown argSelected={country} onSelect={handleSelectCountry}/>
+                            <CountriesDropdown argCountry={country} returnCountry={setCountry}/>
                         </td>
                         <td>
                             <IconCheck
@@ -94,6 +101,11 @@ export const ExtraFilterDialog: React.FC<Props> = ({argCountry, returnCountry}) 
                                 title="Clear extra filter"
                                 onClick={handleClear} size={20}
                                 color={"var(--mantine-color-blue-filled)"}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={3}>
+                            <TypesSelector argHotelTypeIds={hotelTypeIds} returnHotelTypeIds={setHotelTypeIds}/>
                         </td>
                     </tr>
                     </tbody>

@@ -1,22 +1,22 @@
 import React, {useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
-import {FLAGS, type Country, getCountryData} from "../data/flags.ts";
+import {COUNTRIES, type Country, getCountryData} from "../data/countries.ts";
 import {IconChevronDown, IconChevronUp} from "@tabler/icons-react";
 
 type Props = {
-    argSelected: Country | undefined,
-    onSelect: (country: Country | undefined) => void
+    argCountry: Country | undefined,
+    returnCountry: (country: Country | undefined) => void
 }
 
-export const CountriesDropdown: React.FC<Props> = ({argSelected, onSelect}) => {
+export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) => {
     const combobox = useCombobox();
-    const [selected, setSelected] = useState<Country | undefined>(argSelected);
+    const [selected, setSelected] = useState<Country | undefined>(argCountry);
 
     const handleSelect = (key: string) => {
         const country = getCountryData(key)
         setSelected(country);
         combobox.closeDropdown();
-        onSelect(country);
+        returnCountry(country);
     }
 
     return (
@@ -41,13 +41,13 @@ export const CountriesDropdown: React.FC<Props> = ({argSelected, onSelect}) => {
             </Combobox.Target>
             <Combobox.Dropdown
                 style={{
-                    maxHeight: '200px',
+                    maxHeight: '300px',
                     overflowY: 'auto',
                 }}
             >
                 <Combobox.Options>
                     {
-                        FLAGS
+                        COUNTRIES
                             .sort((item1: Country, item2: Country) => item1.name.localeCompare(item2.name))
                             .map((item) =>
                                 <Combobox.Option
