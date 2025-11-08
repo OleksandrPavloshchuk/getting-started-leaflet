@@ -33,7 +33,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                     setLocations);
             }
         },
-        [query]
+        [query, country, hotelTypeIds]
     );
 
     // Simple filter by name:
