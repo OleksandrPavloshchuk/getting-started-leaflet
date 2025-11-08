@@ -12,6 +12,7 @@
     "@mantine/core": "^8.3.6",
     "@mantine/hooks": "^8.3.6",
     "@mantine/utils": "^6.0.22",
+    "@tabler/icons-react": "^3.35.0",
     "cors": "^2.8.5",
     "dompurify": "^3.3.0",
     "express": "^5.1.0",

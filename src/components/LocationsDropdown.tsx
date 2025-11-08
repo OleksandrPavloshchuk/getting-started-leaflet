@@ -1,9 +1,11 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../data/locations.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {retrieveLocations} from "../services/retrieveLocations.ts";
 import {useDebouncedValue} from "@mantine/hooks";
+import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
+import type {Country} from "../data/flags.ts";
 
 type Props = {
     onSelect: (loc: Location | undefined) => void
@@ -16,6 +18,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [locations, setLocations] = useState<Location[] | undefined>([]);
+    const [country, setCountry] = useState<Country | undefined>(undefined);
 
     useMemo(
         () => {
@@ -24,6 +27,14 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
             }
         },
         [query]
+    );
+
+    useEffect(() => {
+            if (country) {
+                console.log("TRACE", country);
+            }
+        },
+        [country]
     );
 
     // Simple filter by name:
@@ -45,43 +56,54 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
         <>
             {loading && <p>Loading...</p>}
             {error && <p style={{color: "red"}}>Error: {error}</p>}
-            <Combobox
-                withinPortal={false}
-                zIndex={8000}
-                store={combobox}
-                onOptionSubmit={(v) => handleSelect(v)}
-            >
-                <Combobox.Target>
-                    <TextInput
-                        placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
-                        onChange={(event) =>
-                            handleChange(event.currentTarget.value)
-                        }
-                        onFocus={() => combobox.openDropdown()}
-                        onClick={() => combobox.openDropdown()}
-                        onBlur={() => combobox.closeDropdown()}
-                    />
-                </Combobox.Target>
-                <Combobox.Dropdown
-                    style={{
-                        maxHeight: '200px',
-                        overflowY: 'auto',
-                    }}
-                >
-                    <Combobox.Options>
-                        {
-                            locations && locations.length > 0 ?
-                                (locations.map((item) =>
-                                        <Combobox.Option value={item.id} key={item.id}>
-                                            <LocationInfo location={item}/>
-                                        </Combobox.Option>)
-                                ) : (
-                                    <Combobox.Empty>Nothing is found</Combobox.Empty>
-                                )
-                        }
-                    </Combobox.Options>
-                </Combobox.Dropdown>
-            </Combobox>
+            <table style={{width: "100%"}}>
+                <tbody>
+                <tr>
+                    <td style={{width: "100%"}}>
+                        <Combobox
+                            withinPortal={true}
+                            zIndex={8000}
+                            store={combobox}
+                            onOptionSubmit={(v) => handleSelect(v)}
+                        >
+                            <Combobox.Target>
+                                <TextInput
+                                    placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
+                                    onChange={(event) =>
+                                        handleChange(event.currentTarget.value)
+                                    }
+                                    onFocus={() => combobox.openDropdown()}
+                                    onClick={() => combobox.openDropdown()}
+                                    onBlur={() => combobox.closeDropdown()}
+                                />
+                            </Combobox.Target>
+                            <Combobox.Dropdown
+                                style={{
+                                    maxHeight: '200px',
+                                    overflowY: 'auto',
+                                }}
+                            >
+                                <Combobox.Options>
+                                    {
+                                        locations && locations.length > 0 ?
+                                            (locations.map((item) =>
+                                                    <Combobox.Option value={item.id} key={item.id}>
+                                                        <LocationInfo location={item}/>
+                                                    </Combobox.Option>)
+                                            ) : (
+                                                <Combobox.Empty>Nothing is found</Combobox.Empty>
+                                            )
+                                    }
+                                </Combobox.Options>
+                            </Combobox.Dropdown>
+                        </Combobox>
+                    </td>
+                    <td>
+                        <ExtraFilterDialog returnCountry={setCountry} argCountry={country}/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </>
     );
 }

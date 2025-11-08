@@ -28,3 +28,14 @@ Run backend application:
 
 npx ts-node server.ts
 ```
+
+## Additional indexes on table NUITEE_HOTEL
+
+```sql
+create index idx_nuitee_hotel_city
+    on public.nuitee_hotel (((ext -> 'hotel'::text) ->> 'city'::text));
+create index idx_nuitee_hotel_city_trgm
+    on public.nuitee_hotel using gin (((ext -> 'hotel'::text) ->> 'city'::text) gin_trgm_ops);
+create index idx_nuitee_hotel_name_trgm
+    on public.nuitee_hotel using gin (name gin_trgm_ops);
+```
