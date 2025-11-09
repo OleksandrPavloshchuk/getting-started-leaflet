@@ -39,6 +39,8 @@ export const ExtraFilterDialog: React.FC<Props> = (
         setOpened(false);
     }
 
+    const isOn = () => country || argHotelTypeIds.length > 0;
+
     return (
         <>
             <ActionIcon
@@ -46,9 +48,9 @@ export const ExtraFilterDialog: React.FC<Props> = (
                 variant="white"
                 size="lg"
                 style={{
-                    backgroundColor: country || argHotelTypeIds.length > 0 ? 'lightgrey' : 'white'
+                    backgroundColor: isOn() ? 'lightgrey' : 'white'
                 }}
-                title="Extra Filter">
+                title={`Extra Filter: ${isOn() ? 'ON' : 'OFF'}`}>
                 <IconFilterSearch size={20}/>
             </ActionIcon>
 
