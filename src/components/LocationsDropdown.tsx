@@ -6,6 +6,7 @@ import {retrieveLocations} from "../services/retrieveLocations.ts";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import type {Country} from "../data/countries.ts";
+import {IconChevronDown, IconChevronUp} from "@tabler/icons-react";
 
 type Props = {
     onSelect: (loc: Location | undefined) => void
@@ -76,6 +77,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                                     onFocus={() => combobox.openDropdown()}
                                     onClick={() => combobox.openDropdown()}
                                     onBlur={() => combobox.closeDropdown()}
+                                    rightSection={combobox.dropdownOpened ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
                                 />
                             </Combobox.Target>
                             <Combobox.Dropdown
