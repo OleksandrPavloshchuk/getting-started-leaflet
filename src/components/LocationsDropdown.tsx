@@ -20,6 +20,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const [locations, setLocations] = useState<Location[] | undefined>([]);
     const [country, setCountry] = useState<Country | undefined>(undefined);
     const [hotelTypeIds, setHotelTypeIds] = useState<string[]>([]);
+    const [selected, setSelected] = useState<Location | undefined>();
 
     useMemo(
         () => {
@@ -45,8 +46,9 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
 
     const handleSelect = (key: string) => {
         if (locations) {
-            const selected = locations.find((item) => item.id === key);
-            onSelect(selected);
+            const loc = locations.find((item) => item.id === key);
+            setSelected(loc);
+            onSelect(loc);
             combobox.closeDropdown();
         }
     }
@@ -86,7 +88,13 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                                     {
                                         locations && locations.length > 0 ?
                                             (locations.map((item) =>
-                                                    <Combobox.Option value={item.id} key={item.id}>
+                                                    <Combobox.Option
+                                                        value={item.id} key={item.id}
+                                                        style={{
+                                                            color: selected?.id === item.id ? 'white' : undefined,
+                                                            backgroundColor: selected?.id === item.id ? 'var(--mantine-color-blue-filled)' : undefined,
+                                                        }}
+                                                    >
                                                         <LocationInfo location={item}/>
                                                     </Combobox.Option>)
                                             ) : (
