@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {MapContainer, TileLayer, Marker, Popup, useMap} from "react-leaflet";
-import type {Location} from "../data/locations.ts";
+import {getStarsString, type Location} from "../data/locations.ts";
 import L from "leaflet";
 
 import {DescriptionDialog} from "./DescriptionDialog.tsx";
@@ -24,25 +24,6 @@ const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
     }, [lat, lng, map]);
     return null;
 };
-
-const getStarsString = (val: number) => {
-    switch (Math.ceil(val)) {
-        case 0:
-            return "";
-        case 1:
-            return "⭐️";
-        case 2:
-            return "⭐️⭐️";
-        case 3:
-            return "⭐️⭐️⭐️";
-        case 4:
-            return "⭐️⭐️⭐️⭐️";
-        case 5:
-            return "⭐️⭐️⭐️⭐️⭐️";
-        default:
-            return "⭐️⭐️⭐️⭐️⭐️+";
-    }
-}
 
 export const MapView: React.FC<Props> = ({selected}) => {
     const defaultCenter = [49.0, 31.0];
