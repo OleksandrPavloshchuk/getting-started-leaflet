@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../data/countries.ts";
-import {IconChevronDown, IconChevronUp} from "@tabler/icons-react";
+import {DropdownArrow} from "./DropdownArrow.tsx";
 
 type Props = {
     argCountry: Country | undefined,
@@ -13,11 +13,24 @@ export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) 
     const [selected, setSelected] = useState<Country | undefined>(argCountry);
 
     const handleSelect = (key: string) => {
+        combobox.resetSelectedOption();
         const country = getCountryData(key)
         setSelected(country);
         combobox.closeDropdown();
         returnCountry(country);
     }
+
+    const handleChange = (s: string) => {
+        if (!selected) {
+            const idx = COUNTRIES.findIndex((v: Country) =>
+                v.name.toUpperCase().startsWith(s.toUpperCase()));
+            if (idx >= 0) {
+                combobox.selectOption(idx);
+            }
+        }
+        combobox.openDropdown();
+        combobox.updateSelectedOptionIndex();
+    };
 
     return (
         <Combobox
@@ -29,14 +42,15 @@ export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) 
             <Combobox.Target>
                 <TextInput
                     title={"Country"}
-                    readOnly
                     value={selected ? `${selected.flag} ${selected.name}` : ""}
                     placeholder="Country"
                     onFocus={() => combobox.openDropdown()}
                     onClick={() => combobox.openDropdown()}
                     onBlur={() => combobox.closeDropdown()}
-                    rightSection={combobox.dropdownOpened ? <IconChevronUp size={16} /> : <IconChevronDown size={16} />}
-                    rightSectionPointerEvents="none"
+                    onChange={(event) =>
+                        handleChange(event.currentTarget.value)
+                    }
+                    rightSection={<DropdownArrow target={combobox} />}
                 />
             </Combobox.Target>
             <Combobox.Dropdown
