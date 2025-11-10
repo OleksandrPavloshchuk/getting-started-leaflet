@@ -56,8 +56,9 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
 
     return (
         <>
-            {loading && <p>Loading...</p>}
             {error && <p style={{color: "red"}}>Error: {error}</p>}
+            {loading && <p>Loading...</p>}
+            {!loading &&
             <table style={{width: "100%"}}>
                 <tbody>
                 <tr>
@@ -118,6 +119,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                 </tr>
                 </tbody>
             </table>
+            }
         </>
     );
 }
