@@ -88,7 +88,7 @@ export const ExtraFilterDialog: React.FC<Props> = (
                 <table width="100%">
                     <tbody>
                     <tr>
-                        <td>
+                        <td style={{width: '100%'}}>
                             <CountriesDropdown argCountry={country} returnCountry={setCountry}/>
                         </td>
                         <td>
