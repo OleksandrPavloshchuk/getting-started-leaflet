@@ -10,14 +10,14 @@ type Props = {
 export const DescriptionDialog: React.FC<Props> = ({location}) => {
     const [opened, setOpened] = useState(false);
 
-    const safeHtml = useMemo(() => {
+    let safeHtml = useMemo(() => {
         return DOMPurify.sanitize(location.description, {
             ALLOWED_TAGS: [
-                'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'br', 'span', 'h1', 'h2', 'h3', 'h4', 'img'
+                'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'br', 'span', 'h1', 'h2', 'h3', 'h4', 'img', 'hr'
             ],
             ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'title', 'class', 'style']
-        });
-    }, [location.description]);
+        }) + (location.importantinfo ? "<hr/><em style='font-size: small'>" + location.importantinfo + "</em>" : "")
+    }, [location.description, location.importantinfo]);
 
     return (
         <>
@@ -57,7 +57,7 @@ export const DescriptionDialog: React.FC<Props> = ({location}) => {
                 }}
             >
                 <div
-                    style={{maxHeight: 480, maxWidth: 640, overflow: 'auto'}}
+                    style={{maxHeight: 640, maxWidth: 640, overflow: 'auto'}}
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{__html: safeHtml}}
                 />

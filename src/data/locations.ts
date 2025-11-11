@@ -10,6 +10,7 @@ export type Location = {
     description: string;
     stars: number;
     type: string;
+    importantinfo: string;
 };
 
 export const getStarsString = (val: number) => {

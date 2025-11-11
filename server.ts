@@ -23,7 +23,8 @@ const SQL = `
      ext -> 'hotel' ->> 'address' address, 
      ext -> 'hotel' ->> 'hotel_description' description, 
      ext -> 'details' ->> 'hotel_type' type, 
-     CAST (ext -> 'hotel' ->> 'stars' as decimal) stars 
+     CAST (ext -> 'hotel' ->> 'stars' as decimal) stars,
+     ext -> 'details' ->> 'hotel_important_information' importantInfo
      FROM nuitee_hotel 
      WHERE 
      name ILIKE CONCAT('%',CAST($2 as text),'%') 
