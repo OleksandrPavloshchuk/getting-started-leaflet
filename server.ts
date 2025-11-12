@@ -69,7 +69,10 @@ app.get("/api/locations", async (req, res) => {
             console.error("Database error:", err);
             res.status(500).json({error: "Database query failed"});
         })
-        .finally(()=> console.log(`Executed in ${performance.now() - start} ms, Rows: ${count}`));
+        .finally(()=> {
+            const timeStr =((performance.now() - start).toFixed(3)).toString();
+            console.log(`Executed in ${timeStr.padStart(12)} ms, Rows: ${count.toString().padStart(6)}`);
+        })
 });
 
 app.listen(port, () => {

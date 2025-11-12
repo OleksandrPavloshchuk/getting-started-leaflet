@@ -1,0 +1,20 @@
+/* leaflet related styles */
+
+.leaflet-popup-content-wrapper {
+    background-color: #d0d0d0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+    border-radius: 6px;
+}
+
+.leaflet-popup-tip {
+    background-color: #d0d0d0;
+}
+
+.leaflet-popup-link {
+    cursor: pointer;
+    color: #666666;
+}
+
+.leaflet-popup-link:hover {
+    text-decoration: underline;
+}

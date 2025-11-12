@@ -6,6 +6,8 @@ import L from "leaflet";
 import {DescriptionDialog} from "./DescriptionDialog.tsx";
 import {Image} from "@mantine/core";
 
+import "../../public/leaflet-custom.css";
+
 // Simple marker
 const markerIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -41,12 +43,13 @@ export const MapView: React.FC<Props> = ({selected}) => {
             {selected &&
                 <>
                     <Marker position={[selected.lat, selected.lng]} icon={markerIcon}>
-                        <Popup>
+                        <Popup closeOnEscapeKey={true} >
                             <p style={{textAlign: 'center'}}>
                                 <strong>{selected.name}</strong><br/>
                                 {selected.thumbnail &&
                                     <>
                                         <Image src={selected.thumbnail}
+                                               style={{boxShadow: "0 2px 2px rgba(0, 0, 0, 0.4)"}}
                                                width={200} height={150} radius="md"/>
                                         <br/>
                                     </>

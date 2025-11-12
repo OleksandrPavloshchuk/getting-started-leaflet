@@ -3,6 +3,8 @@ import {Modal} from "@mantine/core";
 import DOMPurify from 'dompurify';
 import type {Location} from "../data/locations.ts";
 
+import "../../public/leaflet-custom.css";
+
 type Props = {
     location: Location
 }
@@ -27,13 +29,13 @@ export const DescriptionDialog: React.FC<Props> = ({location}) => {
     return (
         <>
       <span
-          style={{cursor: 'pointer', textDecoration: 'underline'}}
+          className="leaflet-popup-link"
           onClick={(e) => {
               e.preventDefault();
               setOpened(true);
           }}
       >
-          Show description
+          Details
       </span>
             <Modal
                 trapFocus={false}
