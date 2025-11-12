@@ -10,13 +10,18 @@ type Props = {
 export const DescriptionDialog: React.FC<Props> = ({location}) => {
     const [opened, setOpened] = useState(false);
 
+    const htmlInfo = location.importantinfo
+        ? location.importantinfo
+            .replaceAll("\n", "<br/>")
+        : undefined;
+
     let safeHtml = useMemo(() => {
         return DOMPurify.sanitize(location.description, {
             ALLOWED_TAGS: [
                 'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'br', 'span', 'h1', 'h2', 'h3', 'h4', 'img', 'hr'
             ],
             ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'title', 'class', 'style']
-        }) + (location.importantinfo ? "<hr/><em style='font-size: small'>" + location.importantinfo + "</em>" : "")
+        }) + (location.importantinfo ? "<hr/><em style='font-size: small'>" + htmlInfo + "</em>" : "")
     }, [location.description, location.importantinfo]);
 
     return (
