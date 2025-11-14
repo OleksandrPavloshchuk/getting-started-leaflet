@@ -1,7 +1,7 @@
 import {getDatabasePool} from "../DatabasePool";
 
-export const retrieveRestelHotels = ({cityLike, nameLike, country, types}) =>
-    getDatabasePool().query(SQL,  [cityLike, nameLike, country, types]);
+export const retrieveRestelHotels = ({cityLike, nameLike, country}) =>
+    getDatabasePool().query(SQL,  [cityLike, nameLike, country]);
 
 const SQL = `
     SELECT
@@ -21,9 +21,7 @@ const SQL = `
      AND 
      ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') 
      AND 
-     ($3='' OR UPPER(country) = UPPER($3)) 
-     AND
-     (COALESCE(array_length($4::text[], 1), 0) = 0 OR (ext -> 'hotel' ->> 'category') = ANY($4))
+     ($3='' OR UPPER(country) = UPPER($3))
      ORDER BY country, city, name
     `;
 
