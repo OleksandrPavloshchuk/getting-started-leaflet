@@ -26,7 +26,7 @@ npm run dev
 Run backend application:
 ```shell
 
-npx ts-node server.ts
+npx ts-node server/endpoint.ts
 ```
 
 ## Additional indexes on table NUITEE_HOTEL

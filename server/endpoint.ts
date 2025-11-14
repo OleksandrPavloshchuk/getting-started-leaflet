@@ -1,41 +1,10 @@
 import * as express from "express";
 import * as cors from "cors";
-import {Pool} from "pg";
+import {retrieveNuiteeHotels} from "./provider/nuitee";
+import {retrieveRestelHotels} from "./provider/restel";
 
 const app = express();
 const port = 4000;
-
-// PostgreSQL connection
-const pool = new Pool({
-    host: "localhost",
-    port: 5432,
-    user: "nb",
-    password: "nbpass",
-    database: "nb",
-});
-
-const SQL = `
-    SELECT
-     id, name, longitude as lng, latitude as lat, 
-     ext -> 'hotel' ->> 'city' city, 
-     UPPER(ext -> 'hotel' ->> 'country') country, 
-     ext -> 'hotel' ->> 'thumbnail' thumbnail, 
-     ext -> 'hotel' ->> 'address' address, 
-     ext -> 'hotel' ->> 'hotel_description' description, 
-     ext -> 'details' ->> 'hotel_type' type, 
-     CAST (ext -> 'hotel' ->> 'stars' as decimal) stars,
-     ext -> 'details' ->> 'hotel_important_information' importantInfo
-     FROM nuitee_hotel 
-     WHERE 
-     name ILIKE CONCAT('%',CAST($2 as text),'%') 
-     AND 
-     ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') 
-     AND 
-     ($3='' OR UPPER(ext -> 'hotel' ->> 'country') = UPPER($3)) 
-     AND
-     (COALESCE(array_length($4::text[], 1), 0) = 0 OR (ext -> 'hotel' ->> 'hotel_type_id') = ANY($4))
-     ORDER BY country, city, name
-    `;
 
 // Middleware
 app.use(cors());
@@ -60,10 +29,36 @@ app.get("/api/locations", async (req, res) => {
     let count = -1;
 
     const start = performance.now();
-    pool.query(SQL,  [cityLike, nameLike, country, types])
-        .then( (result) => {
-            count = result.rows.length;
-            return res.json(result.rows);
+    const queryParams = {cityLike, nameLike, country, types};
+    Promise.all([
+        retrieveNuiteeHotels(queryParams),
+        retrieveRestelHotels(queryParams)
+    ]).then( ([nuiteeResult, restelResult]) => {
+            let rows = [nuiteeResult.rows, restelResult.rows].flat();
+            count = rows.length;
+            rows = rows.sort( (hotel1, hotel2) => {
+                if (hotel1.country < hotel2.country ) {
+                    return -1;
+                }
+                if (hotel1.country > hotel2.country ) {
+                    return 1;
+                }
+                if (hotel1.city < hotel2.city ) {
+                    return -1;
+                }
+                if (hotel1.city > hotel2.city ) {
+                    return 1;
+                }
+                if (hotel1.name < hotel2.name ) {
+                    return -1;
+                }
+                if (hotel1.name > hotel2.name ) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            return res.json(rows);
         })
         .catch((err) => {
             console.error("Database error:", err);
