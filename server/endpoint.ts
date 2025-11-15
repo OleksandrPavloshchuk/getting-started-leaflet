@@ -10,6 +10,29 @@ const port = 4000;
 app.use(cors());
 app.use(express.json());
 
+// Sort method:
+const compareHotels = (hotel1, hotel2) => {
+    if (hotel1.country < hotel2.country ) {
+        return -1;
+    }
+    if (hotel1.country > hotel2.country ) {
+        return 1;
+    }
+    if (hotel1.city.toLowerCase() < hotel2.city.toLowerCase() ) {
+        return -1;
+    }
+    if (hotel1.city.toLowerCase() > hotel2.city.toLowerCase() ) {
+        return 1;
+    }
+    if (hotel1.name.toLowerCase() < hotel2.name.toLowerCase() ) {
+        return -1;
+    }
+    if (hotel1.name.toLowerCase() > hotel2.name.toLowerCase() ) {
+        return 1;
+    }
+    return 0;
+};
+
 // Endpoint:
 app.get("/api/locations", async (req, res) => {
     const q = (req.query.q as string)?.trim() ?? "";
@@ -36,28 +59,7 @@ app.get("/api/locations", async (req, res) => {
     ]).then( ([nuiteeResult, restelResult]) => {
             let rows = [nuiteeResult.rows, restelResult.rows].flat();
             count = rows.length;
-            rows = rows.sort( (hotel1, hotel2) => {
-                if (hotel1.country < hotel2.country ) {
-                    return -1;
-                }
-                if (hotel1.country > hotel2.country ) {
-                    return 1;
-                }
-                if (hotel1.city < hotel2.city ) {
-                    return -1;
-                }
-                if (hotel1.city > hotel2.city ) {
-                    return 1;
-                }
-                if (hotel1.name < hotel2.name ) {
-                    return -1;
-                }
-                if (hotel1.name > hotel2.name ) {
-                    return 1;
-                }
-                return 0;
-            });
-
+            rows = rows.sort( compareHotels);
             return res.json(rows);
         })
         .catch((err) => {

@@ -1,7 +1,16 @@
 import {getDatabasePool} from "../DatabasePool";
+import { startCase, toLower } from "lodash";
 
 export const retrieveRestelHotels = ({cityLike, nameLike, country}) =>
-    getDatabasePool().query(SQL,  [cityLike, nameLike, country]);
+    getDatabasePool().query(SQL,  [cityLike, nameLike, country])
+        .then((result) => {
+            const converted = result.rows.map((row) => {
+                row.city = startCase(toLower(row.city));
+                return row;
+            })
+            result.rows = converted;
+            return result;
+        });
 
 const SQL = `
     SELECT
@@ -22,6 +31,5 @@ const SQL = `
      ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') 
      AND 
      ($3='' OR UPPER(country) = UPPER($3))
-     ORDER BY country, city, name
     `;
 

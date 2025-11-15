@@ -24,6 +24,5 @@ const SQL = `
      ($3='' OR UPPER(ext -> 'hotel' ->> 'country') = UPPER($3)) 
      AND
      (COALESCE(array_length($4::text[], 1), 0) = 0 OR (ext -> 'hotel' ->> 'hotel_type_id') = ANY($4))
-     ORDER BY country, city, name
     `;
 
