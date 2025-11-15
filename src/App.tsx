@@ -31,7 +31,7 @@ export default function App() {
                     }
                     <Button onClick={handleSubmit}>Submit</Button>
                     <div>
-                        <MapView selected={selected}/>
+                        <MapView selected={selected} />
                     </div>
                 </Stack>
             </Paper>

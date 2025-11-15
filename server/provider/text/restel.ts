@@ -1,16 +1,19 @@
-import {getDatabasePool} from "../DatabasePool";
+import {getDatabasePool} from "../../DatabasePool";
 import { startCase, toLower } from "lodash";
 
-export const retrieveRestelHotels = ({cityLike, nameLike, country}) =>
-    getDatabasePool().query(SQL,  [cityLike, nameLike, country])
-        .then((result) => {
-            const converted = result.rows.map((row) => {
-                row.city = startCase(toLower(row.city));
-                return row;
-            })
-            result.rows = converted;
-            return result;
-        });
+export class RestelText {
+    public static retrieve({cityLike, nameLike, country}) {
+        return getDatabasePool().query(SQL, [cityLike, nameLike, country])
+            .then((result) => {
+                const converted = result.rows.map((row) => {
+                    row.city = startCase(toLower(row.city));
+                    return row;
+                })
+                result.rows = converted;
+                return result;
+            });
+    }
+}
 
 const SQL = `
     SELECT

@@ -1,7 +1,10 @@
-import {getDatabasePool} from "../DatabasePool";
+import {getDatabasePool} from "../../DatabasePool";
 
-export const retrieveNuiteeHotels = ({cityLike, nameLike, country, types}) =>
-    getDatabasePool().query(SQL,  [cityLike, nameLike, country, types]);
+export class NuiteeText {
+    public static retrieve({cityLike, nameLike, country, types}) {
+        return getDatabasePool().query(SQL, [cityLike, nameLike, country, types]);
+    }
+}
 
 const SQL = `
     SELECT

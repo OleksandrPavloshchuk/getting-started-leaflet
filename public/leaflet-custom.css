@@ -18,3 +18,12 @@
 .leaflet-popup-link:hover {
     text-decoration: underline;
 }
+
+.radius-link {
+    cursor: pointer;
+    color: #666666;
+}
+
+.radius-link:hover {
+    text-decoration: underline;
+}
