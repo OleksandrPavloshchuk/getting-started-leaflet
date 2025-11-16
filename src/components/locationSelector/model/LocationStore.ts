@@ -3,6 +3,10 @@ import {type Location} from "./Location.ts";
 import {retrieveByText} from "../service/retrieveByText.ts";
 
 interface LocationState {
+    error: string | undefined,
+    setError: (e:string|undefined) => void,
+    loading: boolean,
+    setLoading: (l: boolean) => void,
     searchText: string | undefined,
     setSearchText: (text: string | undefined) => void,
     selectedLocation: Location | undefined,
@@ -13,10 +17,14 @@ interface LocationState {
     setCountryIsoCode: (iso: string | undefined) => void,
     hotelTypeIds: string[],
     setHotelTypeIds: (ids: string[]) => void,
-    searchByText: (setLoading: (l: boolean) => void, setError: (e: string | null) => void) => void
+    searchByText: () => void
 }
 
 export const useLocationStore = create<LocationState>((set, get) => ({
+    error: undefined,
+    setError: (e: string|undefined)=> set({error: e}),
+    loading: false,
+    setLoading: (l: boolean) => set({loading: l}),
     searchText: "",
     setSearchText: (text: string | undefined) => set({searchText: text}),
     selectedLocation: undefined,
@@ -28,12 +36,12 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     hotelTypeIds: [],
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
 
-    searchByText: (setLoading: (l: boolean) => void, setError: (e: string | null) => void) => retrieveByText(
+    searchByText: () => retrieveByText(
         get().searchText,
         get().countryIsoCode,
         get().hotelTypeIds,
-        setLoading,
-        setError,
+        (l: boolean) => set({loading: l}),
+        (e: string|undefined)=> set({error: e}),
         (res: Location[]) => set({result: res})
     )
 }));

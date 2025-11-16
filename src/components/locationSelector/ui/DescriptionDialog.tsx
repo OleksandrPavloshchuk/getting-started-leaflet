@@ -1,30 +1,32 @@
 import {useMemo, useState} from "react";
 import {Modal} from "@mantine/core";
 import DOMPurify from 'dompurify';
-import type {Location} from "../model/Location.ts";
 
 import "../../../../public/leaflet-custom.css";
+import {useLocationStore} from "../model/LocationStore.ts";
 
-type Props = {
-    location: Location
-}
+export const DescriptionDialog: React.FC = () => {
 
-export const DescriptionDialog: React.FC<Props> = ({location}) => {
+    const selectedLocation = useLocationStore((s) => s.selectedLocation);
+    if (!selectedLocation) {
+        return null;
+    }
+
     const [opened, setOpened] = useState(false);
 
-    const htmlInfo = location.importantinfo
-        ? location.importantinfo
+    const htmlInfo = selectedLocation.importantinfo
+        ? selectedLocation.importantinfo
             .replaceAll("\n", "<br/>")
         : undefined;
 
     let safeHtml = useMemo(() => {
-        return DOMPurify.sanitize(location.description, {
+        return DOMPurify.sanitize(selectedLocation.description, {
             ALLOWED_TAGS: [
                 'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'br', 'span', 'h1', 'h2', 'h3', 'h4', 'img', 'hr'
             ],
             ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'title', 'class', 'style']
-        }) + (location.importantinfo ? "<hr/><em style='font-size: small'>" + htmlInfo + "</em>" : "")
-    }, [location.description, location.importantinfo]);
+        }) + (selectedLocation.importantinfo ? "<hr/><em style='font-size: small'>" + htmlInfo + "</em>" : "")
+    }, [selectedLocation.description, selectedLocation.importantinfo]);
 
     return (
         <>
@@ -40,7 +42,7 @@ export const DescriptionDialog: React.FC<Props> = ({location}) => {
             <Modal
                 trapFocus={false}
                 zIndex={9999}
-                title={location.name}
+                title={selectedLocation.name}
                 opened={opened}
                 onClose={() => setOpened(false)}
                 withinPortal={true}

@@ -7,7 +7,7 @@ export const retrieveByText = (
     countryIsoCode: string | undefined,
     hotelTypesIds: string[],
     setLoading: (loading: boolean) => void,
-    setError: (error: string | null) => void,
+    setError: (error: string | undefined) => void,
     setResult: (locations: Location[]) => void
 ) => {
 
@@ -25,7 +25,7 @@ export const retrieveByText = (
     // For request cancellation
     const controller = new AbortController();
 
-    setError(null);
+    setError(undefined);
     setLoading(true);
     const types = hotelTypesIds.join(",");
     const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query ?? "")}&c=${encodeURIComponent(countryIsoCode ?? "")}&t=${encodeURIComponent(types)}`;

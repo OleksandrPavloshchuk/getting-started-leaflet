@@ -1,31 +1,30 @@
 import React from "react";
 import {Image} from "@mantine/core";
-import {type Location} from "../model/Location.ts";
 import {DescriptionDialog} from "./DescriptionDialog.tsx";
 import {Popup} from "react-leaflet";
+import {useLocationStore} from "../model/LocationStore.ts";
 
-type Props = {
-    location: Location
-}
+export const HotelDetailsPopup: React.FC = () => {
+    const selectedLocation = useLocationStore((s) => s.selectedLocation);
+    if (!selectedLocation) {
+        return null;
+    }
 
-export const HotelDetailsPopup: React.FC<Props> = ({location}) => <Popup closeOnEscapeKey={true} >
-    <p style={{textAlign: 'center'}}>
-        <strong>{location.name}</strong><br/>
-        {location.thumbnail &&
-            <>
-                <Image src={location.thumbnail}
-                       style={{boxShadow: "0 2px 2px rgba(0, 0, 0, 0.4)"}}
-                       width={200} height={150} radius="md"/>
-                <br/>
-            </>
-        }
-        {location.address &&
-            <>{location.address}<br/></>
-        }
-        {location.isShowStars() && <>{location.getStarsString()}<br/></>}
-        {location.description &&
-            <DescriptionDialog location={location}/>
-        }
-    </p>
-</Popup>;
+    return (<Popup closeOnEscapeKey={true}>
+        <p style={{textAlign: 'center'}}>
+            <strong>{selectedLocation.name}</strong><br/>
+            {selectedLocation.thumbnail &&
+                <>
+                    <Image src={selectedLocation.thumbnail}
+                           style={{boxShadow: "0 2px 2px rgba(0, 0, 0, 0.4)"}}
+                           width={200} height={150} radius="md"/>
+                    <br/>
+                </>
+            }
+            {selectedLocation.address && <>{selectedLocation.address}<br/></>}
+            {selectedLocation.isShowStars() && <>{selectedLocation.getStarsString()}<br/></>}
+            {selectedLocation.description && <DescriptionDialog/> }
+        </p>
+    </Popup>);
+};
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../model/Location.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
@@ -14,8 +14,8 @@ type Props = {
 
 export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const combobox = useCombobox();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const error = useLocationStore((s)=>s.error);
+    const loading = useLocationStore((s) => s.loading);
     const result = useLocationStore((s)=> s.result);
     const searchByText = useLocationStore((s) => s.searchByText);
     const query = useLocationStore((s) => s.searchText);
@@ -32,7 +32,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     useEffect(
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
-                searchByText( setLoading, setError);
+                searchByText();
             }
         },
         [query, country, hotelTypeIds]

@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
+import {MapContainer, Marker, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {type Location} from "../model/Location.ts";
 import L, {LatLng} from "leaflet";
 
 import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
+import {SelectLocationAndRadiusPopup} from "./SelectLocationAndRadiusPopup.tsx";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -45,24 +46,6 @@ export const MapView: React.FC<Props> = ({selected}) => {
     const [circlePopupPos, setCirclePopupPos] = useState<LatLng | undefined>(undefined);
     const [showCirclePopup, setShowCirclePopup] = useState(false);
 
-    const radiusButton = (r: number) => {
-
-        const str = r < 1000 ? `${r} m` : `${r / 1000} km`;
-        // TODO calculate km
-
-
-        return (<>
-            <div
-                className="radius-link"
-                onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setCirclePopupPos(undefined);
-                setShowCirclePopup(false);
-            }}>{str}</div>
-        </>);
-    }
-
     return (
         <MapContainer
             center={defaultCenter as [number, number]}
@@ -79,33 +62,19 @@ export const MapView: React.FC<Props> = ({selected}) => {
                 setShowCirclePopup(true);
             }}/>
 
-            {showCirclePopup && circlePopupPos && (
-                <Popup position={circlePopupPos}
-                       closeOnEscapeKey={true}
-                       closeButton={true}>
-                    <div style={{margin: "6px", textAlign: "center", padding: "em"}}>
-                        <strong>Radius of selection:</strong>
-                        <hr/>
-                        {[500, 1000, 2000, 5000, 10000].map((r: number) => radiusButton(r))}
-                        <hr/>
-                        <div
-                            className="radius-link"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                setCirclePopupPos(undefined);
-                                setShowCirclePopup(false);
-                            }}
-                        >Reset</div>
-                    </div>
-
-                </Popup>
-            )}
+            {showCirclePopup && circlePopupPos &&
+                <>
+                    <SelectLocationAndRadiusPopup
+                        position={circlePopupPos} setPosition={setCirclePopupPos}
+                        setShow={setShowCirclePopup}/>
+                    <Recenter lat={circlePopupPos.lat} lng={circlePopupPos.lng}/>
+                </>
+            }
 
             {selected &&
                 <>
                     <Marker position={[selected.lat, selected.lng]} icon={markerIcon}>
-                        <HotelDetailsPopup location={selected}/>
+                        <HotelDetailsPopup/>
                     </Marker>
                     <Recenter lat={selected.lat} lng={selected.lng}/>
                 </>
