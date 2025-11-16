@@ -1,11 +1,11 @@
 import React, {useMemo, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
-import type {Location} from "../data/locations.ts";
+import type {Location} from "../model/Location.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
-import {retrieveLocations} from "../services/retrieveLocations.ts";
+import {retrieveLocationsByText} from "../service/retrieveLocationsByText.ts";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
-import type {Country} from "../data/countries.ts";
+import type {Country} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 
 type Props = {
@@ -26,7 +26,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     useMemo(
         () => {
             if (debouncedQuery.length >= 3) {
-                retrieveLocations(
+                retrieveLocationsByText(
                     query,
                     country?.iso ? country?.iso : '',
                     hotelTypeIds,

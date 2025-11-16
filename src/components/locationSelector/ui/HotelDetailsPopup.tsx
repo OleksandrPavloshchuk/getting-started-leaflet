@@ -1,6 +1,6 @@
 import React from "react";
 import {Image} from "@mantine/core";
-import {getStarsString, type Location} from "../data/locations.ts";
+import {type Location} from "../model/Location.ts";
 import {DescriptionDialog} from "./DescriptionDialog.tsx";
 import {Popup} from "react-leaflet";
 
@@ -22,7 +22,7 @@ export const HotelDetailsPopup: React.FC<Props> = ({location}) => <Popup closeOn
         {location.address &&
             <>{location.address}<br/></>
         }
-        {location.stars >= 1 && <>{getStarsString(location.stars)}<br/></>}
+        {location.isShowStars() && <>{location.getStarsString()}<br/></>}
         {location.description &&
             <DescriptionDialog location={location}/>
         }

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
-import {type Location} from "../data/locations.ts";
+import {type Location} from "../model/Location.ts";
 import L, {LatLng} from "leaflet";
 
-import "../../public/leaflet-custom.css";
+import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
 
 // Simple marker

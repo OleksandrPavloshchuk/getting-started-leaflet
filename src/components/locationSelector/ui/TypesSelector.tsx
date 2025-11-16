@@ -1,4 +1,4 @@
-import {HOTEL_TYPES, type HotelType} from "../data/hotelTypes.ts";
+import {HOTEL_TYPES, type HotelType} from "../static/hotelTypes.ts";
 import {Checkbox} from "@mantine/core";
 import {useEffect, useState} from "react";
 

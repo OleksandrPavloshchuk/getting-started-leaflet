@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {ActionIcon, Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
-import {type Country} from "../data/countries.ts";
+import {type Country} from "../static/countries.ts";
 import {IconCancel, IconCheck, IconFilterSearch} from "@tabler/icons-react";
 import {TypesSelector} from "./TypesSelector.tsx";
 

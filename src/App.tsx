@@ -1,40 +1,14 @@
-import {useState} from "react";
-import {type Location} from "./data/locations.ts";
-import {LocationsDropdown} from "./components/LocationsDropdown.tsx";
-import {MapView} from "./components/MapView.tsx";
-import {Button, Paper, Stack} from "@mantine/core";
-import {LocationInfo} from "./components/LocationInfo.tsx";
+import {LocationSelector} from "./components/locationSelector/ui/LocationSelector.tsx";
+import {type Location} from "./components/locationSelector/model/Location.ts";
 
 export default function App() {
-    const [selected, setSelected] = useState<Location | undefined>(undefined);
 
-    const handleSubmit = () => {
-        if (!selected) {
-            console.log("No location selected");
-            return;
-        }
-        console.log('Selected location', selected);
+    const handleSubmit = (loc: Location | undefined) => {
+        console.log( loc ? `Selected location: ${JSON.stringify(loc)}` : 'No selection');
     };
 
-    const handleSelect = (location: Location | undefined) => {
-        setSelected(location);
-    }
-
-    return (
-        <div style={{padding: 24, fontFamily: 'sans-serif'}}>
-            <Paper withBorder radius="md" p="lg">
-                <Stack gap="lg">
-                    <LocationsDropdown onSelect={handleSelect}/>
-                    {
-                        selected &&
-                        <div><strong><LocationInfo location={selected} /></strong></div>
-                    }
-                    <Button onClick={handleSubmit}>Submit</Button>
-                    <div>
-                        <MapView selected={selected} />
-                    </div>
-                </Stack>
-            </Paper>
-        </div>
-    );
-};
+    return <>
+        <h5>getting started leaflet</h5>
+        <LocationSelector onSubmit={handleSubmit} />
+    </>;
+}

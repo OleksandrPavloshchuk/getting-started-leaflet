@@ -1,8 +1,8 @@
-import type {Location} from "../data/locations.ts";
+import {type Location, createLocation} from "../model/Location.ts";
 
 const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
-export const retrieveLocations = (
+export const retrieveLocationsByText = (
     query: string,
     countryIsoCode: string | undefined,
     hotelTypesIds: string[],
@@ -36,7 +36,7 @@ export const retrieveLocations = (
             }
             return res.json();
         })
-        .then((locations: Location[]) => setLocations(locations))
+        .then((locations: Location[]) => setLocations(locations.map((raw) => createLocation(raw))))
         .catch((e: Error) => setError(`Retrieve error: ${e}`))
         .finally(() => setLoading(false));
 

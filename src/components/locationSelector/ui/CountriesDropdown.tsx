@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
-import {COUNTRIES, type Country, getCountryData} from "../data/countries.ts";
+import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 
 type Props = {

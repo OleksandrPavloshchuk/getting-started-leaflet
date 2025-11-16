@@ -1,9 +1,9 @@
 import {useMemo, useState} from "react";
 import {Modal} from "@mantine/core";
 import DOMPurify from 'dompurify';
-import type {Location} from "../data/locations.ts";
+import type {Location} from "../model/Location.ts";
 
-import "../../public/leaflet-custom.css";
+import "../../../../public/leaflet-custom.css";
 
 type Props = {
     location: Location
