@@ -24,9 +24,9 @@ export const CountriesDropdown: React.FC = () => {
             if (idx >= 0) {
                 combobox.selectOption(idx);
             }
+            combobox.openDropdown();
+            combobox.updateSelectedOptionIndex();
         }
-        combobox.openDropdown();
-        combobox.updateSelectedOptionIndex();
     };
 
     return (
@@ -44,10 +44,10 @@ export const CountriesDropdown: React.FC = () => {
                     onFocus={() => combobox.openDropdown()}
                     onClick={() => combobox.openDropdown()}
                     onBlur={() => combobox.closeDropdown()}
+                    rightSection={<DropdownArrow target={combobox}/>}
                     onChange={(event) =>
                         handleChange(event.currentTarget.value)
                     }
-                    rightSection={<DropdownArrow target={combobox}/>}
                 />
             </Combobox.Target>
             <Combobox.Dropdown

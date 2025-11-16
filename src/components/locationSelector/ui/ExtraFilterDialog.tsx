@@ -1,4 +1,3 @@
-import {useState} from "react";
 import {ActionIcon, Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
 import {IconCancel, IconCheck, IconFilterSearch} from "@tabler/icons-react";
@@ -7,19 +6,19 @@ import {useLocationStore} from "../model/LocationStore.ts";
 
 export const ExtraFilterDialog: React.FC = () => {
 
-    const [opened, setOpened] = useState(false);
-
-    const country = useLocationStore((s)=>s.country);
-    const setCountry = useLocationStore((s)=> s.setCountry);
-    const hotelTypeIds = useLocationStore((s)=>s.hotelTypeIds);
+    const country = useLocationStore((s) => s.country);
+    const setCountry = useLocationStore((s) => s.setCountry);
+    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
     const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
+    const extraFilterOpened = useLocationStore((s) => s.extraFilterOpened);
+    const setExtraFilterOpened = useLocationStore((s) => s.setExtraFilterOpened);
 
-    const handleSet = () => setOpened(false);
+    const handleSet = () => setExtraFilterOpened(false);
 
     const handleClear = () => {
         setCountry(undefined);
         setHotelTypeIds([]);
-        setOpened(false);
+        setExtraFilterOpened(false);
     }
 
     const isOn = () => country || hotelTypeIds.length > 0;
@@ -27,7 +26,7 @@ export const ExtraFilterDialog: React.FC = () => {
     return (
         <>
             <ActionIcon
-                onClick={() => setOpened(true)}
+                onClick={() => setExtraFilterOpened(true)}
                 variant="white"
                 size="lg"
                 style={{
@@ -41,8 +40,8 @@ export const ExtraFilterDialog: React.FC = () => {
                 title="Extra Filter"
                 trapFocus={false}
                 zIndex={8000}
-                opened={opened}
-                onClose={() => setOpened(false)}
+                opened={extraFilterOpened}
+                onClose={() => setExtraFilterOpened(false)}
                 withinPortal={true}
                 styles={{
                     root: {
@@ -72,7 +71,7 @@ export const ExtraFilterDialog: React.FC = () => {
                     <tbody>
                     <tr>
                         <td style={{width: '100%'}}>
-                            <CountriesDropdown />
+                            <CountriesDropdown/>
                         </td>
                         <td>
                             <ActionIcon
@@ -95,7 +94,7 @@ export const ExtraFilterDialog: React.FC = () => {
                     </tr>
                     <tr>
                         <td colSpan={3}>
-                            <TypesSelector />
+                            <TypesSelector/>
                         </td>
                     </tr>
                     </tbody>

@@ -19,6 +19,7 @@ export const LocationsDropdown: React.FC = () => {
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
     const selected = useLocationStore((s) => s.selectedLocation);
     const setSelected = useLocationStore((s) => s.setSelectedLocation);
+    const extraFilterOpened = useLocationStore((s)=>s.extraFilterOpened);
 
     const [debouncedQuery] = useDebouncedValue(query, 300);
 
@@ -28,7 +29,7 @@ export const LocationsDropdown: React.FC = () => {
                 searchByText();
             }
         },
-        [query, country, hotelTypeIds]
+        [query, country, hotelTypeIds, extraFilterOpened]
     );
 
     // Simple filter by name:

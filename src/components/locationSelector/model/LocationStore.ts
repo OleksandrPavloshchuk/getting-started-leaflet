@@ -18,6 +18,8 @@ interface LocationState {
     setCountry: (c: Country | undefined) => void,
     hotelTypeIds: string[],
     setHotelTypeIds: (ids: string[]) => void,
+    extraFilterOpened: boolean,
+    setExtraFilterOpened: (b:boolean) => void,
     searchByText: () => void
 }
 
@@ -36,6 +38,8 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setCountry: (c: Country | undefined) => set({country: c}),
     hotelTypeIds: [],
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
+    extraFilterOpened: false,
+    setExtraFilterOpened: (b:boolean)=> set({extraFilterOpened: b}),
 
     searchByText: () => retrieveByText(
         get().searchText,
