@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {MapContainer, Marker, TileLayer, useMap, useMapEvents} from "react-leaflet";
+import {MapContainer, Marker, TileLayer, Circle, useMap, useMapEvents, ScaleControl} from "react-leaflet";
 import L, {LatLng} from "leaflet";
 
 import "../../../../public/leaflet-custom.css";
@@ -41,8 +41,9 @@ export const MapView: React.FC = () => {
     const defaultCenter = [49.0, 31.0];
 
     const selectedLocation = useLocationStore((s)=>s.selectedLocation);
-
-    const [circlePopupPos, setCirclePopupPos] = useState<LatLng | undefined>(undefined);
+    const searchRadius = useLocationStore((s) => s.searchRadius);
+    const searchCenter = useLocationStore((s) => s.searchCenter);
+    const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
     const [showCirclePopup, setShowCirclePopup] = useState(false);
 
     return (
@@ -52,22 +53,36 @@ export const MapView: React.FC = () => {
             style={{width: 800, height: 640, borderRadius: 6}}
 
         >
+            <ScaleControl />
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap contributors"
+
             />
             <MapClickHandler onClickPoint={(point: LatLng) => {
-                setCirclePopupPos(point);
+                setSearchCenter(point);
                 setShowCirclePopup(true);
             }}/>
 
-            {showCirclePopup && circlePopupPos &&
+            {showCirclePopup && searchCenter &&
                 <>
                     <SelectLocationAndRadiusPopup
-                        position={circlePopupPos} setPosition={setCirclePopupPos}
                         setShow={setShowCirclePopup}/>
-                    <Recenter lat={circlePopupPos.lat} lng={circlePopupPos.lng}/>
+                    <Recenter lat={searchCenter.lat} lng={searchCenter.lng}/>
                 </>
+            }
+
+            {searchCenter && searchRadius && searchRadius > 0 &&
+            <Circle
+                center={[searchCenter.lat, searchCenter.lng]}
+                radius={searchRadius}
+                pathOptions={{
+                    color: 'var(--mantine-color-blue-filled)',
+                    weight: 1,
+                    fillColor: 'var(--mantine-color-blue-filled)',
+                    fillOpacity: 0.1,
+                }}
+            />
             }
 
             {selectedLocation &&

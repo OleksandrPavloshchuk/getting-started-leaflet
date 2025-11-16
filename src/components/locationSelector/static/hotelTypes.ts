@@ -1,123 +1,153 @@
 export type HotelType = {
     ids: string;
     name: string;
+    nameNormal: string;
 };
 
 export const HOTEL_TYPES: HotelType[] = [
     {
         ids: "219",
-        name: "Aparthotels"
+        name: "Aparthotels",
+        nameNormal: "Aparthotel"
     },
     {
         ids: "201",
-        name: "Apartments"
+        name: "Apartments",
+        nameNormal: "Apartment"
     },
     {
         ids: "204,208",
-        name: "Bed and breakfasts"
+        name: "Beds and breakfasts",
+        nameNormal: "Bed and breakfasts"
     },
     {
         ids: "215",
-        name: "Boats"
+        name: "Boats",
+        nameNormal: "Boat"
     },
     {
         ids: "254",
-        name: "Campsite"
+        name: "Campsites",
+        nameNormal: "Campsite"
     },
     {
         ids: "228",
-        name: "Chalets"
+        name: "Chalets",
+        nameNormal: "Chalet"
     },
     {
         ids: "229",
-        name: "Condos"
+        name: "Condos",
+        nameNormal: "Condo"
     },
     {
         ids: "230",
-        name: "Cottages"
+        name: "Cottages",
+        nameNormal: "Cottage"
     },
     {
         ids: "234",
-        name: "Cruises"
+        name: "Cruises",
+        nameNormal: "Cruise"
     },
     {
         ids: "216",
-        name: "Guest houses"
+        name: "Guest houses",
+        nameNormal: "Guest house"
     },
     {
         ids: "220",
-        name: "Holiday homes"
+        name: "Holiday homes",
+        nameNormal: "Holiday home"
     },
     {
         ids: "222",
-        name: "Homestays"
+        name: "Homestays",
+        nameNormal: "Homestay"
     },
     {
         ids: "264",
-        name: "Hostel/Backpacker accommodation"
+        name: "Hostels/Backpacker accommodations",
+        nameNormal: "Hostel/Backpacker accommodation"
     },
     {
         ids: "203",
-        name: "Hostels"
+        name: "Hostels",
+        nameNormal: "Hostel"
     },
     {
         ids: "204",
-        name: "Hotels"
+        name: "Hotels",
+        nameNormal: "Hotel"
     },
     {
         ids: "265",
-        name: "Houseboat"
+        name: "Houseboats",
+        nameNormal: "Houseboat"
     },
     {
         ids: "218",
-        name: "Inns"
+        name: "Inns",
+        nameNormal: "Inn"
     },
     {
         ids: "221",
-        name: "Lodges"
+        name: "Lodges",
+        nameNormal: "Lodge"
     },
     {
         ids: "224",
-        name: "Luxury tents"
+        name: "Luxury tents",
+        nameNormal: "Luxury tent"
     },
     {
         ids: "205",
-        name: "Motels"
+        name: "Motels",
+        nameNormal: "Motel"
     },
     {
         ids: "0",
-        name: "Not Available"
+        name: "Not Available",
+        nameNormal: "Not Available"
     },
     {
         ids: "250",
-        name: "Private vacation home"
+        name: "Private vacation homes",
+        nameNormal: "Private vacation home"
     },
     {
         ids: "277",
-        name: "Property"
+        name: "Properties",
+        nameNormal: "Property"
     },
     {
         ids: "207",
-        name: "Residences"
+        name: "Residences",
+        nameNormal: "Residence"
     },
     {
         ids: "206",
-        name: "Resorts"
+        name: "Resorts",
+        nameNormal: "Resort"
     },
     {
         ids: "227",
-        name: "Riads"
+        name: "Riads",
+        nameNormal: "Riad"
     },
     {
         ids: "273",
-        name: "Safari/Tentalow"
+        name: "Safari/Tentalows",
+        nameNormal: "Safari/Tentalow"
     },
     {
         ids: "235",
-        name: "Student accommodation"
+        name: "Student accommodations",
+        nameNormal: "Student accommodation"
     },
     {
         ids: "213",
-        name: "Villas"
+        name: "Villas",
+        nameNormal: "Villa"
     }
 ];

@@ -20,6 +20,10 @@ interface LocationState {
     setHotelTypeIds: (ids: string[]) => void,
     extraFilterOpened: boolean,
     setExtraFilterOpened: (b:boolean) => void,
+    searchRadius: number|undefined;
+    setSearchRadius: (r:number|undefined) => void,
+    searchCenter: L.LatLng|undefined,
+    setSearchCenter: (l:L.LatLng|undefined) => void,
     searchByText: () => void
 }
 
@@ -40,6 +44,10 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
     extraFilterOpened: false,
     setExtraFilterOpened: (b:boolean)=> set({extraFilterOpened: b}),
+    searchRadius: undefined,
+    setSearchRadius: (r:number|undefined)=> set({searchRadius:r}),
+    searchCenter: undefined,
+    setSearchCenter: (l:L.LatLng|undefined)=> set({searchCenter: l}),
 
     searchByText: () => retrieveByText(
         get().searchText,

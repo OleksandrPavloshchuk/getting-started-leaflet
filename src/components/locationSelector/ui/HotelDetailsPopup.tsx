@@ -15,15 +15,17 @@ export const HotelDetailsPopup: React.FC = () => {
             <strong>{selectedLocation.name}</strong><br/>
             {selectedLocation.thumbnail &&
                 <>
-                    <Image src={selectedLocation.thumbnail}
-                           style={{boxShadow: "0 2px 2px rgba(0, 0, 0, 0.4)"}}
-                           width={200} height={150} radius="md"/>
+                    <a target="_blank" href={selectedLocation.thumbnail}>
+                        <Image src={selectedLocation.thumbnail}
+                               style={{boxShadow: "0 2px 2px rgba(0, 0, 0, 0.4)", border: 0}}
+                               width={200} height={150} radius="md"/>
+                    </a>
                     <br/>
                 </>
             }
             {selectedLocation.address && <>{selectedLocation.address}<br/></>}
             {selectedLocation.isShowStars() && <>{selectedLocation.getStarsString()}<br/></>}
-            {selectedLocation.description && <DescriptionDialog/> }
+            {selectedLocation.description && <DescriptionDialog/>}
         </p>
     </Popup>);
 };

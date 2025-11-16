@@ -40,7 +40,7 @@ export const LocationsDropdown: React.FC = () => {
     };
 
     const handleSelect = (key: string) => {
-        if (result) {
+        if (result.length > 0) {
             const loc = result.find((item) => item.id === key);
             setSelected(loc);
             combobox.closeDropdown();
