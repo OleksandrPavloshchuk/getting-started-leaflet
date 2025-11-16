@@ -1,12 +1,12 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import type {Location} from "../model/Location.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
-import {retrieveLocationsByText} from "../service/retrieveLocationsByText.ts";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
-import type {Country} from "../static/countries.ts";
+import {getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
+import {useLocationStore} from "../model/LocationStore.ts";
 
 type Props = {
     onSelect: (loc: Location | undefined) => void
@@ -14,25 +14,25 @@ type Props = {
 
 export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const combobox = useCombobox();
-    const [query, setQuery] = useState('');
-    const [debouncedQuery] = useDebouncedValue(query, 300);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [locations, setLocations] = useState<Location[] | undefined>([]);
-    const [country, setCountry] = useState<Country | undefined>(undefined);
-    const [hotelTypeIds, setHotelTypeIds] = useState<string[]>([]);
-    const [selected, setSelected] = useState<Location | undefined>();
+    const result = useLocationStore((s)=> s.result);
+    const searchByText = useLocationStore((s) => s.searchByText);
+    const query = useLocationStore((s) => s.searchText);
+    const setQuery = useLocationStore((s) => s.setSearchText);
+    const country = useLocationStore((s) => s.countryIsoCode);
+    const setCountry = useLocationStore((s) => s.setCountryIsoCode);
+    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
+    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
+    const selected = useLocationStore((s) => s.selectedLocation);
+    const setSelected = useLocationStore((s) => s.setSelectedLocation);
 
-    useMemo(
+    const [debouncedQuery] = useDebouncedValue(query, 300);
+
+    useEffect(
         () => {
-            if (debouncedQuery.length >= 3) {
-                retrieveLocationsByText(
-                    query,
-                    country?.iso ? country?.iso : '',
-                    hotelTypeIds,
-                    setLoading,
-                    setError,
-                    setLocations);
+            if (debouncedQuery && debouncedQuery.length >= 3) {
+                searchByText( setLoading, setError);
             }
         },
         [query, country, hotelTypeIds]
@@ -46,8 +46,8 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     };
 
     const handleSelect = (key: string) => {
-        if (locations) {
-            const loc = locations.find((item) => item.id === key);
+        if (result) {
+            const loc = result.find((item) => item.id === key);
             setSelected(loc);
             onSelect(loc);
             combobox.closeDropdown();
@@ -90,8 +90,8 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                             >
                                 <Combobox.Options>
                                     {
-                                        locations && locations.length > 0 ?
-                                            (locations.map((item) =>
+                                        result && result.length > 0 ?
+                                            (result.map((item) =>
                                                     <Combobox.Option
                                                         value={item.id} key={item.id}
                                                         style={{
@@ -111,8 +111,8 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                     </td>
                     <td>
                         <ExtraFilterDialog
-                            argCountry={country}
-                            returnCountry={setCountry}
+                            argCountry={getCountryData(country)}
+                            returnCountry={c => setCountry(c?.iso)}
                             argHotelTypeIds={hotelTypeIds}
                             returnHotelTypeIds={setHotelTypeIds}
                         />

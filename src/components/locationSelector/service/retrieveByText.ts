@@ -2,22 +2,23 @@ import {type Location, createLocation} from "../model/Location.ts";
 
 const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
-export const retrieveLocationsByText = (
-    query: string,
+export const retrieveByText = (
+    query: string | undefined,
     countryIsoCode: string | undefined,
     hotelTypesIds: string[],
     setLoading: (loading: boolean) => void,
     setError: (error: string | null) => void,
-    setLocations: (locations: Location[]) => void
+    setResult: (locations: Location[]) => void
 ) => {
-    const normalized = query?.toLowerCase().trim();
+
+    const normalized = query?.toLowerCase().trim() ?? "";
     if (!normalized) {
-        setLocations([]);
+        setResult([]);
         return;
     }
     const [city, name] = normalized.split(/,/);
     if (!city || city.trim().length < 2 || !name || name === "") {
-        setLocations([]);
+        setResult([]);
         return;
     }
 
@@ -27,7 +28,7 @@ export const retrieveLocationsByText = (
     setError(null);
     setLoading(true);
     const types = hotelTypesIds.join(",");
-    const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query)}&c=${countryIsoCode}&t=${encodeURIComponent(types)}`;
+    const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query ?? "")}&c=${encodeURIComponent(countryIsoCode ?? "")}&t=${encodeURIComponent(types)}`;
     fetch(uri,
         {signal: controller.signal})
         .then((res) => {
@@ -36,7 +37,9 @@ export const retrieveLocationsByText = (
             }
             return res.json();
         })
-        .then((locations: Location[]) => setLocations(locations.map((raw) => createLocation(raw))))
+        .then((locationsRaw: Location[]) => {
+            setResult(locationsRaw.map((raw) => createLocation(raw)));
+        })
         .catch((e: Error) => setError(`Retrieve error: ${e}`))
         .finally(() => setLoading(false));
 
