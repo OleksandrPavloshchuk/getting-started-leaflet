@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {MapContainer, Marker, TileLayer, useMap, useMapEvents} from "react-leaflet";
-import {type Location} from "../model/Location.ts";
 import L, {LatLng} from "leaflet";
 
 import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
 import {SelectLocationAndRadiusPopup} from "./SelectLocationAndRadiusPopup.tsx";
+import {useLocationStore} from "../model/LocationStore.ts";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -14,10 +14,6 @@ const markerIcon = new L.Icon({
     iconSize: [25, 41],
     iconAnchor: [12, 41]
 });
-
-type Props = {
-    selected: Location | undefined
-};
 
 // Helper component for map recentering
 const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
@@ -41,8 +37,11 @@ const MapClickHandler: React.FC<{ onClickPoint: (pos: LatLng) => void }> = ({onC
     return null;
 }
 
-export const MapView: React.FC<Props> = ({selected}) => {
+export const MapView: React.FC = () => {
     const defaultCenter = [49.0, 31.0];
+
+    const selectedLocation = useLocationStore((s)=>s.selectedLocation);
+
     const [circlePopupPos, setCirclePopupPos] = useState<LatLng | undefined>(undefined);
     const [showCirclePopup, setShowCirclePopup] = useState(false);
 
@@ -71,12 +70,12 @@ export const MapView: React.FC<Props> = ({selected}) => {
                 </>
             }
 
-            {selected &&
+            {selectedLocation &&
                 <>
-                    <Marker position={[selected.lat, selected.lng]} icon={markerIcon}>
+                    <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={markerIcon}>
                         <HotelDetailsPopup/>
                     </Marker>
-                    <Recenter lat={selected.lat} lng={selected.lng}/>
+                    <Recenter lat={selectedLocation.lat} lng={selectedLocation.lng}/>
                 </>
             }
 

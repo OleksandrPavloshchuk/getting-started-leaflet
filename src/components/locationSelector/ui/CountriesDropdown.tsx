@@ -3,12 +3,13 @@ import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
+import {getDropdownItemStyle} from "../utils/style.ts";
 
 export const CountriesDropdown: React.FC = () => {
     const combobox = useCombobox();
 
-    const country = useLocationStore((s)=>s.country);
-    const setCountry = useLocationStore((s)=>s.setCountry);
+    const country = useLocationStore((s) => s.country);
+    const setCountry = useLocationStore((s) => s.setCountry);
 
     const handleSelect = (key: string) => {
         combobox.resetSelectedOption();
@@ -46,7 +47,7 @@ export const CountriesDropdown: React.FC = () => {
                     onChange={(event) =>
                         handleChange(event.currentTarget.value)
                     }
-                    rightSection={<DropdownArrow target={combobox} />}
+                    rightSection={<DropdownArrow target={combobox}/>}
                 />
             </Combobox.Target>
             <Combobox.Dropdown
@@ -63,12 +64,8 @@ export const CountriesDropdown: React.FC = () => {
                                 <Combobox.Option
                                     value={item.iso}
                                     key={item.iso}
-                                    style={{
-                                        color: country?.iso === item.iso ? 'white' : undefined,
-                                        backgroundColor: country?.iso === item.iso ? 'var(--mantine-color-blue-filled)' : undefined,
-                                    }}>
-                                    {item.flag}&nbsp;{item.name}
-                                </Combobox.Option>)
+                                    style={getDropdownItemStyle(() => country?.iso === item.iso)}
+                                >{item.flag}&nbsp;{item.name}</Combobox.Option>)
                     }
                 </Combobox.Options>
             </Combobox.Dropdown>

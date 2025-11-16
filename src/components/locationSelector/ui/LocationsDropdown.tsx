@@ -5,6 +5,7 @@ import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
+import {getDropdownItemStyle} from "../utils/style.ts";
 
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
@@ -85,10 +86,7 @@ export const LocationsDropdown: React.FC = () => {
                                             (result.map((item) =>
                                                     <Combobox.Option
                                                         value={item.id} key={item.id}
-                                                        style={{
-                                                            color: selected?.id === item.id ? 'white' : undefined,
-                                                            backgroundColor: selected?.id === item.id ? 'var(--mantine-color-blue-filled)' : undefined,
-                                                        }}
+                                                        style={getDropdownItemStyle(()=>selected?.id === item.id)}
                                                     >
                                                         <LocationInfo location={item}/>
                                                     </Combobox.Option>)

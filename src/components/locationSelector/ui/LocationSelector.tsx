@@ -10,18 +10,14 @@ type Props = {
 };
 
 export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
-    const selectedLocation = useLocationStore((s)=>s.selectedLocation);
-    const setSelectedLocation = useLocationStore((s)=>s.setSelectedLocation);
-
-    const handleSubmit = () => {
-        onSubmit(selectedLocation);
-    };
+    const selectedLocation = useLocationStore((s) => s.selectedLocation);
+    const setSelectedLocation = useLocationStore((s) => s.setSelectedLocation);
 
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
             <Paper withBorder radius="md" p="lg">
                 <Stack gap="lg">
-                    <LocationsDropdown />
+                    <LocationsDropdown/>
                     <div>
                         {
                             selectedLocation
@@ -31,7 +27,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                     </div>
                     <Flex w="100%" gap="sm">
                         <Button style={{flex: 1}}
-                                onClick={handleSubmit}
+                                onClick={() => onSubmit(selectedLocation)}
                                 disabled={!selectedLocation}>Submit</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => {
@@ -40,7 +36,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 disabled={!selectedLocation}>Reset</Button>
                     </Flex>
                     <div>
-                        <MapView selected={selectedLocation}/>
+                        <MapView/>
                     </div>
                 </Stack>
             </Paper>
