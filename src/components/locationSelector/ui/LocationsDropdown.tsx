@@ -1,18 +1,12 @@
 import React, {useEffect} from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
-import type {Location} from "../model/Location.ts";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
-import {getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
 
-type Props = {
-    onSelect: (loc: Location | undefined) => void
-}
-
-export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
+export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
     const error = useLocationStore((s)=>s.error);
     const loading = useLocationStore((s) => s.loading);
@@ -20,10 +14,8 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
     const searchByText = useLocationStore((s) => s.searchByText);
     const query = useLocationStore((s) => s.searchText);
     const setQuery = useLocationStore((s) => s.setSearchText);
-    const country = useLocationStore((s) => s.countryIsoCode);
-    const setCountry = useLocationStore((s) => s.setCountryIsoCode);
+    const country = useLocationStore((s) => s.country);
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
-    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
     const selected = useLocationStore((s) => s.selectedLocation);
     const setSelected = useLocationStore((s) => s.setSelectedLocation);
 
@@ -49,7 +41,6 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
         if (result) {
             const loc = result.find((item) => item.id === key);
             setSelected(loc);
-            onSelect(loc);
             combobox.closeDropdown();
         }
     }
@@ -110,12 +101,7 @@ export const LocationsDropdown: React.FC<Props> = ({onSelect}) => {
                         </Combobox>
                     </td>
                     <td>
-                        <ExtraFilterDialog
-                            argCountry={getCountryData(country)}
-                            returnCountry={c => setCountry(c?.iso)}
-                            argHotelTypeIds={hotelTypeIds}
-                            returnHotelTypeIds={setHotelTypeIds}
-                        />
+                        <ExtraFilterDialog/>
                     </td>
                 </tr>
                 </tbody>

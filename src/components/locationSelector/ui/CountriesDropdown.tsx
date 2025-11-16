@@ -1,27 +1,23 @@
-import React, {useState} from "react";
+import React from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
+import {useLocationStore} from "../model/LocationStore.ts";
 
-type Props = {
-    argCountry: Country | undefined,
-    returnCountry: (country: Country | undefined) => void
-}
-
-export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) => {
+export const CountriesDropdown: React.FC = () => {
     const combobox = useCombobox();
-    const [selected, setSelected] = useState<Country | undefined>(argCountry);
+
+    const country = useLocationStore((s)=>s.country);
+    const setCountry = useLocationStore((s)=>s.setCountry);
 
     const handleSelect = (key: string) => {
         combobox.resetSelectedOption();
-        const country = getCountryData(key)
-        setSelected(country);
+        setCountry(getCountryData(key));
         combobox.closeDropdown();
-        returnCountry(country);
     }
 
     const handleChange = (s: string) => {
-        if (!selected) {
+        if (country) {
             const idx = COUNTRIES.findIndex((v: Country) =>
                 v.name.toUpperCase().startsWith(s.toUpperCase()));
             if (idx >= 0) {
@@ -42,7 +38,7 @@ export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) 
             <Combobox.Target>
                 <TextInput
                     title={"Country"}
-                    value={selected ? `${selected.flag} ${selected.name}` : ""}
+                    value={country ? `${country.flag} ${country.name}` : ""}
                     placeholder="Country"
                     onFocus={() => combobox.openDropdown()}
                     onClick={() => combobox.openDropdown()}
@@ -68,8 +64,8 @@ export const CountriesDropdown: React.FC<Props> = ({argCountry, returnCountry}) 
                                     value={item.iso}
                                     key={item.iso}
                                     style={{
-                                        color: selected?.iso === item.iso ? 'white' : undefined,
-                                        backgroundColor: selected?.iso === item.iso ? 'var(--mantine-color-blue-filled)' : undefined,
+                                        color: country?.iso === item.iso ? 'white' : undefined,
+                                        backgroundColor: country?.iso === item.iso ? 'var(--mantine-color-blue-filled)' : undefined,
                                     }}>
                                     {item.flag}&nbsp;{item.name}
                                 </Combobox.Option>)

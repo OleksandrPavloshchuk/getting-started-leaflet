@@ -1,45 +1,28 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {ActionIcon, Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
-import {type Country} from "../static/countries.ts";
 import {IconCancel, IconCheck, IconFilterSearch} from "@tabler/icons-react";
 import {TypesSelector} from "./TypesSelector.tsx";
+import {useLocationStore} from "../model/LocationStore.ts";
 
-type Props = {
-    argCountry: Country | undefined,
-    returnCountry: (country: Country | undefined) => void,
-    argHotelTypeIds: string[],
-    returnHotelTypeIds: (hotelTypeIds: string[]) => void
-}
+export const ExtraFilterDialog: React.FC = () => {
 
-export const ExtraFilterDialog: React.FC<Props> = (
-    {argCountry, returnCountry, argHotelTypeIds, returnHotelTypeIds}) => {
     const [opened, setOpened] = useState(false);
-    const [country, setCountry] = useState<Country | undefined>(argCountry);
-    const [hotelTypeIds, setHotelTypeIds] = useState<string[]>([]);
 
-    useEffect(() => {
-        setCountry(argCountry);
-    }, [argCountry]);
+    const country = useLocationStore((s)=>s.country);
+    const setCountry = useLocationStore((s)=> s.setCountry);
+    const hotelTypeIds = useLocationStore((s)=>s.hotelTypeIds);
+    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
 
-    useEffect(() => {
-        setHotelTypeIds(argHotelTypeIds);
-    }, [argHotelTypeIds]);
-
-    const handleSet = () => {
-        returnCountry(country);
-        returnHotelTypeIds(hotelTypeIds);
-        setOpened(false);
-    }
+    const handleSet = () => setOpened(false);
 
     const handleClear = () => {
         setCountry(undefined);
-        returnCountry(undefined);
-        returnHotelTypeIds([]);
+        setHotelTypeIds([]);
         setOpened(false);
     }
 
-    const isOn = () => country || argHotelTypeIds.length > 0;
+    const isOn = () => country || hotelTypeIds.length > 0;
 
     return (
         <>
@@ -89,7 +72,7 @@ export const ExtraFilterDialog: React.FC<Props> = (
                     <tbody>
                     <tr>
                         <td style={{width: '100%'}}>
-                            <CountriesDropdown argCountry={country} returnCountry={setCountry}/>
+                            <CountriesDropdown />
                         </td>
                         <td>
                             <ActionIcon
@@ -112,7 +95,7 @@ export const ExtraFilterDialog: React.FC<Props> = (
                     </tr>
                     <tr>
                         <td colSpan={3}>
-                            <TypesSelector argHotelTypeIds={hotelTypeIds} returnHotelTypeIds={setHotelTypeIds}/>
+                            <TypesSelector />
                         </td>
                     </tr>
                     </tbody>

@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import {type Location} from "./Location.ts";
 import {retrieveByText} from "../service/retrieveByText.ts";
+import type {Country} from "../static/countries.ts";
 
 interface LocationState {
     error: string | undefined,
@@ -13,8 +14,8 @@ interface LocationState {
     setSelectedLocation: (loc: Location | undefined) => void,
     result: Location[],
     setResult: (res: Location[]) => void,
-    countryIsoCode: string | undefined,
-    setCountryIsoCode: (iso: string | undefined) => void,
+    country: Country | undefined,
+    setCountry: (c: Country | undefined) => void,
     hotelTypeIds: string[],
     setHotelTypeIds: (ids: string[]) => void,
     searchByText: () => void
@@ -31,14 +32,14 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setSelectedLocation: (loc: Location | undefined) => set({selectedLocation: loc}),
     result: [],
     setResult: (res: Location[]) => set({result: res}),
-    countryIsoCode: undefined,
-    setCountryIsoCode: (iso: string | undefined) => set({countryIsoCode: iso}),
+    country: undefined,
+    setCountry: (c: Country | undefined) => set({country: c}),
     hotelTypeIds: [],
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
 
     searchByText: () => retrieveByText(
         get().searchText,
-        get().countryIsoCode,
+        get().country?.iso,
         get().hotelTypeIds,
         (l: boolean) => set({loading: l}),
         (e: string|undefined)=> set({error: e}),
