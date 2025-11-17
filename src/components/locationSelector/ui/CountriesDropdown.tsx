@@ -3,7 +3,7 @@ import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
-import {getDropdownItemStyle} from "../utils/style.ts";
+import {getDropdownItemStyle} from "../utils/utils.ts";
 
 export const CountriesDropdown: React.FC = () => {
     const combobox = useCombobox();

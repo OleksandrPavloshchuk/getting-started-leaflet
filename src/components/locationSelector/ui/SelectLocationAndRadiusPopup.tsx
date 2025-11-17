@@ -1,6 +1,7 @@
 import {Popup} from "react-leaflet";
 import React from "react";
 import {useLocationStore} from "../model/LocationStore.ts";
+import {getRadiusStr} from "../utils/utils.ts";
 
 type Props = {
     setShow: (show: boolean) => void
@@ -12,7 +13,6 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
     const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
 
     const radiusLink = (r: number) => {
-        const str = r < 1000 ? `${r} m` : `${r / 1000} km`;
         return (
             <div key={r}
                  className="radius-link"
@@ -21,7 +21,7 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
                      e.preventDefault();
                      setSearchRadius(r);
                      setShow(false);
-                 }}>{str}</div>);
+                 }}>{getRadiusStr(r)}</div>);
     };
 
     return (<Popup position={searchCenter} closeOnEscapeKey={true} closeButton={true}>

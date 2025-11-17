@@ -5,7 +5,7 @@ import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
-import {getDropdownItemStyle} from "../utils/style.ts";
+import {getDropdownItemStyle} from "../utils/utils.ts";
 
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
