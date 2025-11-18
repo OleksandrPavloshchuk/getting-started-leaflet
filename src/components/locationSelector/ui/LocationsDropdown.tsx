@@ -12,7 +12,7 @@ export const LocationsDropdown: React.FC = () => {
     const error = useLocationStore((s) => s.error);
     const loading = useLocationStore((s) => s.loading);
     const result = useLocationStore((s) => s.result);
-    const searchByText = useLocationStore((s) => s.searchByText);
+    const retrieve = useLocationStore((s) => s.retrieve);
     const query = useLocationStore((s) => s.searchText);
     const setQuery = useLocationStore((s) => s.setSearchText);
     const country = useLocationStore((s) => s.country);
@@ -28,7 +28,7 @@ export const LocationsDropdown: React.FC = () => {
     useEffect(
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
-                searchByText();
+                retrieve();
             }
         },
         [query, country, hotelTypeIds, extraFilterOpened, radius, center]

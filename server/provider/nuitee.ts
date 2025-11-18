@@ -1,6 +1,6 @@
-import {getDatabasePool} from "../../DatabasePool";
+import {getDatabasePool} from "../DatabasePool";
 
-export class NuiteeText {
+export class NuiteeProvider {
     public static retrieve({cityLike, nameLike, country, radius, lat, lng, types}) {
         return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, types]);
     }

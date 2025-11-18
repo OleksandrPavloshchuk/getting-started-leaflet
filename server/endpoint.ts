@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
-import {NuiteeText} from "./provider/text/nuitee";
-import {RestelText} from "./provider/text/restel";
+import {NuiteeProvider} from "./provider/nuitee";
+import {RestelProvider} from "./provider/restel";
 
 const app = express();
 const port = 4000;
@@ -86,8 +86,8 @@ app.get("/api/locations", async (req, res) => {
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
     Promise.all([
-        NuiteeText.retrieve(queryParams),
-        RestelText.retrieve(queryParams)
+        NuiteeProvider.retrieve(queryParams),
+        RestelProvider.retrieve(queryParams)
     ]).then(([nuiteeResult, restelResult]) => gatherAndReturnResult(res, [nuiteeResult, restelResult], setCount))
         .catch((err) => handleError(res, err))
         .finally(() => finalize(start, count));

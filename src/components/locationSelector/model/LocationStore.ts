@@ -5,7 +5,7 @@ import type {Country} from "../static/countries.ts";
 
 interface LocationState {
     error: string | undefined,
-    setError: (e:string|undefined) => void,
+    setError: (e: string | undefined) => void,
     loading: boolean,
     setLoading: (l: boolean) => void,
     searchText: string | undefined,
@@ -19,17 +19,19 @@ interface LocationState {
     hotelTypeIds: string[],
     setHotelTypeIds: (ids: string[]) => void,
     extraFilterOpened: boolean,
-    setExtraFilterOpened: (b:boolean) => void,
-    searchRadius: number|undefined;
-    setSearchRadius: (r:number|undefined) => void,
-    searchCenter: L.LatLng|undefined,
-    setSearchCenter: (l:L.LatLng|undefined) => void,
-    searchByText: () => void
+    setExtraFilterOpened: (b: boolean) => void,
+    searchRadius: number | undefined;
+    setSearchRadius: (r: number | undefined) => void,
+    searchCenter: L.LatLng | undefined,
+    setSearchCenter: (l: L.LatLng | undefined) => void,
+    retrieve: () => void,
+    filtersEnabled: () => boolean,
+    clearFilters: () => void
 }
 
 export const useLocationStore = create<LocationState>((set, get) => ({
     error: undefined,
-    setError: (e: string|undefined)=> set({error: e}),
+    setError: (e: string | undefined) => set({error: e}),
     loading: false,
     setLoading: (l: boolean) => set({loading: l}),
     searchText: "",
@@ -43,13 +45,12 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     hotelTypeIds: [],
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
     extraFilterOpened: false,
-    setExtraFilterOpened: (b:boolean)=> set({extraFilterOpened: b}),
+    setExtraFilterOpened: (b: boolean) => set({extraFilterOpened: b}),
     searchRadius: undefined,
-    setSearchRadius: (r:number|undefined)=> set({searchRadius:r}),
+    setSearchRadius: (r: number | undefined) => set({searchRadius: r}),
     searchCenter: undefined,
-    setSearchCenter: (l:L.LatLng|undefined)=> set({searchCenter: l}),
-
-    searchByText: () => retrieveByText(
+    setSearchCenter: (l: L.LatLng | undefined) => set({searchCenter: l}),
+    retrieve: () => retrieveByText(
         get().searchText,
         get().country?.iso,
         get().hotelTypeIds,
@@ -57,7 +58,35 @@ export const useLocationStore = create<LocationState>((set, get) => ({
         get().searchCenter?.lat,
         get().searchCenter?.lng,
         (l: boolean) => set({loading: l}),
-        (e: string|undefined)=> set({error: e}),
+        (e: string | undefined) => set({error: e}),
         (res: Location[]) => set({result: res})
-    )
+    ),
+    filtersEnabled: () => {
+        // TODO fix this
+        if (get().searchText && get().searchText?.trim() !== "") {
+            return true;
+        }
+        if (get().country) {
+            return true;
+        }
+        if (get().hotelTypeIds.length > 1) {
+            return true;
+        }
+        if (get().searchCenter) {
+            return true;
+        }
+        if (get().searchRadius) {
+            return true;
+        }
+        return false;
+    },
+    clearFilters: () => {
+        set({
+            searchText: "",
+            searchCenter: undefined,
+            searchRadius: undefined,
+            country: undefined,
+            hotelTypeIds: []
+        });
+    }
 }));

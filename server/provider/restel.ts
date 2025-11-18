@@ -1,7 +1,7 @@
-import {getDatabasePool} from "../../DatabasePool";
+import {getDatabasePool} from "../DatabasePool";
 import { startCase, toLower } from "lodash";
 
-export class RestelText {
+export class RestelProvider {
     public static retrieve({cityLike, nameLike, country, radius, lat, lng, }) {
         return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, ])
             .then((result) => {
