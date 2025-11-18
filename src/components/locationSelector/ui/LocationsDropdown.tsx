@@ -58,48 +58,51 @@ export const LocationsDropdown: React.FC = () => {
                     <tbody>
                     <tr>
                         <td style={{width: "100%"}}>
-                            <Combobox
-                                withinPortal={true}
-                                zIndex={8000}
-                                store={combobox}
-                                onOptionSubmit={(v) => handleSelect(v)}
-                            >
-                                <Combobox.Target>
-                                    <TextInput
-                                        value={query}
-                                        placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
-                                        onChange={(event) =>
-                                            handleChange(event.currentTarget.value)
-                                        }
-                                        onFocus={() => combobox.openDropdown()}
-                                        onClick={() => combobox.openDropdown()}
-                                        onBlur={() => combobox.closeDropdown()}
-                                        rightSection={<DropdownArrow target={combobox}/>}
-                                    />
-                                </Combobox.Target>
-                                <Combobox.Dropdown
-                                    style={{
-                                        maxHeight: '300px',
-                                        overflowY: 'auto',
-                                    }}
+                            <fieldset>
+                                <legend>{`Found: ${result.length}`}</legend>
+                                <Combobox
+                                    withinPortal={true}
+                                    zIndex={8000}
+                                    store={combobox}
+                                    onOptionSubmit={(v) => handleSelect(v)}
                                 >
-                                    <Combobox.Options>
-                                        {
-                                            result && result.length > 0 ?
-                                                (result.map((item) =>
-                                                        <Combobox.Option
-                                                            value={item.id} key={item.id}
-                                                            style={getDropdownItemStyle(() => selected?.id === item.id)}
-                                                        >
-                                                            <LocationInfo location={item}/>
-                                                        </Combobox.Option>)
-                                                ) : (
-                                                    <Combobox.Empty>Nothing is found</Combobox.Empty>
-                                                )
-                                        }
-                                    </Combobox.Options>
-                                </Combobox.Dropdown>
-                            </Combobox>
+                                    <Combobox.Target>
+                                        <TextInput
+                                            value={query}
+                                            placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
+                                            onChange={(event) =>
+                                                handleChange(event.currentTarget.value)
+                                            }
+                                            onFocus={() => combobox.openDropdown()}
+                                            onClick={() => combobox.openDropdown()}
+                                            onBlur={() => combobox.closeDropdown()}
+                                            rightSection={<DropdownArrow target={combobox}/>}
+                                        />
+                                    </Combobox.Target>
+                                    <Combobox.Dropdown
+                                        style={{
+                                            maxHeight: '300px',
+                                            overflowY: 'auto',
+                                        }}
+                                    >
+                                        <Combobox.Options>
+                                            {
+                                                result && result.length > 0 ?
+                                                    (result.map((item) =>
+                                                            <Combobox.Option
+                                                                value={item.id} key={item.id}
+                                                                style={getDropdownItemStyle(() => selected?.id === item.id)}
+                                                            >
+                                                                <LocationInfo location={item}/>
+                                                            </Combobox.Option>)
+                                                    ) : (
+                                                        <Combobox.Empty>Nothing is found</Combobox.Empty>
+                                                    )
+                                            }
+                                        </Combobox.Options>
+                                    </Combobox.Dropdown>
+                                </Combobox>
+                            </fieldset>
                         </td>
                         <td>
                             <ExtraFilterDialog/>

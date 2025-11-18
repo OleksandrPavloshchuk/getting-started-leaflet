@@ -1,14 +1,24 @@
 import {useLocationStore} from "../model/LocationStore.ts";
 import {getRadiusStr} from "../utils/utils.ts";
+import {HOTEL_TYPES} from "../static/hotelTypes.ts";
+import {Badge} from "@mantine/core";
 
 export const ExtraFiltersInfo: React.FC = () => {
     const searchRadius = useLocationStore((s) => s.searchRadius);
     const searchCenter = useLocationStore((s) => s.searchCenter);
     const country = useLocationStore((s) => s.country);
-    // TODO use full types here for getting of names
-    const hotelTypes = useLocationStore((s) => s.hotelTypeIds);
+    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
 
-    return <table style={{width: "100%", fontSize: "sm"}}>
+    const getTypeNames = () => {
+        return <div style={{maxWidth: 600}}>{
+            hotelTypeIds
+            .map( (key) => HOTEL_TYPES.find((item)=>item.ids==key)?.name)
+            .map((name) =>
+                <Badge key={name} style={{margin: 2, borderRadius: 2}}>{name}</Badge>)}
+        </div>;
+    }
+
+    return <table style={{width: "100%", fontSize: "10pt"}}>
         <tbody>
         {searchCenter &&
             <>
@@ -34,10 +44,10 @@ export const ExtraFiltersInfo: React.FC = () => {
                 <td>{`${country.flag} ${country.name}`}</td>
             </tr>
         }
-        {hotelTypes.length > 0 &&
+        {hotelTypeIds.length > 0 &&
             <tr>
                 <td>Location Types</td>
-                <td>{hotelTypes.join(", ")}</td>
+                <td>{getTypeNames()}</td>
             </tr>
         }
         </tbody>

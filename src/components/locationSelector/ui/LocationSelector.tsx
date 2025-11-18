@@ -14,8 +14,11 @@ type Props = {
 export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
     const selectedLocation = useLocationStore((s) => s.selectedLocation);
     const setSelectedLocation = useLocationStore((s) => s.setSelectedLocation);
-    const filtersEnabled = useLocationStore((s) => s.filtersEnabled);
     const clearAllFilters = useLocationStore((s) => s.clearFilters);
+    const searchRadius = useLocationStore((s) => s.searchRadius);
+    const country = useLocationStore((s) => s.country);
+    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
+    const searchText = useLocationStore((s) => s.searchText);
 
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
@@ -36,7 +39,8 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 disabled={!selectedLocation}><IconSelect/>&nbsp;Submit</Button>
                         <Button style={{flex: 1}}
                                 onClick={clearAllFilters}
-                                disabled={!filtersEnabled}><IconFilterCancel/>&nbsp;Clear All Filters</Button>
+                                disabled={!country && !searchRadius && hotelTypeIds.length===0 && !searchText}
+                        ><IconFilterCancel/>&nbsp;Clear All Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => {
                                     setSelectedLocation(undefined);

@@ -25,7 +25,6 @@ interface LocationState {
     searchCenter: L.LatLng | undefined,
     setSearchCenter: (l: L.LatLng | undefined) => void,
     retrieve: () => void,
-    filtersEnabled: () => boolean,
     clearFilters: () => void
 }
 
@@ -61,25 +60,6 @@ export const useLocationStore = create<LocationState>((set, get) => ({
         (e: string | undefined) => set({error: e}),
         (res: Location[]) => set({result: res})
     ),
-    filtersEnabled: () => {
-        // TODO fix this
-        if (get().searchText && get().searchText?.trim() !== "") {
-            return true;
-        }
-        if (get().country) {
-            return true;
-        }
-        if (get().hotelTypeIds.length > 1) {
-            return true;
-        }
-        if (get().searchCenter) {
-            return true;
-        }
-        if (get().searchRadius) {
-            return true;
-        }
-        return false;
-    },
     clearFilters: () => {
         set({
             searchText: "",
