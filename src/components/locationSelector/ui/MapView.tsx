@@ -80,7 +80,7 @@ export const MapView: React.FC = () => {
                     color: 'var(--mantine-color-blue-filled)',
                     weight: 1,
                     fillColor: 'var(--mantine-color-blue-filled)',
-                    fillOpacity: 0.1,
+                    fillOpacity: 0.15,
                 }}
             />
             }

@@ -1,8 +1,8 @@
 import {getDatabasePool} from "../../DatabasePool";
 
 export class NuiteeText {
-    public static retrieve({cityLike, nameLike, country, types}) {
-        return getDatabasePool().query(SQL, [cityLike, nameLike, country, types]);
+    public static retrieve({cityLike, nameLike, country, radius, lat, lng, types}) {
+        return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, types]);
     }
 }
 
@@ -25,7 +25,9 @@ const SQL = `
      ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') 
      AND 
      ($3='' OR UPPER(ext -> 'hotel' ->> 'country') = UPPER($3)) 
+     AND 
+     ($4=0 OR earth_distance(ll_to_earth($5, $6),ll_to_earth(latitude, longitude)) <= $4)
      AND
-     (COALESCE(array_length($4::text[], 1), 0) = 0 OR (ext -> 'hotel' ->> 'hotel_type_id') = ANY($4))
+     (COALESCE(array_length($7::text[], 1), 0) = 0 OR (ext -> 'hotel' ->> 'hotel_type_id') = ANY($7))
     `;
 

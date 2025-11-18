@@ -6,6 +6,9 @@ export const retrieveByText = (
     query: string | undefined,
     countryIsoCode: string | undefined,
     hotelTypesIds: string[],
+    radius: number | undefined,
+    lat: number | undefined,
+    lng: number | undefined,
     setLoading: (loading: boolean) => void,
     setError: (error: string | undefined) => void,
     setResult: (locations: Location[]) => void
@@ -28,7 +31,14 @@ export const retrieveByText = (
     setError(undefined);
     setLoading(true);
     const types = hotelTypesIds.join(",");
-    const uri = `${ENDPOINT_URI}?q=${encodeURIComponent(query ?? "")}&c=${encodeURIComponent(countryIsoCode ?? "")}&t=${encodeURIComponent(types)}`;
+    const qParam = encodeURIComponent(query ?? "");
+    const cParam = encodeURIComponent(countryIsoCode ?? "");
+    const tParam = encodeURIComponent(types);
+    const rParam = encodeURIComponent(radius ?? "");
+    const latParam = encodeURIComponent(lat ?? "");
+    const lngParam = encodeURIComponent(lng ?? "");
+
+    const uri = `${ENDPOINT_URI}?q=${qParam}&c=${cParam}&t=${tParam}&r=${rParam}&lat=${latParam}&lng=${lngParam}`;
     fetch(uri,
         {signal: controller.signal})
         .then((res) => {

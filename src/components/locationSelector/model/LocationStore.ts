@@ -53,6 +53,9 @@ export const useLocationStore = create<LocationState>((set, get) => ({
         get().searchText,
         get().country?.iso,
         get().hotelTypeIds,
+        get().searchRadius,
+        get().searchCenter?.lat,
+        get().searchCenter?.lng,
         (l: boolean) => set({loading: l}),
         (e: string|undefined)=> set({error: e}),
         (res: Location[]) => set({result: res})

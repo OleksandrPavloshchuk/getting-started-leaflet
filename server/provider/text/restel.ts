@@ -2,8 +2,8 @@ import {getDatabasePool} from "../../DatabasePool";
 import { startCase, toLower } from "lodash";
 
 export class RestelText {
-    public static retrieve({cityLike, nameLike, country}) {
-        return getDatabasePool().query(SQL, [cityLike, nameLike, country])
+    public static retrieve({cityLike, nameLike, country, radius, lat, lng, }) {
+        return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, ])
             .then((result) => {
                 const converted = result.rows.map((row) => {
                     row.city = startCase(toLower(row.city));
@@ -34,5 +34,7 @@ const SQL = `
      ext -> 'hotel' ->> 'city' ILIKE CONCAT('%',CAST($1 as text),'%') 
      AND 
      ($3='' OR UPPER(country) = UPPER($3))
+     AND
+     ($4=0 OR earth_distance(ll_to_earth($5, $6),ll_to_earth(latitude, longitude)) <= $4);    
     `;
 

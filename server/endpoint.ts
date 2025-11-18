@@ -53,11 +53,20 @@ const gatherAndReturnResult = (
     return res.json(rows);
 };
 
+const getParamString = (src: any | undefined) => (src as string)?.trim() ?? "";
+const getParamNumber = (src: any | undefined)=> {
+    const s = getParamString(src);
+    return s.length > 0 ? Number.parseFloat(s) : 0;
+}
+
 // Endpoint:
 app.get("/api/locations", async (req, res) => {
-    const q = (req.query.q as string)?.trim() ?? "";
-    const country = (req.query.c as string)?.trim() ?? "";
-    const typesStr = (req.query.t as string)?.trim() ?? "";
+    const q = getParamString(req.query.q);
+    const country = getParamString(req.query.c);
+    const typesStr = getParamString(req.query.t);
+    const lng = getParamNumber(req.query.lng);
+    const lat = getParamNumber(req.query.lat);
+    const radius = getParamNumber(req.query.r);
     let types = typesStr.split(/,/);
     types = types[0] === '' ? [] : types;
 
@@ -74,8 +83,8 @@ app.get("/api/locations", async (req, res) => {
         count = n;
     };
 
+    const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    const queryParams = {cityLike, nameLike, country, types};
     Promise.all([
         NuiteeText.retrieve(queryParams),
         RestelText.retrieve(queryParams)
