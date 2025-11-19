@@ -2,6 +2,7 @@ import {useLocationStore} from "../model/LocationStore.ts";
 import {getRadiusStr} from "../utils/utils.ts";
 import {HOTEL_TYPES} from "../static/hotelTypes.ts";
 import {Badge} from "@mantine/core";
+import "../../../../public/leaflet-custom.css";
 
 export const ExtraFiltersInfo: React.FC = () => {
     const searchRadius = useLocationStore((s) => s.searchRadius);
@@ -23,31 +24,31 @@ export const ExtraFiltersInfo: React.FC = () => {
         {searchCenter &&
             <>
                 <tr>
-                    <td>Latitude</td>
-                    <td>{searchCenter.lat.toFixed(4)}</td>
+                    <td className="extra-filter-info line">Center Latitude</td>
+                    <td className="extra-filter-info line" width="75%">{searchCenter.lat.toFixed(4)}</td>
                 </tr>
                 <tr>
-                    <td>Longitude</td>
-                    <td>{searchCenter.lng.toFixed(4)}</td>
+                    <td className="extra-filter-info line">Center Longitude</td>
+                    <td className="extra-filter-info line">{searchCenter.lng.toFixed(4)}</td>
                 </tr>
             </>
         }
         {searchRadius && searchRadius > 0 &&
             <tr>
-                <td>Radius</td>
-                <td>{getRadiusStr(searchRadius)}</td>
+                <td className="extra-filter-info line">Radius</td>
+                <td className="extra-filter-info line">{getRadiusStr(searchRadius)}</td>
             </tr>
         }
         {country &&
             <tr>
-                <td>Country</td>
-                <td>{`${country.flag} ${country.name}`}</td>
+                <td className="extra-filter-info line">Country</td>
+                <td className="extra-filter-info line">{`${country.flag} ${country.name}`}</td>
             </tr>
         }
         {hotelTypeIds.length > 0 &&
             <tr>
-                <td>Location Types</td>
-                <td>{getTypeNames()}</td>
+                <td className="extra-filter-info">Location Types</td>
+                <td className="extra-filter-info">{getTypeNames()}</td>
             </tr>
         }
         </tbody>

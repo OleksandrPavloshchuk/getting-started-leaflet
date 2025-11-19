@@ -58,7 +58,7 @@ export const LocationsDropdown: React.FC = () => {
                     <tbody>
                     <tr>
                         <td style={{width: "100%"}}>
-                            <fieldset>
+                            <fieldset style={{fontSize: '8pt'}}>
                                 <legend>{`Found: ${result.length}`}</legend>
                                 <Combobox
                                     withinPortal={true}

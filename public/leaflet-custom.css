@@ -27,3 +27,11 @@
 .radius-link:hover {
     text-decoration: underline;
 }
+
+td.extra-filter-info {
+    font-size: 10pt;
+}
+
+td.line {
+    border-bottom: 1px dotted lightgray;
+}
