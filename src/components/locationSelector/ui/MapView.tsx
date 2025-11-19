@@ -6,6 +6,7 @@ import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
 import {SelectLocationAndRadiusPopup} from "./SelectLocationAndRadiusPopup.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
+import {MapHint} from "./MapHint.tsx";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -93,6 +94,8 @@ export const MapView: React.FC = () => {
                     <Recenter lat={selectedLocation.lat} lng={selectedLocation.lng}/>
                 </>
             }
+
+            <MapHint timeout={5000} />
 
         </MapContainer>
     );

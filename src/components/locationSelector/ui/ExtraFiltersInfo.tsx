@@ -15,7 +15,7 @@ export const ExtraFiltersInfo: React.FC = () => {
             hotelTypeIds
             .map( (key) => HOTEL_TYPES.find((item)=>item.ids==key)?.name)
             .map((name) =>
-                <Badge key={name} style={{margin: 2, borderRadius: 2}}>{name}</Badge>)}
+                <Badge key={name} style={{margin: 2, borderRadius: 4, opacity: 0.6}}>{name}</Badge>)}
         </div>;
     }
 

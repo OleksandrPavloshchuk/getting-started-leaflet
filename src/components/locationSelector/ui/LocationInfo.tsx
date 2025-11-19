@@ -12,7 +12,7 @@ export const LocationInfo: React.FC<Props> = ({location}) => {
     const starsStr = location.isShowStars() ? ` (${location.getStarsString()})` : '';
     const hotelType = HOTEL_TYPES.find( (item) => location.type === item.name);
     const typeStr = hotelType ? hotelType.nameNormal : '';
-    
+
     return <div style={{display: "flex"}}>
         <abbr title={getCountryData(location.country)?.name}>{getCountryData(location.country)?.flag}</abbr>&nbsp;
         {location.city}&nbsp;-&nbsp;
