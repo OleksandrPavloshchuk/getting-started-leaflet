@@ -20,6 +20,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
     const searchText = useLocationStore((s) => s.searchText);
     const setExtraFilterOpened = useLocationStore((s) => s.setExtraFilterOpened);
+    const loading = useLocationStore((s) => s.loading);
 
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
@@ -37,19 +38,20 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                     <Flex w="100%" gap="sm">
                         <Button style={{flex: 1}}
                                 onClick={() => onSubmit(selectedLocation)}
-                                disabled={!selectedLocation}><IconSelect/>&nbsp;Submit</Button>
+                                disabled={loading || !selectedLocation}><IconSelect/>&nbsp;Submit</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => setExtraFilterOpened(true)}
+                                disabled={loading}
                         ><IconFilterSearch/>&nbsp;Set Extra Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={clearAllFilters}
-                                disabled={!country && !searchRadius && hotelTypeIds.length === 0 && !searchText}
+                                disabled={loading || (!country && !searchRadius && hotelTypeIds.length === 0 && !searchText)}
                         ><IconFilterCancel/>&nbsp;Clear All Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => {
                                     setSelectedLocation(undefined);
                                 }}
-                                disabled={!selectedLocation}><IconDeselect/>&nbsp;Reset</Button>
+                                disabled={loading || !selectedLocation}><IconDeselect/>&nbsp;Reset</Button>
                     </Flex>
                     <div>
                         <MapView/>

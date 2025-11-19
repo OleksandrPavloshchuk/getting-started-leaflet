@@ -95,7 +95,7 @@ export const MapView: React.FC = () => {
                 </>
             }
 
-            <MapHint timeout={5000} />
+            <MapHint timeout={5000} text="Left-click the map to set search center" />
 
         </MapContainer>
     );

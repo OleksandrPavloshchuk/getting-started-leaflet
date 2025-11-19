@@ -1,7 +1,12 @@
 import {useEffect, useState} from "react";
 import {useMapEvent} from "react-leaflet";
 
-export const MapHint = ({timeout = 5000}) => {
+type Props = {
+    timeout: number,
+    text: string
+}
+
+export const MapHint: React.FC<Props> = ({text, timeout = 5000}) => {
     const [hidden, setHidden] = useState(false);
 
     useMapEvent( "click", () => {
@@ -36,5 +41,5 @@ export const MapHint = ({timeout = 5000}) => {
         transition: "opacity 400ms ease",
     };
 
-    return <div style={style}>Left-click the map to set search center</div>;
+    return <div style={style}>{text}</div>;
 };

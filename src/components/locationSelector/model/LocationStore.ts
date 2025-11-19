@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {type Location} from "./Location.ts";
-import {retrieveByText} from "../service/retrieveByText.ts";
+import {retrieve} from "../service/retrieve.ts";
 import type {Country} from "../static/countries.ts";
 
 interface LocationState {
@@ -49,7 +49,7 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setSearchRadius: (r: number | undefined) => set({searchRadius: r}),
     searchCenter: undefined,
     setSearchCenter: (l: L.LatLng | undefined) => set({searchCenter: l}),
-    retrieve: () => retrieveByText(
+    retrieve: () => retrieve(
         get().searchText,
         get().country?.iso,
         get().hotelTypeIds,

@@ -2,7 +2,7 @@ import {type Location, createLocation} from "../model/Location.ts";
 
 const ENDPOINT_URI = "http://localhost:4000/api/locations";
 
-export const retrieveByText = (
+export const retrieve = (
     query: string | undefined,
     countryIsoCode: string | undefined,
     hotelTypesIds: string[],
