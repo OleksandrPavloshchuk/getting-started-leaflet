@@ -1,11 +1,12 @@
 import React, {useEffect} from "react";
-import {Combobox, TextInput, useCombobox} from "@mantine/core";
+import {Combobox, TextInput, Tooltip, useCombobox} from "@mantine/core";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useDebouncedValue} from "@mantine/hooks";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
 import {getDropdownItemStyle} from "../utils/utils.ts";
+import {IconHelp} from "@tabler/icons-react";
 
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
@@ -29,6 +30,7 @@ export const LocationsDropdown: React.FC = () => {
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
                 retrieve();
+                combobox.focusSearchInput();
             }
         },
         [query, country, hotelTypeIds, extraFilterOpened, radius, center]
@@ -105,6 +107,17 @@ export const LocationsDropdown: React.FC = () => {
                             </fieldset>
                         </td>
                         <td>
+                            <Tooltip
+                                label={helpText}
+                                position="left-start"
+                                style={{maxWidth: 480}}
+                                multiline
+                            >
+                                <IconHelp size={18} style={{ marginLeft: 6, cursor: 'pointer', color: 'grey' }} />
+                            </Tooltip>
+
+                        </td>
+                        <td>
                             <ExtraFilterDialog/>
                         </td>
                     </tr>
@@ -114,3 +127,8 @@ export const LocationsDropdown: React.FC = () => {
         </>
     );
 }
+
+const helpText = `Enter at least two letters of the city name, then a comma and a space if you want to search for all locations in that city, 
+or at least one letter of the location name if you want to narrow it down.
+
+Note: some cities have a very large number of locations, so searches may occasionally take longer.`

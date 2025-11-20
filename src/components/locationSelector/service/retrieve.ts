@@ -14,13 +14,13 @@ export const retrieve = (
     setResult: (locations: Location[]) => void
 ) => {
 
-    const normalized = query?.toLowerCase().trim() ?? "";
-    if (!normalized || !normalized.includes(",")) {
+    const normalized = query?.toLowerCase() ?? "";
+    if (!normalized || normalized.trim()==="" || !normalized.includes(",")) {
         setResult([]);
         return;
     }
-    const [city] = normalized.split(/,/);
-    if (!city || city.trim().length < 2) {
+    const [city,name] = normalized.split(/,/);
+    if (!city || city.trim().length < 2 || !name) {
         setResult([]);
         return;
     }
@@ -31,7 +31,7 @@ export const retrieve = (
     setError(undefined);
     setLoading(true);
     const types = hotelTypesIds.join(",");
-    const qParam = encodeURIComponent(query ?? "");
+    const qParam = encodeURIComponent(query?.trim() ?? "");
     const cParam = encodeURIComponent(countryIsoCode ?? "");
     const tParam = encodeURIComponent(types);
     const rParam = encodeURIComponent(radius ?? "");

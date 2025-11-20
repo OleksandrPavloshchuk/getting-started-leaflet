@@ -2,6 +2,7 @@ import * as express from "express";
 import * as cors from "cors";
 import {NuiteeProvider} from "./provider/nuitee";
 import {RestelProvider} from "./provider/restel";
+import {getOrCache} from "./redisConnector";
 
 const app = express();
 const port = 4000;
@@ -54,7 +55,7 @@ const gatherAndReturnResult = (
 };
 
 const getParamString = (src: any | undefined) => (src as string)?.trim() ?? "";
-const getParamNumber = (src: any | undefined)=> {
+const getParamNumber = (src: any | undefined) => {
     const s = getParamString(src);
     return s.length > 0 ? Number.parseFloat(s) : 0;
 }
@@ -85,10 +86,12 @@ app.get("/api/locations", async (req, res) => {
 
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    Promise.all([
-        NuiteeProvider.retrieve(queryParams),
-        RestelProvider.retrieve(queryParams)
-    ]).then(([nuiteeResult, restelResult]) => gatherAndReturnResult(res, [nuiteeResult, restelResult], setCount))
+    getOrCache(queryParams,
+        () => Promise.all([
+            NuiteeProvider.retrieve(queryParams),
+            RestelProvider.retrieve(queryParams)
+        ])
+    ).then(([nuiteeResult, restelResult]) => gatherAndReturnResult(res, [nuiteeResult, restelResult], setCount))
         .catch((err) => handleError(res, err))
         .finally(() => finalize(start, count));
 });
