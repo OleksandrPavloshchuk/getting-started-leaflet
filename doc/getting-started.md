@@ -17,16 +17,23 @@ Create frontend project template using Reat + Vite:
 npm create vite@latest getting-started-google-maps -- --template react-ts
 ```
 
-Run frontend application:
+Run Redis in Docker:
 ```shell
 
-npm run dev
+cd docker
+docker compose up
 ```
 
 Run backend application:
 ```shell
 
 npx ts-node server/endpoint.ts
+```
+
+Run frontend application:
+```shell
+
+npm run dev
 ```
 
 ## Additional indexes on table NUITEE_HOTEL
@@ -41,4 +48,15 @@ create index idx_nuitee_hotel_city_trgm
     on public.nuitee_hotel using gin (((ext -> 'hotel'::text) ->> 'city'::text) gin_trgm_ops);
 create index idx_nuitee_hotel_name_trgm
     on public.nuitee_hotel using gin (name gin_trgm_ops);
+```
+
+## Addional indexes on table RESTEL_HOTEL
+
+```sql
+create index idx_restel_hotel_city
+on public.restel_hotel (((ext -> 'hotel'::text) ->> 'city'::text));
+create index idx_restel_hotel_city_trgm
+on public.restel_hotel using gin (((ext -> 'hotel'::text) ->> 'city'::text) gin_trgm_ops);
+create index idx_restel_hotel_name_trgm
+on public.restel_hotel using gin (name gin_trgm_ops);
 ```

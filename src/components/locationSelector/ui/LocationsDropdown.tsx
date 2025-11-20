@@ -71,7 +71,7 @@ export const LocationsDropdown: React.FC = () => {
                                     <Combobox.Target>
                                         <TextInput
                                             value={query}
-                                            placeholder="Type at least 2 letters for city, comma and at least 1 letters from hotel name — e.g. 'Lo, H'"
+                                            placeholder="Type at least 2 letters for city, comma and space for all hotels or at least 1 letters from hotel name"
                                             onChange={(event) =>
                                                 handleChange(event.currentTarget.value)
                                             }
