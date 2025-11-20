@@ -15,12 +15,12 @@ export const retrieve = (
 ) => {
 
     const normalized = query?.toLowerCase().trim() ?? "";
-    if (!normalized) {
+    if (!normalized || !normalized.includes(",")) {
         setResult([]);
         return;
     }
-    const [city, name] = normalized.split(/,/);
-    if (!city || city.trim().length < 2 || !name || name === "") {
+    const [city] = normalized.split(/,/);
+    if (!city || city.trim().length < 2) {
         setResult([]);
         return;
     }
