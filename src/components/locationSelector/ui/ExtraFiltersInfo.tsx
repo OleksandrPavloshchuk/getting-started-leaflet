@@ -24,7 +24,7 @@ export const ExtraFiltersInfo: React.FC = () => {
                         <Badge
                             style={{margin: 2, borderRadius: 4, opacity: 0.6}}>
                             {item?.name}
-                        </Badge>
+                        </Badge>&nbsp;
                         <RemoveSearchParameterIcon onClick={() => {
                             let prev = hotelTypeIds;
                             if (item ) {
