@@ -1,48 +1,63 @@
 import {useLocationStore} from "../model/LocationStore.ts";
-import {getRadiusStr} from "../utils/utils.ts";
+import {getLocationStr, getRadiusStr} from "../utils/utils.ts";
 import {HOTEL_TYPES} from "../static/hotelTypes.ts";
 import {Badge} from "@mantine/core";
 import "../../../../public/leaflet-custom.css";
+import {RemoveSearchParameterIcon} from "./RemoveSearchParameterIcon.tsx";
 
 export const ExtraFiltersInfo: React.FC = () => {
     const searchRadius = useLocationStore((s) => s.searchRadius);
     const searchCenter = useLocationStore((s) => s.searchCenter);
     const country = useLocationStore((s) => s.country);
+    const setCountry = useLocationStore((s) => s.setCountry);
+    const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
+    const setSearchRadius = useLocationStore((s) => s.setSearchRadius);
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
+    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
 
     const getTypeNames = () => {
         return <div style={{maxWidth: 600}}>{
             hotelTypeIds
-            .map( (key) => HOTEL_TYPES.find((item)=>item.ids==key)?.name)
-            .map((name) =>
-                <Badge key={name} style={{margin: 2, borderRadius: 4, opacity: 0.6}}>{name}</Badge>)}
+                .map((key) => HOTEL_TYPES.find((item) => item.ids == key))
+                .map((item) =>
+                    <span key={item?.ids}>
+                        <Badge
+                            style={{margin: 2, borderRadius: 4, opacity: 0.6}}>
+                            {item?.name}
+                        </Badge>
+                        <RemoveSearchParameterIcon onClick={() => {
+                            let prev = hotelTypeIds;
+                            if (item ) {
+                                prev = prev.filter((v) => v != item.ids);
+                            }
+                            setHotelTypeIds(prev);
+                        }}/>
+                    </span>)}
         </div>;
     }
 
     return <table style={{width: "100%", fontSize: "10pt"}}>
         <tbody>
-        {searchCenter &&
+        {searchCenter && searchRadius && searchRadius > 0 &&
             <>
                 <tr>
-                    <td className="extra-filter-info line">Center Latitude</td>
-                    <td className="extra-filter-info line" width="75%">{searchCenter.lat.toFixed(4)}</td>
-                </tr>
-                <tr>
-                    <td className="extra-filter-info line">Center Longitude</td>
-                    <td className="extra-filter-info line">{searchCenter.lng.toFixed(4)}</td>
+                    <td className="extra-filter-info line">Center Coordinates and Radius</td>
+                    <td className="extra-filter-info line" width="75%">
+                        {`${getLocationStr(searchCenter)}, ${getRadiusStr(searchRadius)}`}&nbsp;
+                        <RemoveSearchParameterIcon onClick={() => {
+                            setSearchCenter(undefined);
+                            setSearchRadius(undefined);
+                        }}/>
+                    </td>
                 </tr>
             </>
-        }
-        {searchRadius && searchRadius > 0 &&
-            <tr>
-                <td className="extra-filter-info line">Radius</td>
-                <td className="extra-filter-info line">{getRadiusStr(searchRadius)}</td>
-            </tr>
         }
         {country &&
             <tr>
                 <td className="extra-filter-info line">Country</td>
-                <td className="extra-filter-info line">{`${country.flag} ${country.name}`}</td>
+                <td className="extra-filter-info line">{`${country.flag} ${country.name}`}&nbsp;
+                    <RemoveSearchParameterIcon onClick={() => setCountry(undefined)}/>
+                </td>
             </tr>
         }
         {hotelTypeIds.length > 0 &&

@@ -32,6 +32,7 @@
 
 td.extra-filter-info {
     font-size: 10pt;
+    vertical-align: baseline;
 }
 
 td.line {
