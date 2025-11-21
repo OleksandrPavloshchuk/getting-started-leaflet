@@ -54,13 +54,13 @@ export const LocationsDropdown: React.FC = () => {
     return (
         <>
             {error && <p style={{color: "red"}}>Error: {error}</p>}
-            {loading && <p>Loading...</p>}
+            {loading && <p style={{height: "45pt"}}>Loading...</p>}
             {!loading &&
                 <table style={{width: "100%"}}>
                     <tbody>
                     <tr>
                         <td style={{width: "100%"}}>
-                            <fieldset style={{fontSize: '8pt'}}>
+                            <fieldset style={{fontSize: '8pt', height: "55pt"}}>
                                 <legend>{`Found: ${result.length}`}</legend>
                                 <Combobox
                                     withinPortal={true}

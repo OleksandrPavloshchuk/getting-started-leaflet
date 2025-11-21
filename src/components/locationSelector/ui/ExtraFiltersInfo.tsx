@@ -20,11 +20,11 @@ export const ExtraFiltersInfo: React.FC = () => {
             hotelTypeIds
                 .map((key) => HOTEL_TYPES.find((item) => item.ids == key))
                 .map((item) =>
-                    <span key={item?.ids}>
+                    <span key={item?.ids} style={{display: "inline-flex"}}>
                         <Badge
-                            style={{margin: 2, borderRadius: 4, opacity: 0.6}}>
+                            style={{margin: 2, borderRadius: 4, opacity: 0.6, marginLeft: 6}}>
                             {item?.name}
-                        </Badge>&nbsp;
+                        </Badge>
                         <RemoveSearchParameterIcon onClick={() => {
                             let prev = hotelTypeIds;
                             if (item ) {
