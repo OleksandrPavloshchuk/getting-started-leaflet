@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import {Combobox, TextInput, Tooltip, useCombobox} from "@mantine/core";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useDebouncedValue} from "@mantine/hooks";
-import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
 import {getDropdownItemStyle} from "../utils/utils.ts";
@@ -54,12 +53,16 @@ export const LocationsDropdown: React.FC = () => {
     return (
         <>
             {error && <p style={{color: "red"}}>Error: {error}</p>}
-            {loading && <p style={{height: "45pt"}}>Loading...</p>}
-            {!loading &&
-                <table style={{width: "100%"}}>
-                    <tbody>
+            <table style={{width: "100%"}}>
+                <tbody>
+                {loading &&
                     <tr>
-                        <td style={{width: "100%"}}>
+                        <td style={{width: "100%", height: 80}}>Loading...</td>
+                    </tr>
+                }
+                {!loading &&
+                    <tr>
+                        <td style={{width: "100%", height: 80}}>
                             <fieldset style={{fontSize: '8pt', height: "55pt"}}>
                                 <legend>{`Found: ${result.length}`}</legend>
                                 <Combobox
@@ -113,17 +116,13 @@ export const LocationsDropdown: React.FC = () => {
                                 style={{maxWidth: 480}}
                                 multiline
                             >
-                                <IconHelp size={18} style={{ marginLeft: 6, cursor: 'pointer', color: 'grey' }} />
+                                <IconHelp size={18} style={{marginLeft: 6, cursor: 'pointer', color: 'grey'}}/>
                             </Tooltip>
-
-                        </td>
-                        <td>
-                            <ExtraFilterDialog/>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-            }
+                }
+                </tbody>
+            </table>
         </>
     );
 }

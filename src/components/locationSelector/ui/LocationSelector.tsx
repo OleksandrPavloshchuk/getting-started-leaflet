@@ -6,6 +6,8 @@ import {LocationInfo} from "./LocationInfo.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
 import {IconDeselect, IconFilterCancel, IconFilterSearch, IconSelect} from "@tabler/icons-react";
 import {ExtraFiltersInfo} from "./ExtraFiltersInfo.tsx";
+import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
+import React from "react";
 
 type Props = {
     onSubmit: (loc: Location | undefined) => void
@@ -57,6 +59,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                         <MapView/>
                     </div>
                 </Stack>
+                <ExtraFilterDialog/>
             </Paper>
         </div>
     );

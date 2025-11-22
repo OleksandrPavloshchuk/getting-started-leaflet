@@ -1,6 +1,6 @@
 import {useLocationStore} from "../model/LocationStore.ts";
 import {getLocationStr, getRadiusStr} from "../utils/utils.ts";
-import {HOTEL_TYPES} from "../static/hotelTypes.ts";
+import {HOTEL_TYPES, type HotelType} from "../static/hotelTypes.ts";
 import {Badge} from "@mantine/core";
 import "../../../../public/leaflet-custom.css";
 import {RemoveSearchParameterIcon} from "./RemoveSearchParameterIcon.tsx";
@@ -16,9 +16,18 @@ export const ExtraFiltersInfo: React.FC = () => {
     const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
 
     const getTypeNames = () => {
+
+        const nameComparator = (item1: HotelType|undefined, item2: HotelType|undefined) => {
+            if (!item1 || !item2) {
+                return 0;
+            }
+            return item1.name.localeCompare(item2.name);
+        };
+
         return <div style={{maxWidth: 600}}>{
             hotelTypeIds
                 .map((key) => HOTEL_TYPES.find((item) => item.ids == key))
+                .sort(nameComparator)
                 .map((item) =>
                     <span key={item?.ids} style={{display: "inline-flex"}}>
                         <Badge
