@@ -11,8 +11,8 @@ export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
     const error = useLocationStore((s) => s.error);
     const loading = useLocationStore((s) => s.loading);
-    const result = useLocationStore((s) => s.result);
-    const retrieve = useLocationStore((s) => s.retrieve);
+    const retrieveLocationsResult = useLocationStore((s) => s.retrieveLocationsResult);
+    const retrieveLocations = useLocationStore((s) => s.retrieveLocations);
     const query = useLocationStore((s) => s.searchText);
     const setQuery = useLocationStore((s) => s.setSearchText);
     const country = useLocationStore((s) => s.country);
@@ -27,7 +27,7 @@ export const LocationsDropdown: React.FC = () => {
     useEffect(
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
-                retrieve();
+                retrieveLocations();
                 combobox.focusSearchInput();
             }
         },
@@ -42,8 +42,8 @@ export const LocationsDropdown: React.FC = () => {
     };
 
     const handleSelect = (key: string) => {
-        if (result.length > 0) {
-            const loc = result.find((item) => item.id === key);
+        if (retrieveLocationsResult.length > 0) {
+            const loc = retrieveLocationsResult.find((item) => item.id === key);
             setSelected(loc);
             combobox.closeDropdown();
         }
@@ -65,7 +65,7 @@ export const LocationsDropdown: React.FC = () => {
                     <tr>
                         <td style={{width: "100%", height: 80}}>
                             <fieldset style={{fontSize: '8pt', height: "55pt"}}>
-                                <legend>{`Found: ${result.length}`}</legend>
+                                <legend>{`Found: ${retrieveLocationsResult.length}`}</legend>
                                 <Combobox
                                     withinPortal={true}
                                     zIndex={8000}
@@ -93,8 +93,8 @@ export const LocationsDropdown: React.FC = () => {
                                     >
                                         <Combobox.Options>
                                             {
-                                                result && result.length > 0 ?
-                                                    (result.map((item) =>
+                                                retrieveLocationsResult && retrieveLocationsResult.length > 0 ?
+                                                    (retrieveLocationsResult.map((item) =>
                                                             <Combobox.Option
                                                                 value={item.id} key={item.id}
                                                                 style={getDropdownItemStyle(() => selected?.id === item.id)}

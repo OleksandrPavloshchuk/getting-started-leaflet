@@ -17,7 +17,7 @@ export const ExtraFiltersInfo: React.FC = () => {
 
     const getTypeNames = () => {
 
-        const nameComparator = (item1: HotelType|undefined, item2: HotelType|undefined) => {
+        const nameComparator = (item1: HotelType | undefined, item2: HotelType | undefined) => {
             if (!item1 || !item2) {
                 return 0;
             }
@@ -36,7 +36,7 @@ export const ExtraFiltersInfo: React.FC = () => {
                         </Badge>
                         <RemoveSearchParameterIcon onClick={() => {
                             let prev = hotelTypeIds;
-                            if (item ) {
+                            if (item) {
                                 prev = prev.filter((v) => v != item.ids);
                             }
                             setHotelTypeIds(prev);
@@ -48,18 +48,16 @@ export const ExtraFiltersInfo: React.FC = () => {
     return <table style={{width: "100%", fontSize: "10pt"}}>
         <tbody>
         {searchCenter && searchRadius && searchRadius > 0 &&
-            <>
-                <tr>
-                    <td className="extra-filter-info line">Center Coordinates and Radius</td>
-                    <td className="extra-filter-info line" width="75%">
-                        {`${getLocationStr(searchCenter)}, ${getRadiusStr(searchRadius)}`}&nbsp;
-                        <RemoveSearchParameterIcon onClick={() => {
-                            setSearchCenter(undefined);
-                            setSearchRadius(undefined);
-                        }}/>
-                    </td>
-                </tr>
-            </>
+            <tr>
+                <td className="extra-filter-info line">Center Coordinates and Radius</td>
+                <td className="extra-filter-info line" width="75%">
+                    {`${getLocationStr(searchCenter)}, ${getRadiusStr(searchRadius)}`}&nbsp;
+                    <RemoveSearchParameterIcon onClick={() => {
+                        setSearchCenter(undefined);
+                        setSearchRadius(undefined);
+                    }}/>
+                </td>
+            </tr>
         }
         {country &&
             <tr>
