@@ -60,6 +60,8 @@ const getParamNumber = (src: any | undefined) => {
     return s.length > 0 ? Number.parseFloat(s) : 0;
 }
 
+const normalize = (s:string)=> s ? s.replace("_", " ") : "";
+
 // Endpoint:
 app.get("/api/locations", async (req, res) => {
     const q = getParamString(req.query.q);
@@ -76,8 +78,8 @@ app.get("/api/locations", async (req, res) => {
     }
 
     let [cityLike, nameLike] = q.split(/,/);
-    cityLike = cityLike ? cityLike.replace("_", " ") : "";
-    nameLike = nameLike ? nameLike.replace("_", " ") : "";
+    cityLike = normalize(cityLike);
+    nameLike = normalize(nameLike);
 
     let count = -1;
     const setCount = (n: number) => {

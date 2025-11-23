@@ -4,10 +4,14 @@ import {retrieve} from "../service/retrieve.ts";
 import type {Country} from "../static/countries.ts";
 
 interface LocationState {
+    // Widget modes:
     error: string | undefined,
     setError: (e: string | undefined) => void,
     loading: boolean,
     setLoading: (l: boolean) => void,
+    extraFilterDialogOpened: boolean,
+    setExtraFilterDialogOpened: (b: boolean) => void,
+
     searchText: string | undefined,
     setSearchText: (text: string | undefined) => void,
     selectedLocation: Location | undefined,
@@ -18,8 +22,6 @@ interface LocationState {
     setCountry: (c: Country | undefined) => void,
     hotelTypeIds: string[],
     setHotelTypeIds: (ids: string[]) => void,
-    extraFilterOpened: boolean,
-    setExtraFilterOpened: (b: boolean) => void,
     searchRadius: number | undefined;
     setSearchRadius: (r: number | undefined) => void,
     searchCenter: L.LatLng | undefined,
@@ -43,8 +45,8 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setCountry: (c: Country | undefined) => set({country: c}),
     hotelTypeIds: [],
     setHotelTypeIds: (ids: string[]) => set({hotelTypeIds: ids}),
-    extraFilterOpened: false,
-    setExtraFilterOpened: (b: boolean) => set({extraFilterOpened: b}),
+    extraFilterDialogOpened: false,
+    setExtraFilterDialogOpened: (b: boolean) => set({extraFilterDialogOpened: b}),
     searchRadius: undefined,
     setSearchRadius: (r: number | undefined) => set({searchRadius: r}),
     searchCenter: undefined,

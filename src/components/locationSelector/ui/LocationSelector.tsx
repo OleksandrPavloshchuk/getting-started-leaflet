@@ -21,7 +21,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
     const country = useLocationStore((s) => s.country);
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
     const searchText = useLocationStore((s) => s.searchText);
-    const setExtraFilterOpened = useLocationStore((s) => s.setExtraFilterOpened);
+    const setExtraFilterDialogOpened = useLocationStore((s) => s.setExtraFilterDialogOpened);
     const loading = useLocationStore((s) => s.loading);
 
     return (
@@ -42,7 +42,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 onClick={() => onSubmit(selectedLocation)}
                                 disabled={loading || !selectedLocation}><IconSelect/>&nbsp;Submit</Button>
                         <Button style={{flex: 1}}
-                                onClick={() => setExtraFilterOpened(true)}
+                                onClick={() => setExtraFilterDialogOpened(true)}
                                 disabled={loading}
                         ><IconFilterSearch/>&nbsp;Set Extra Filters</Button>
                         <Button style={{flex: 1}}

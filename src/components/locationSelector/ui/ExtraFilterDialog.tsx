@@ -8,15 +8,15 @@ export const ExtraFilterDialog: React.FC = () => {
 
     const setCountry = useLocationStore((s) => s.setCountry);
     const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
-    const extraFilterOpened = useLocationStore((s) => s.extraFilterOpened);
-    const setExtraFilterOpened = useLocationStore((s) => s.setExtraFilterOpened);
+    const extraFilterDialogOpened = useLocationStore((s) => s.extraFilterDialogOpened);
+    const setExtraFilterDialogOpened = useLocationStore((s) => s.setExtraFilterDialogOpened);
 
-    const handleSet = () => setExtraFilterOpened(false);
+    const handleSet = () => setExtraFilterDialogOpened(false);
 
     const handleClear = () => {
         setCountry(undefined);
         setHotelTypeIds([]);
-        setExtraFilterOpened(false);
+        setExtraFilterDialogOpened(false);
     }
 
     return (
@@ -24,8 +24,8 @@ export const ExtraFilterDialog: React.FC = () => {
             title="Extra Filter"
             trapFocus={false}
             zIndex={8000}
-            opened={extraFilterOpened}
-            onClose={() => setExtraFilterOpened(false)}
+            opened={extraFilterDialogOpened}
+            onClose={() => setExtraFilterDialogOpened(false)}
             withinPortal={true}
             styles={{
                 root: {

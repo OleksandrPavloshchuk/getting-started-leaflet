@@ -19,7 +19,6 @@ export const LocationsDropdown: React.FC = () => {
     const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
     const selected = useLocationStore((s) => s.selectedLocation);
     const setSelected = useLocationStore((s) => s.setSelectedLocation);
-    const extraFilterOpened = useLocationStore((s) => s.extraFilterOpened);
     const radius = useLocationStore((s) => s.searchRadius);
     const center = useLocationStore((s) => s.searchCenter);
 
@@ -32,7 +31,7 @@ export const LocationsDropdown: React.FC = () => {
                 combobox.focusSearchInput();
             }
         },
-        [query, country, hotelTypeIds, extraFilterOpened, radius, center]
+        [query, country, hotelTypeIds, radius, center]
     );
 
     // Simple filter by name:
@@ -57,7 +56,9 @@ export const LocationsDropdown: React.FC = () => {
                 <tbody>
                 {loading &&
                     <tr>
-                        <td style={{width: "100%", height: 80}}>Loading...</td>
+                        <td
+                            style={{verticalAlign: "center", textAlign: "center", height: 80}}
+                        ><img src="public/loading.gif" width={200} height={50} alt="loading..." /></td>
                     </tr>
                 }
                 {!loading &&
