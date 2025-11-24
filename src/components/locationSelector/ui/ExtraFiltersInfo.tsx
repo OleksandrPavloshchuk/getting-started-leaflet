@@ -1,21 +1,30 @@
-import {useLocationStore} from "../model/LocationStore.ts";
 import {getLocationStr, getRadiusStr} from "../utils/utils.ts";
 import {HOTEL_TYPES, type HotelType} from "../static/hotelTypes.ts";
 import {Badge} from "@mantine/core";
 import "../../../../public/leaflet-custom.css";
 import {RemoveSearchParameterIcon} from "./RemoveSearchParameterIcon.tsx";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
+/**
+ * Panel for showing and removing search parameters:
+ * - center
+ * - radius
+ * - country
+ * - location types
+ *
+ * @constructor
+ */
 export const ExtraFiltersInfo: React.FC = () => {
-    const searchRadius = useLocationStore((s) => s.searchRadius);
-    const searchCenter = useLocationStore((s) => s.searchCenter);
-    const country = useLocationStore((s) => s.country);
-    const setCountry = useLocationStore((s) => s.setCountry);
-    const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
-    const setSearchRadius = useLocationStore((s) => s.setSearchRadius);
-    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
-    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
+    const radius = useLocationFilterModel((s) => s.radius);
+    const setRadius = useLocationFilterModel((s) => s.setRadius);
+    const center = useLocationFilterModel((s) => s.center);
+    const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const country = useLocationFilterModel((s) => s.country);
+    const setCountry = useLocationFilterModel((s) => s.setCountry);
+    const locationTypeIds = useLocationFilterModel((s) => s.locationTypeIds);
+    const setLocationTypeIds = useLocationFilterModel((s) => s.setLocationTypeIds);
 
-    const getTypeNames = () => {
+    const getTypeBadges = () => {
 
         const nameComparator = (item1: HotelType | undefined, item2: HotelType | undefined) => {
             if (!item1 || !item2) {
@@ -25,7 +34,7 @@ export const ExtraFiltersInfo: React.FC = () => {
         };
 
         return <div style={{maxWidth: 600}}>{
-            hotelTypeIds
+            locationTypeIds
                 .map((key) => HOTEL_TYPES.find((item) => item.ids == key))
                 .sort(nameComparator)
                 .map((item) =>
@@ -35,11 +44,11 @@ export const ExtraFiltersInfo: React.FC = () => {
                             {item?.name}
                         </Badge>
                         <RemoveSearchParameterIcon onClick={() => {
-                            let prev = hotelTypeIds;
+                            let prev = locationTypeIds;
                             if (item) {
                                 prev = prev.filter((v) => v != item.ids);
                             }
-                            setHotelTypeIds(prev);
+                            setLocationTypeIds(prev);
                         }}/>
                     </span>)}
         </div>;
@@ -47,14 +56,14 @@ export const ExtraFiltersInfo: React.FC = () => {
 
     return <table style={{width: "100%", fontSize: "10pt"}}>
         <tbody>
-        {searchCenter && searchRadius && searchRadius > 0 &&
+        {center && radius && radius > 0 &&
             <tr>
                 <td className="extra-filter-info line">Center Coordinates and Radius</td>
                 <td className="extra-filter-info line" width="75%">
-                    {`${getLocationStr(searchCenter)}, ${getRadiusStr(searchRadius)}`}&nbsp;
+                    {`${getLocationStr(center)}, ${getRadiusStr(radius)}`}&nbsp;
                     <RemoveSearchParameterIcon onClick={() => {
-                        setSearchCenter(undefined);
-                        setSearchRadius(undefined);
+                        setCenter(undefined);
+                        setRadius(undefined);
                     }}/>
                 </td>
             </tr>
@@ -67,10 +76,10 @@ export const ExtraFiltersInfo: React.FC = () => {
                 </td>
             </tr>
         }
-        {hotelTypeIds.length > 0 &&
+        {locationTypeIds.length > 0 &&
             <tr>
                 <td className="extra-filter-info">Location Types</td>
-                <td className="extra-filter-info">{getTypeNames()}</td>
+                <td className="extra-filter-info">{getTypeBadges()}</td>
             </tr>
         }
         </tbody>

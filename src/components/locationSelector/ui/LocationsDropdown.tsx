@@ -3,32 +3,33 @@ import {Combobox, TextInput, Tooltip, useCombobox} from "@mantine/core";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useDebouncedValue} from "@mantine/hooks";
 import {DropdownArrow} from "./DropdownArrow.tsx";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {getDropdownItemStyle} from "../utils/utils.ts";
 import {IconHelp} from "@tabler/icons-react";
 import {retrieveLocations} from "../service/RetrieveLocations.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
-    const error = useLocationStore((s) => s.error);
-    const setError = useLocationStore((s) => s.setError);
-    const loading = useLocationStore((s) => s.loading);
-    const setLoading = useLocationStore((s) => s.setLoading);
-    const query = useLocationStore((s) => s.searchText);
-    const setQuery = useLocationStore((s) => s.setSearchText);
-    const country = useLocationStore((s) => s.country);
-    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
-    const selected = useLocationStore((s) => s.selectedLocation);
-    const setSelected = useLocationStore((s) => s.setSelectedLocation);
-    const radius = useLocationStore((s) => s.searchRadius);
-    const center = useLocationStore((s) => s.searchCenter);
+    const error = useWidgetStateModel((s) => s.error);
+    const setError = useWidgetStateModel((s) => s.setError);
+    const loading = useWidgetStateModel((s) => s.loading);
+    const setLoading = useWidgetStateModel((s) => s.setLoading);
+    const selected = useWidgetStateModel((s) => s.selectedLocation);
+    const setSelected = useWidgetStateModel((s) => s.setSelectedLocation);
 
-    const getFilters = useLocationStore((s) => s.getFilters);
+    const cityAndName = useLocationFilterModel((s) => s.cityAndName);
+    const setCityAndName = useLocationFilterModel((s) => s.setCityAndName);
+    const country = useLocationFilterModel((s) => s.country);
+    const locationTypeIds = useLocationFilterModel((s) => s.locationTypeIds);
+    const radius = useLocationFilterModel((s) => s.radius);
+    const center = useLocationFilterModel((s) => s.center);
+    const getFilters = useLocationFilterModel((s) => s.getFilters);
+
     const retrieve = retrieveLocations.useModel((s)=>s.call);
     const result = retrieveLocations.useModel((s) => s.result);
 
-
-    const [debouncedQuery] = useDebouncedValue(query, 300);
+    const [debouncedQuery] = useDebouncedValue(cityAndName, 300);
 
     useEffect(
         () => {
@@ -37,12 +38,12 @@ export const LocationsDropdown: React.FC = () => {
                 combobox.focusSearchInput();
             }
         },
-        [query, country, hotelTypeIds, radius, center]
+        [cityAndName, country, locationTypeIds, radius, center]
     );
 
     // Simple filter by name:
-    const handleChange = (q: string) => {
-        setQuery(q);
+    const handleChange = (val: string) => {
+        setCityAndName(val);
         combobox.openDropdown();
         combobox.updateSelectedOptionIndex();
     };
@@ -80,7 +81,7 @@ export const LocationsDropdown: React.FC = () => {
                                 >
                                     <Combobox.Target>
                                         <TextInput
-                                            value={query}
+                                            value={cityAndName}
                                             placeholder="Type at least 2 letters for city, comma and space for all hotels or at least 1 letters from hotel name"
                                             onChange={(event) =>
                                                 handleChange(event.currentTarget.value)

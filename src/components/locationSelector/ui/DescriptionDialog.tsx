@@ -3,11 +3,11 @@ import {Modal} from "@mantine/core";
 import DOMPurify from 'dompurify';
 
 import "../../../../public/leaflet-custom.css";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 
 export const DescriptionDialog: React.FC = () => {
 
-    const selectedLocation = useLocationStore((s) => s.selectedLocation);
+    const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
     if (!selectedLocation) {
         return null;
     }

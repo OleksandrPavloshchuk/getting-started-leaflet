@@ -2,10 +2,10 @@ import React from "react";
 import {Image} from "@mantine/core";
 import {DescriptionDialog} from "./DescriptionDialog.tsx";
 import {Popup} from "react-leaflet";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 
 export const HotelDetailsPopup: React.FC = () => {
-    const selectedLocation = useLocationStore((s) => s.selectedLocation);
+    const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
     if (!selectedLocation) {
         return null;
     }

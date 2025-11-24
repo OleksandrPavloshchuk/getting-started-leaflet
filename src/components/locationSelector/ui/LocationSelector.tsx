@@ -3,26 +3,35 @@ import {Button, Flex, Paper, Stack} from "@mantine/core";
 import {LocationsDropdown} from "./LocationsDropdown.tsx";
 import {MapView} from "./MapView.tsx";
 import {LocationInfo} from "./LocationInfo.tsx";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {IconDeselect, IconFilterCancel, IconFilterSearch, IconSelect} from "@tabler/icons-react";
 import {ExtraFiltersInfo} from "./ExtraFiltersInfo.tsx";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import React from "react";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 type Props = {
     onSubmit: (loc: Location | undefined) => void
 };
 
+/**
+ * Root component of widget.
+ * It searches location in database using backend, shows it on the map and applies filters.
+ *
+ * @param onSubmit consumer of the selected location
+ * @constructor
+ */
 export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
-    const selectedLocation = useLocationStore((s) => s.selectedLocation);
-    const setSelectedLocation = useLocationStore((s) => s.setSelectedLocation);
-    const clearAllFilters = useLocationStore((s) => s.clearFilters);
-    const searchRadius = useLocationStore((s) => s.searchRadius);
-    const country = useLocationStore((s) => s.country);
-    const hotelTypeIds = useLocationStore((s) => s.hotelTypeIds);
-    const searchText = useLocationStore((s) => s.searchText);
-    const setExtraFilterDialogOpened = useLocationStore((s) => s.setExtraFilterDialogOpened);
-    const loading = useLocationStore((s) => s.loading);
+    const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
+    const setSelectedLocation = useWidgetStateModel((s) => s.setSelectedLocation);
+    const setExtraFilterDialogOpened = useWidgetStateModel((s) => s.setExtraFilterDialogOpened);
+    const loading = useWidgetStateModel((s) => s.loading);
+
+    const clearAllFilters = useLocationFilterModel((s) => s.clearFilters);
+    const radius = useLocationFilterModel((s) => s.radius);
+    const country = useLocationFilterModel((s) => s.country);
+    const locationTypeIds = useLocationFilterModel((s) => s.locationTypeIds);
+    const cityAndName = useLocationFilterModel((s) => s.cityAndName);
 
     return (
         <div style={{padding: 24, fontFamily: 'sans-serif'}}>
@@ -47,7 +56,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                         ><IconFilterSearch/>&nbsp;Set Extra Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={clearAllFilters}
-                                disabled={loading || (!country && !searchRadius && hotelTypeIds.length === 0 && !searchText)}
+                                disabled={loading || (!country && !radius && locationTypeIds.length === 0 && !cityAndName)}
                         ><IconFilterCancel/>&nbsp;Clear All Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => {

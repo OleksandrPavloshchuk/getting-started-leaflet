@@ -1,17 +1,16 @@
 import {ActionIcon, Modal} from "@mantine/core";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
-import {IconCancel, IconCheck} from "@tabler/icons-react";
+import {IconCancel} from "@tabler/icons-react";
 import {TypesSelector} from "./TypesSelector.tsx";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 export const ExtraFilterDialog: React.FC = () => {
 
-    const setCountry = useLocationStore((s) => s.setCountry);
-    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
-    const extraFilterDialogOpened = useLocationStore((s) => s.extraFilterDialogOpened);
-    const setExtraFilterDialogOpened = useLocationStore((s) => s.setExtraFilterDialogOpened);
-
-    const handleSet = () => setExtraFilterDialogOpened(false);
+    const setCountry = useLocationFilterModel((s) => s.setCountry);
+    const setHotelTypeIds = useLocationFilterModel((s) => s.setLocationTypeIds);
+    const extraFilterDialogOpened = useWidgetStateModel((s) => s.extraFilterDialogOpened);
+    const setExtraFilterDialogOpened = useWidgetStateModel((s) => s.setExtraFilterDialogOpened);
 
     const handleClear = () => {
         setCountry(undefined);
@@ -56,15 +55,6 @@ export const ExtraFilterDialog: React.FC = () => {
                 <tr>
                     <td style={{width: '100%'}}>
                         <CountriesDropdown/>
-                    </td>
-                    <td>
-                        <ActionIcon
-                            onClick={handleSet}
-                            variant="white"
-                            size="lg"
-                            title="Set Extra Filter">
-                            <IconCheck size={20}/>
-                        </ActionIcon>
                     </td>
                     <td>
                         <ActionIcon

@@ -5,8 +5,9 @@ import L, {LatLng} from "leaflet";
 import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
 import {SelectLocationAndRadiusPopup} from "./SelectLocationAndRadiusPopup.tsx";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {MapHint} from "./MapHint.tsx";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -38,13 +39,19 @@ const MapClickHandler: React.FC<{ onClickPoint: (pos: LatLng) => void }> = ({onC
     return null;
 }
 
+/**
+ * Component for showing of the map, pointer, search circle and helper dialog
+ *
+ * @constructor
+ */
 export const MapView: React.FC = () => {
     const defaultCenter = [49.0, 31.0];
 
-    const selectedLocation = useLocationStore((s)=>s.selectedLocation);
-    const searchRadius = useLocationStore((s) => s.searchRadius);
-    const searchCenter = useLocationStore((s) => s.searchCenter);
-    const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
+    const selectedLocation = useWidgetStateModel((s)=>s.selectedLocation);
+
+    const radius = useLocationFilterModel((s) => s.radius);
+    const center = useLocationFilterModel((s) => s.center);
+    const setCenter = useLocationFilterModel((s) => s.setCenter);
     const [showCirclePopup, setShowCirclePopup] = useState(false);
 
     return (
@@ -61,22 +68,22 @@ export const MapView: React.FC = () => {
 
             />
             <MapClickHandler onClickPoint={(point: LatLng) => {
-                setSearchCenter(point);
+                setCenter(point);
                 setShowCirclePopup(true);
             }}/>
 
-            {showCirclePopup && searchCenter &&
+            {showCirclePopup && center &&
                 <>
                     <SelectLocationAndRadiusPopup
                         setShow={setShowCirclePopup}/>
-                    <Recenter lat={searchCenter.lat} lng={searchCenter.lng}/>
+                    <Recenter lat={center.lat} lng={center.lng}/>
                 </>
             }
 
-            {searchCenter && searchRadius && searchRadius > 0 &&
+            {center && radius && radius > 0 &&
             <Circle
-                center={[searchCenter.lat, searchCenter.lng]}
-                radius={searchRadius}
+                center={[center.lat, center.lng]}
+                radius={radius}
                 pathOptions={{
                     color: 'var(--mantine-color-blue-filled)',
                     weight: 1,

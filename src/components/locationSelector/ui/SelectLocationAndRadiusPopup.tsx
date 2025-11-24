@@ -1,16 +1,16 @@
 import {Popup} from "react-leaflet";
 import React from "react";
-import {useLocationStore} from "../model/LocationStore.ts";
 import {getRadiusStr} from "../utils/utils.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 type Props = {
     setShow: (show: boolean) => void
 };
 
 export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
-    const setSearchRadius = useLocationStore((s) => s.setSearchRadius);
-    const searchCenter = useLocationStore((s) => s.searchCenter);
-    const setSearchCenter = useLocationStore((s) => s.setSearchCenter);
+    const setRadius = useLocationFilterModel((s) => s.setRadius);
+    const center = useLocationFilterModel((s) => s.center);
+    const setCenter = useLocationFilterModel((s) => s.setCenter);
 
     const radiusLink = (r: number) => {
         return (
@@ -19,12 +19,12 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
                  onClick={(e) => {
                      e.stopPropagation();
                      e.preventDefault();
-                     setSearchRadius(r);
+                     setRadius(r);
                      setShow(false);
                  }}>{getRadiusStr(r)}</div>);
     };
 
-    return (<Popup position={searchCenter} closeOnEscapeKey={true} closeButton={true}>
+    return (<Popup position={center} closeOnEscapeKey={true} closeButton={true}>
         <div style={{textAlign: 'center'}}>
             <strong>Radius of selection:</strong>
             <hr/>
@@ -35,8 +35,8 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    setSearchRadius(undefined);
-                    setSearchCenter(undefined);
+                    setRadius(undefined);
+                    setCenter(undefined);
                     setShow(false);
                 }}
             >Reset

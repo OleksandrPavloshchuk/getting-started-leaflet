@@ -1,7 +1,8 @@
 import {HOTEL_TYPES, type HotelType} from "../static/hotelTypes.ts";
 import {Checkbox} from "@mantine/core";
-import {useLocationStore} from "../model/LocationStore.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
+// Helper method: split array to array of arrays of fixed length
 function split<T>(arr: T[], chunkSize: number): T[][] {
     const result: T[][] = [];
     for (let i = 0; i < arr.length; i += chunkSize) {
@@ -10,10 +11,15 @@ function split<T>(arr: T[], chunkSize: number): T[][] {
     return result;
 }
 
+/**
+ * Widget for selection of location types via checkboxes
+ *
+ * @constructor
+ */
 export const TypesSelector: React.FC = () => {
 
-    const hotelTypeIds = useLocationStore((s)=>s.hotelTypeIds);
-    const setHotelTypeIds = useLocationStore((s) => s.setHotelTypeIds);
+    const locationTypeIds = useLocationFilterModel((s) => s.locationTypeIds);
+    const setLocationTypeIds = useLocationFilterModel((s) => s.setLocationTypeIds);
 
     const table = split<HotelType>(HOTEL_TYPES, 2);
 
@@ -26,7 +32,7 @@ export const TypesSelector: React.FC = () => {
         />
     </td>;
 
-    return (<Checkbox.Group value={hotelTypeIds} onChange={setHotelTypeIds}>
+    return (<Checkbox.Group value={locationTypeIds} onChange={setLocationTypeIds}>
         <table>
             <tbody>
             {

@@ -2,14 +2,14 @@ import React from "react";
 import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
-import {useLocationStore} from "../model/LocationStore.ts";
 import {getDropdownItemStyle} from "../utils/utils.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 export const CountriesDropdown: React.FC = () => {
     const combobox = useCombobox();
 
-    const country = useLocationStore((s) => s.country);
-    const setCountry = useLocationStore((s) => s.setCountry);
+    const country = useLocationFilterModel((s) => s.country);
+    const setCountry = useLocationFilterModel((s) => s.setCountry);
 
     const handleSelect = (key: string) => {
         combobox.resetSelectedOption();
