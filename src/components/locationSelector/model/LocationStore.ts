@@ -1,7 +1,7 @@
 import {create} from "zustand";
 import {type Location} from "./Location.ts";
-import {retrieveLocations} from "../service/retrieveLocations.ts";
 import type {Country} from "../static/countries.ts";
+import {retrieveLocations} from "../service/RetrieveLocations.ts";
 
 interface LocationState {
     // Widget modes:
@@ -54,13 +54,14 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setSearchRadius: (r: number | undefined) => set({searchRadius: r}),
     searchCenter: undefined,
     setSearchCenter: (l: L.LatLng | undefined) => set({searchCenter: l}),
-    retrieveLocations: () => retrieveLocations(
-        get().searchText,
-        get().country?.iso,
-        get().hotelTypeIds,
-        get().searchRadius,
-        get().searchCenter?.lat,
-        get().searchCenter?.lng,
+    retrieveLocations: () => retrieveLocations.call(
+        {
+            center: get()?.searchCenter,
+            country: get()?.country,
+            radius: get()?.searchRadius,
+            cityAndName: get()?.searchText,
+            locationTypeIds: get()?.hotelTypeIds ? get()?.hotelTypeIds : []
+        },
         (l: boolean) => set({loading: l}),
         (e: string | undefined) => set({error: e}),
         (res: Location[]) => set({retrieveLocationsResult: res})
