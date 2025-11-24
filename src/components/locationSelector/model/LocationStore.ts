@@ -22,13 +22,11 @@ interface LocationState {
     setSearchRadius: (r: number | undefined) => void,
     searchCenter: L.LatLng | undefined,
     setSearchCenter: (l: L.LatLng | undefined) => void,
-    // Retrieve locations, store and load result
-    retrieveLocations: () => void,
-    retrieveLocationsResult: Location[],
-    setRetrieveLocationsResult: (res: Location[]) => void,
     // Selected location
     selectedLocation: Location | undefined,
     setSelectedLocation: (loc: Location | undefined) => void,
+    // Get filters:
+    getFilters: () => retrieveLocations.Filters,
     // Skip all the filters
     clearFilters: () => void
 }
@@ -42,8 +40,6 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setSearchText: (text: string | undefined) => set({searchText: text}),
     selectedLocation: undefined,
     setSelectedLocation: (loc: Location | undefined) => set({selectedLocation: loc}),
-    retrieveLocationsResult: [],
-    setRetrieveLocationsResult: (res: Location[]) => set({retrieveLocationsResult: res}),
     country: undefined,
     setCountry: (c: Country | undefined) => set({country: c}),
     hotelTypeIds: [],
@@ -54,18 +50,15 @@ export const useLocationStore = create<LocationState>((set, get) => ({
     setSearchRadius: (r: number | undefined) => set({searchRadius: r}),
     searchCenter: undefined,
     setSearchCenter: (l: L.LatLng | undefined) => set({searchCenter: l}),
-    retrieveLocations: () => retrieveLocations.call(
-        {
-            center: get()?.searchCenter,
-            country: get()?.country,
-            radius: get()?.searchRadius,
-            cityAndName: get()?.searchText,
-            locationTypeIds: get()?.hotelTypeIds ? get()?.hotelTypeIds : []
-        },
-        (l: boolean) => set({loading: l}),
-        (e: string | undefined) => set({error: e}),
-        (res: Location[]) => set({retrieveLocationsResult: res})
-    ),
+    getFilters: () => {
+        return {
+            cityAndName: get().searchText,
+            country: get().country,
+            locationTypeIds: get().hotelTypeIds,
+            center: get().searchCenter,
+            radius: get().searchRadius
+        }
+    },
     clearFilters: () => {
         set({
             searchText: "",

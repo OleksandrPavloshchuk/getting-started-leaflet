@@ -6,13 +6,14 @@ import {DropdownArrow} from "./DropdownArrow.tsx";
 import {useLocationStore} from "../model/LocationStore.ts";
 import {getDropdownItemStyle} from "../utils/utils.ts";
 import {IconHelp} from "@tabler/icons-react";
+import {retrieveLocations} from "../service/RetrieveLocations.ts";
 
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
     const error = useLocationStore((s) => s.error);
+    const setError = useLocationStore((s) => s.setError);
     const loading = useLocationStore((s) => s.loading);
-    const retrieveLocationsResult = useLocationStore((s) => s.retrieveLocationsResult);
-    const retrieveLocations = useLocationStore((s) => s.retrieveLocations);
+    const setLoading = useLocationStore((s) => s.setLoading);
     const query = useLocationStore((s) => s.searchText);
     const setQuery = useLocationStore((s) => s.setSearchText);
     const country = useLocationStore((s) => s.country);
@@ -22,12 +23,17 @@ export const LocationsDropdown: React.FC = () => {
     const radius = useLocationStore((s) => s.searchRadius);
     const center = useLocationStore((s) => s.searchCenter);
 
+    const getFilters = useLocationStore((s) => s.getFilters);
+    const retrieve = retrieveLocations.useModel((s)=>s.call);
+    const result = retrieveLocations.useModel((s) => s.result);
+
+
     const [debouncedQuery] = useDebouncedValue(query, 300);
 
     useEffect(
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
-                retrieveLocations();
+                retrieve(getFilters(), setLoading, setError);
                 combobox.focusSearchInput();
             }
         },
@@ -42,8 +48,8 @@ export const LocationsDropdown: React.FC = () => {
     };
 
     const handleSelect = (key: string) => {
-        if (retrieveLocationsResult.length > 0) {
-            const loc = retrieveLocationsResult.find((item) => item.id === key);
+        if (result.length > 0) {
+            const loc = result.find((item) => item.id === key);
             setSelected(loc);
             combobox.closeDropdown();
         }
@@ -65,7 +71,7 @@ export const LocationsDropdown: React.FC = () => {
                     <tr>
                         <td style={{width: "100%", height: 80}}>
                             <fieldset style={{fontSize: '8pt', height: "55pt"}}>
-                                <legend>{`Found: ${retrieveLocationsResult.length}`}</legend>
+                                <legend>{`Found: ${result.length}`}</legend>
                                 <Combobox
                                     withinPortal={true}
                                     zIndex={8000}
@@ -93,8 +99,8 @@ export const LocationsDropdown: React.FC = () => {
                                     >
                                         <Combobox.Options>
                                             {
-                                                retrieveLocationsResult && retrieveLocationsResult.length > 0 ?
-                                                    (retrieveLocationsResult.map((item) =>
+                                                result && result.length > 0 ?
+                                                    (result.map((item) =>
                                                             <Combobox.Option
                                                                 value={item.id} key={item.id}
                                                                 style={getDropdownItemStyle(() => selected?.id === item.id)}
