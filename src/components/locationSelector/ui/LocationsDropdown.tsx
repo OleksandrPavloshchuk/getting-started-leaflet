@@ -9,8 +9,15 @@ import {IconHelp} from "@tabler/icons-react";
 import {retrieveLocations} from "../service/RetrieveLocations.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
+/**
+ * This dropdown applies filters, primarily from the input line, requests locations data from service
+ * and fills the dropdown list.
+ *
+ * @constructor
+ */
 export const LocationsDropdown: React.FC = () => {
     const combobox = useCombobox();
+
     const error = useWidgetStateModel((s) => s.error);
     const setError = useWidgetStateModel((s) => s.setError);
     const loading = useWidgetStateModel((s) => s.loading);
@@ -29,8 +36,10 @@ export const LocationsDropdown: React.FC = () => {
     const retrieve = retrieveLocations.useModel((s)=>s.call);
     const result = retrieveLocations.useModel((s) => s.result);
 
+    // Debounce used to prevent the redundant requests to service
     const [debouncedQuery] = useDebouncedValue(cityAndName, 300);
 
+    // Listen to filter parameters changes and retrieve data from service
     useEffect(
         () => {
             if (debouncedQuery && debouncedQuery.length >= 3) {
@@ -41,13 +50,14 @@ export const LocationsDropdown: React.FC = () => {
         [cityAndName, country, locationTypeIds, radius, center]
     );
 
-    // Simple filter by name:
+    // Listen to changes of input line
     const handleChange = (val: string) => {
         setCityAndName(val);
         combobox.openDropdown();
         combobox.updateSelectedOptionIndex();
     };
 
+    // Listen to selection of position in the list
     const handleSelect = (key: string) => {
         if (result.length > 0) {
             const loc = result.find((item) => item.id === key);

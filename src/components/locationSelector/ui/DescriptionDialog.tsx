@@ -5,6 +5,13 @@ import DOMPurify from 'dompurify';
 import "../../../../public/leaflet-custom.css";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 
+/**
+ * Show location's description.
+ * It's get from fields "description" and "importantInfo".
+ * These fields may contain HTML, so these values should be sanitized before insertion into dialog.
+ *
+ * @constructor
+ */
 export const DescriptionDialog: React.FC = () => {
 
     const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);

@@ -1,7 +1,7 @@
 import {create} from "zustand";
 import {type Location} from "./Location.ts";
 
-interface WidgenStateModel {
+interface WidgetStateModel {
     error: string | undefined,
     setError: (e: string | undefined) => void,
     loading: boolean,
@@ -10,9 +10,11 @@ interface WidgenStateModel {
     setExtraFilterDialogOpened: (b: boolean) => void,
     selectedLocation: Location | undefined,
     setSelectedLocation: (loc: Location | undefined) => void,
+    mapZoom: number,
+    setMapZoom: (n:number) => void
 }
 
-export const useWidgetStateModel = create<WidgenStateModel>((set) => ({
+export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     error: undefined,
     setError: (e: string | undefined) => set({error: e}),
     loading: false,
@@ -20,5 +22,7 @@ export const useWidgetStateModel = create<WidgenStateModel>((set) => ({
     selectedLocation: undefined,
     setSelectedLocation: (loc: Location | undefined) => set({selectedLocation: loc}),
     extraFilterDialogOpened: false,
-    setExtraFilterDialogOpened: (b: boolean) => set({extraFilterDialogOpened: b})
+    setExtraFilterDialogOpened: (b: boolean) => set({extraFilterDialogOpened: b}),
+    mapZoom: 6,
+    setMapZoom: (n:number)=> set({mapZoom: n})
 }));

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {MapContainer, Marker, TileLayer, Circle, useMap, useMapEvents, ScaleControl} from "react-leaflet";
+import {MapContainer, Marker, TileLayer, Circle, useMap, useMapEvents, ScaleControl, useMapEvent} from "react-leaflet";
 import L, {LatLng} from "leaflet";
 
 import "../../../../public/leaflet-custom.css";
@@ -17,15 +17,7 @@ const markerIcon = new L.Icon({
     iconAnchor: [12, 41]
 });
 
-// Helper component for map recentering
-const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
-    const map = useMap();
-    useEffect(() => {
-        map.setView([lat, lng], 13);
-    }, [lat, lng, map]);
-    return null;
-};
-
+// Listener to clicking on the map
 const MapClickHandler: React.FC<{ onClickPoint: (pos: LatLng) => void }> = ({onClickPoint}) => {
 
     useMapEvents(
@@ -52,15 +44,36 @@ export const MapView: React.FC = () => {
     const radius = useLocationFilterModel((s) => s.radius);
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const mapZoom = useWidgetStateModel((s) => s.mapZoom);
+    const setMapZoom = useWidgetStateModel((s) => s.setMapZoom);
     const [showCirclePopup, setShowCirclePopup] = useState(false);
+
+    // Zoom listener:
+    const ZoomListener = () => {
+        useMapEvent("zoomend", (event) => {
+            setMapZoom(event.target.getZoom());
+        });
+
+        return null; // цей компонент не рендерить нічого
+    }
+
+    // Helper component for map recentering
+    const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
+        const map = useMap();
+        useEffect(() => {
+            map.setView([lat, lng], mapZoom);
+        }, [lat, lng, map]);
+        return null;
+    };
 
     return (
         <MapContainer
             center={defaultCenter as [number, number]}
-            zoom={6}
+            zoom={mapZoom}
             style={{width: 800, height: 640, borderRadius: 6}}
 
         >
+            <ZoomListener/>
             <ScaleControl />
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

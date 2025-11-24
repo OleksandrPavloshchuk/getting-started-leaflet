@@ -4,6 +4,11 @@ import {DescriptionDialog} from "./DescriptionDialog.tsx";
 import {Popup} from "react-leaflet";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 
+/**
+ * Show hotel details in popup dialog on the map.
+ *
+ * @constructor
+ */
 export const HotelDetailsPopup: React.FC = () => {
     const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
     if (!selectedLocation) {

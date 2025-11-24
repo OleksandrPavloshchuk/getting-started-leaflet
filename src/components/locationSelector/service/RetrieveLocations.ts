@@ -19,7 +19,6 @@ export namespace retrieveLocations {
 
     interface Model {
         result: Location[],
-        setResult: (r: Location[]) => void
         call: (
             f: Filters,
             setLoading: (b: boolean) => void,
@@ -28,7 +27,6 @@ export namespace retrieveLocations {
 
     export const useModel = create<Model>((set) => ({
         result: [],
-        setResult: (r: Location[]) => set({result: r}),
         /**
          * Load locations using filters
          *
