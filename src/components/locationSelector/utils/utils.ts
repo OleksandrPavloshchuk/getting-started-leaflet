@@ -9,3 +9,11 @@ export const getDropdownItemStyle = (isSelected: () => boolean) => {
 export const getRadiusStr = (r: number) => r < 1000 ? `${r} m` : `${r / 1000} km`;
 
 export const getLocationStr = (l: L.LatLng) => `(${l.lat.toFixed(3)}, ${l.lng.toFixed(3)})`;
+
+export const normalizeName =(src: string, limit: number) => {
+    let res = src.substring(0, limit);
+    if (src.length>limit) {
+        res = res + "...";
+    }
+    return res;
+}
