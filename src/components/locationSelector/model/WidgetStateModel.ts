@@ -8,10 +8,10 @@ interface WidgetStateModel {
     setLoading: (l: boolean) => void,
     extraFilterDialogOpened: boolean,
     setExtraFilterDialogOpened: (b: boolean) => void,
+    searchCenterDialogOpened: boolean,
+    setSearchCenterDialogOpened: (b: boolean) => void,
     selectedLocation: Location | undefined,
-    setSelectedLocation: (loc: Location | undefined) => void,
-    mapZoom: number,
-    setMapZoom: (n:number) => void
+    setSelectedLocation: (loc: Location | undefined) => void
 }
 
 export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
@@ -23,6 +23,6 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     setSelectedLocation: (loc: Location | undefined) => set({selectedLocation: loc}),
     extraFilterDialogOpened: false,
     setExtraFilterDialogOpened: (b: boolean) => set({extraFilterDialogOpened: b}),
-    mapZoom: 6,
-    setMapZoom: (n:number)=> set({mapZoom: n})
+    searchCenterDialogOpened: false,
+    setSearchCenterDialogOpened: (b: boolean) => set({searchCenterDialogOpened: b})
 }));

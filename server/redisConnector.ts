@@ -6,6 +6,7 @@ let client = createClient({
 client.on('error', (err) => console.error('Redis Client Error', err));
 
 export async function getOrCache(
+    prefix: string,
     key: any,
     baseRetrieve: () => any,
     ttlSeconds = 3600
@@ -13,7 +14,7 @@ export async function getOrCache(
     if (!client.isOpen) {
         await client.connect();
     }
-    const keyStr = createKeyString(key);
+    const keyStr = createKeyString(prefix, key);
     const valueStr = await client.get(keyStr);
     if (valueStr) {
         return JSON.parse(valueStr.toString());
@@ -25,4 +26,4 @@ export async function getOrCache(
 
 }
 
-const createKeyString = (src) => `hotels:${JSON.stringify(src, Object.keys(src).sort())}`;
+const createKeyString = (prefix: string, src) => `${prefix}:${JSON.stringify(src, Object.keys(src).sort())}`;

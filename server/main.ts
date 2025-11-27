@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
-import {NuiteeProvider} from "./provider/nuitee";
-import {RestelProvider} from "./provider/restel";
+import {NuiteeProvider} from "./provider/nuiteeLocations";
+import {RestelProvider} from "./provider/restelLocations";
 import {getOrCache} from "./redisConnector";
 
 const app = express();
@@ -62,7 +62,7 @@ const getParamNumber = (src: any | undefined) => {
 
 const normalize = (s:string)=> s ? s.replace("_", " ") : "";
 
-// Endpoint:
+// Endpoints: list of connections
 app.get("/api/locations", async (req, res) => {
     const q = getParamString(req.query.q);
     const country = getParamString(req.query.c);
@@ -88,7 +88,7 @@ app.get("/api/locations", async (req, res) => {
 
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    getOrCache(queryParams,
+    getOrCache('location', queryParams,
         () => Promise.all([
             NuiteeProvider.retrieve(queryParams),
             RestelProvider.retrieve(queryParams)

@@ -27,7 +27,7 @@ docker compose up
 Run backend application:
 ```shell
 
-npx ts-node server/endpoint.ts
+npx ts-node server/main.ts
 ```
 
 Run frontend application:

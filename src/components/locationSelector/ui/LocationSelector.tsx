@@ -4,11 +4,12 @@ import {LocationsDropdown} from "./LocationsDropdown.tsx";
 import {MapView} from "./MapView.tsx";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
-import {IconDeselect, IconFilterCancel, IconFilterSearch, IconSelect} from "@tabler/icons-react";
+import {IconDeselect, IconFilterCancel, IconFilterSearch, IconSelect, IconTarget} from "@tabler/icons-react";
 import {ExtraFiltersInfo} from "./ExtraFiltersInfo.tsx";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import React from "react";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import {SearchCenterDialog} from "./SearchCenterDialog.tsx";
 
 type Props = {
     onSubmit: (loc: Location | undefined) => void
@@ -25,6 +26,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
     const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
     const setSelectedLocation = useWidgetStateModel((s) => s.setSelectedLocation);
     const setExtraFilterDialogOpened = useWidgetStateModel((s) => s.setExtraFilterDialogOpened);
+    const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
     const loading = useWidgetStateModel((s) => s.loading);
 
     const clearAllFilters = useLocationFilterModel((s) => s.clearFilters);
@@ -48,6 +50,11 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                     </div>
                     <Flex w="100%" gap="sm">
                         <Button style={{flex: 1}}
+                                onClick={() => {
+                                    setSearchCenterDialogOpened(true);
+                                }}
+                                disabled={loading}><IconTarget/>&nbsp;Search Center</Button>
+                        <Button style={{flex: 1}}
                                 onClick={() => onSubmit(selectedLocation)}
                                 disabled={loading || !selectedLocation}><IconSelect/>&nbsp;Submit</Button>
                         <Button style={{flex: 1}}
@@ -67,6 +74,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                     <MapView/>
                 </Stack>
                 <ExtraFilterDialog/>
+                <SearchCenterDialog/>
             </Paper>
         </div>
     );
