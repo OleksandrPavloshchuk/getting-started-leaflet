@@ -2,15 +2,13 @@ import {Popup} from "react-leaflet";
 import React from "react";
 import {getRadiusStr} from "../utils/utils.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 
-type Props = {
-    setShow: (show: boolean) => void
-};
-
-export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
+export const SelectRadiusPopup: React.FC = () => {
     const setRadius = useLocationFilterModel((s) => s.setRadius);
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const setSelectRadiusPopupOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
 
     const radiusLink = (r: number) => {
         return (
@@ -20,7 +18,7 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
                      e.stopPropagation();
                      e.preventDefault();
                      setRadius(r);
-                     setShow(false);
+                     setSelectRadiusPopupOpened(false);
                  }}>{getRadiusStr(r)}</div>);
     };
 
@@ -37,7 +35,7 @@ export const SelectLocationAndRadiusPopup: React.FC<Props> = ({setShow}) => {
                     e.preventDefault();
                     setRadius(undefined);
                     setCenter(undefined);
-                    setShow(false);
+                    setSelectRadiusPopupOpened(false);
                 }}
             >Reset
             </div>

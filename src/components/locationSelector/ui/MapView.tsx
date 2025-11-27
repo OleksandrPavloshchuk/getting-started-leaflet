@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {MapContainer, Marker, TileLayer, Circle, useMap, useMapEvents, ScaleControl} from "react-leaflet";
 import L, {LatLng} from "leaflet";
 
 import "../../../../public/leaflet-custom.css";
 import {HotelDetailsPopup} from "./HotelDetailsPopup.tsx";
-import {SelectLocationAndRadiusPopup} from "./SelectLocationAndRadiusPopup.tsx";
+import {SelectRadiusPopup} from "./SelectRadiusPopup.tsx";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {MapHint} from "./MapHint.tsx";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import {SearchCenterDialog} from "./SearchCenterDialog.tsx";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -44,7 +45,8 @@ export const MapView: React.FC = () => {
     const radius = useLocationFilterModel((s) => s.radius);
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
-    const [showCirclePopup, setShowCirclePopup] = useState(false);
+    const selectRadiusPopupOpened = useWidgetStateModel((s) => s.selectRadiusPopupOpened);
+    const setSelectRadiusPopupOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
 
     // Helper component for map recentering
     const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
@@ -70,13 +72,12 @@ export const MapView: React.FC = () => {
             />
             <MapClickHandler onClickPoint={(point: LatLng) => {
                 setCenter(point);
-                setShowCirclePopup(true);
+                setSelectRadiusPopupOpened(true);
             }}/>
 
-            {showCirclePopup && center &&
+            {selectRadiusPopupOpened && center &&
                 <>
-                    <SelectLocationAndRadiusPopup
-                        setShow={setShowCirclePopup}/>
+                    <SelectRadiusPopup/>
                     <Recenter lat={center.lat} lng={center.lng}/>
                 </>
             }
@@ -105,6 +106,7 @@ export const MapView: React.FC = () => {
 
             <MapHint timeout={5000} text="Left-click the map to set search center" />
 
+            <SearchCenterDialog/>
         </MapContainer>
     );
 };

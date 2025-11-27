@@ -11,7 +11,9 @@ interface WidgetStateModel {
     searchCenterDialogOpened: boolean,
     setSearchCenterDialogOpened: (b: boolean) => void,
     selectedLocation: Location | undefined,
-    setSelectedLocation: (loc: Location | undefined) => void
+    setSelectedLocation: (loc: Location | undefined) => void,
+    selectRadiusPopupOpened: boolean,
+    setSelectRadiusPopupOpened: (b:boolean) => void
 }
 
 export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
@@ -24,5 +26,7 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     extraFilterDialogOpened: false,
     setExtraFilterDialogOpened: (b: boolean) => set({extraFilterDialogOpened: b}),
     searchCenterDialogOpened: false,
-    setSearchCenterDialogOpened: (b: boolean) => set({searchCenterDialogOpened: b})
+    setSearchCenterDialogOpened: (b: boolean) => set({searchCenterDialogOpened: b}),
+    selectRadiusPopupOpened: false,
+    setSelectRadiusPopupOpened: (b:boolean)=> set({selectRadiusPopupOpened: b})
 }));

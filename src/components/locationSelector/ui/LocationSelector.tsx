@@ -9,7 +9,6 @@ import {ExtraFiltersInfo} from "./ExtraFiltersInfo.tsx";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import React from "react";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
-import {SearchCenterDialog} from "./SearchCenterDialog.tsx";
 
 type Props = {
     onSubmit: (loc: Location | undefined) => void
@@ -74,7 +73,6 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                     <MapView/>
                 </Stack>
                 <ExtraFilterDialog/>
-                <SearchCenterDialog/>
             </Paper>
         </div>
     );

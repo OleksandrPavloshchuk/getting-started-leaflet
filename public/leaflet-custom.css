@@ -38,3 +38,13 @@ td.extra-filter-info {
 td.line {
     border-bottom: 1px dotted lightgray;
 }
+
+.search-center-link {
+    cursor: pointer;
+    color: var(--mantine-color-blue-filled);
+}
+
+.search-center-link:hover {
+    text-decoration: underline;
+    color: var(--mantine-color-blue-filled);
+}

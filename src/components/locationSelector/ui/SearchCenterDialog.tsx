@@ -1,12 +1,20 @@
-import {Box, Modal, Tabs} from "@mantine/core";
+import {Accordion, Box, Modal, Tabs} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {retrieveSearchCenters} from "../service/RetrieveSearchCenters.ts";
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
+import type {SearchCenter} from "../model/SearchCenter.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import L from "leaflet";
+import {useMap} from "react-leaflet";
 
 export const SearchCenterDialog: React.FC = () => {
 
+    const setCenter = useLocationFilterModel((s)=>s.setCenter);
     const searchCenterDialogOpened = useWidgetStateModel((s) => s.searchCenterDialogOpened);
     const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
+    const setSelectRadiusPopuoOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
+    const setCityAndName = useLocationFilterModel((s) => s.setCityAndName);
+    const setSelectedLocation = useWidgetStateModel((s) => s.setSelectedLocation);
 
     const retrieve = retrieveSearchCenters.useModel((s) => s.call);
     const result = retrieveSearchCenters.useModel((s) => s.result);
@@ -16,6 +24,28 @@ export const SearchCenterDialog: React.FC = () => {
             retrieve();
         }
     }, [searchCenterDialogOpened]);
+
+    const centersByCities = useMemo(() => {
+        return result.reduce((acc, item) => {
+            if (!acc[item.city]) {
+                acc[item.city] = [];
+            }
+            acc[item.city].push(item);
+            return acc;
+        }, {} as Record<string, typeof result>);
+    }, [result]);
+
+    const map = useMap();
+
+    const openSelectLocationPopup = (item: SearchCenter)=> {
+        setSearchCenterDialogOpened(false);
+        let center = new L.LatLng(item.latitude, item.longitude);
+        setCenter(center);
+        map.setView([item.latitude, item.longitude], 13);
+        setCityAndName(`${item.city},`);
+        setSelectedLocation(undefined);
+        setSelectRadiusPopuoOpened(true);
+    };
 
     return (
         <Modal
@@ -57,16 +87,27 @@ export const SearchCenterDialog: React.FC = () => {
                     </Tabs.List>
 
                     <Tabs.Panel value="COMMON" pt="sm">
-                        <Box>
+                        <Accordion multiple={false}>
                             {
-                                result.filter((item) => item.type=='COMMON')
-                                    .map((item) => (
-                                        <div key={`${item.city}+${item.name}`}>
-                                            <a href="#">{`${item.city} - ${item.name}`}</a>
-                                        </div>
-                                    ))
+                                Object.entries(centersByCities).map(([city, items]) => (
+                                    <Accordion.Item key={city} value={city}>
+                                        <Accordion.Control style={{fontSize: "10pt"}}>{city}</Accordion.Control>
+                                        <Accordion.Panel>
+                                            {items
+                                                .filter((item) => item.type=='COMMON')
+                                                .map((item) => (
+                                                <div key={`${item.city}+${item.name}`}>
+                                                    <a href="#"
+                                                       className="search-center-link"
+                                                       onClick={()=>openSelectLocationPopup(item)}
+                                                    >{item.name}</a>
+                                                </div>
+                                            ))}
+                                        </Accordion.Panel>
+                                    </Accordion.Item>
+                                ))
                             }
-                        </Box>
+                        </Accordion>
                     </Tabs.Panel>
                 </Tabs>
             </Box>
