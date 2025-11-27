@@ -50,7 +50,7 @@ export const MapView: React.FC = () => {
     const Recenter: React.FC<{ lat: number, lng: number }> = ({lat, lng}) => {
         const map = useMap();
         useEffect(() => {
-            map.setView([lat, lng], 6);
+            map.setView([lat, lng], 13);
         }, [lat, lng, map]);
         return null;
     };

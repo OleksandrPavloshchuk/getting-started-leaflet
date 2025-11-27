@@ -1,14 +1,25 @@
 import {Box, Modal, Tabs} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
+import {retrieveSearchCenters} from "../service/RetrieveSearchCenters.ts";
+import {useEffect} from "react";
 
 export const SearchCenterDialog: React.FC = () => {
 
     const searchCenterDialogOpened = useWidgetStateModel((s) => s.searchCenterDialogOpened);
     const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
 
+    const retrieve = retrieveSearchCenters.useModel((s) => s.call);
+    const result = retrieveSearchCenters.useModel((s) => s.result);
+
+    useEffect(() => {
+        if (searchCenterDialogOpened) {
+            retrieve();
+        }
+    }, [searchCenterDialogOpened]);
+
     return (
         <Modal
-            title="Search Center"
+            title="Search Centers"
             trapFocus={false}
             zIndex={8000}
             opened={searchCenterDialogOpened}
@@ -30,6 +41,7 @@ export const SearchCenterDialog: React.FC = () => {
 
                 },
                 content: {
+                    fontSize: "10pt",
                     top: '20%',
                     left: '-20%',
                     transform: 'translate(-50%, -50%)',
@@ -45,9 +57,16 @@ export const SearchCenterDialog: React.FC = () => {
                     </Tabs.List>
 
                     <Tabs.Panel value="COMMON" pt="sm">
-                        <a href="#">one</a><br/>
-                        <a href="#">one</a><br/>
-                        <a href="#">one</a><br/>
+                        <Box>
+                            {
+                                result.filter((item) => item.type=='COMMON')
+                                    .map((item) => (
+                                        <div key={`${item.city}+${item.name}`}>
+                                            <a href="#">{`${item.city} - ${item.name}`}</a>
+                                        </div>
+                                    ))
+                            }
+                        </Box>
                     </Tabs.Panel>
                 </Tabs>
             </Box>
