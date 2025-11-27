@@ -1,11 +1,12 @@
 import {Accordion, Box, Modal, Tabs} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {retrieveSearchCenters} from "../service/RetrieveSearchCenters.ts";
-import {useEffect, useMemo} from "react";
+import {useCallback, useEffect, useMemo} from "react";
 import type {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
+import {getCountryData} from "../static/countries.ts";
 
 export const SearchCenterDialog: React.FC = () => {
 
@@ -27,27 +28,68 @@ export const SearchCenterDialog: React.FC = () => {
     }, [searchCenterDialogOpened]);
 
     const centersByCities = useMemo(() => {
+        const accordionKey =
+            (item: SearchCenter)=> `${getCountryData(item.country)?.flag} ${item.city}`;
+
         return result.reduce((acc, item) => {
-            if (!acc[item.city]) {
-                acc[item.city] = [];
+            const key = accordionKey(item);
+            if (!acc[key]) {
+                acc[key] = [];
             }
-            acc[item.city].push(item);
+            acc[key].push(item);
             return acc;
         }, {} as Record<string, typeof result>);
     }, [result]);
 
     const map = useMap();
 
-    const openSelectLocationPopup = (item: SearchCenter)=> {
+    const openSelectLocationPopup = useCallback((item: SearchCenter)=> {
         setSearchCenterDialogOpened(false);
-        let center = new L.LatLng(item.latitude, item.longitude);
+
+        const center = new L.LatLng(item.latitude, item.longitude);
         setCenter(center);
+
         setRadius(undefined);
         map.setView([item.latitude, item.longitude], 13);
+
         setCityAndName(`${item.city},`);
         setSelectedLocation(undefined);
         setSelectRadiusPopuoOpened(true);
-    };
+    }, [
+        map,
+        setCenter,
+        setRadius,
+        setSearchCenterDialogOpened,
+        setCityAndName,
+        setSelectedLocation,
+        setSelectRadiusPopuoOpened
+    ]);
+
+    const createTabPanelForType = (type: string)=> (
+        <Tabs.Panel value={type} pt="sm">
+            <Accordion multiple={false}>
+                {
+                    Object.entries(centersByCities).map(([group, items]) => (
+                        <Accordion.Item key={group} value={group}>
+                            <Accordion.Control style={{fontSize: "10pt"}}>{group}</Accordion.Control>
+                            <Accordion.Panel>
+                                {items
+                                    .filter((item) => item.type==type)
+                                    .map((item) => (
+                                        <div key={item.getKey()}>
+                                            <a href="#"
+                                               className="search-center-link"
+                                               onClick={()=>openSelectLocationPopup(item)}
+                                            >{item.name}</a>
+                                        </div>
+                                    ))}
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    ))
+                }
+            </Accordion>
+        </Tabs.Panel>
+    );
 
     return (
         <Modal
@@ -83,34 +125,17 @@ export const SearchCenterDialog: React.FC = () => {
             }}
         >
             <Box maw={720} mx="auto" mt="md">
-                <Tabs defaultValue="COMMON" keepMounted={false}>
+                <Tabs defaultValue="COMMON" keepMounted={false}
+                      styles={{
+                          tab: {fontSize: "10pt"}
+                      }}
+                >
                     <Tabs.List>
                         <Tabs.Tab value="COMMON">Common</Tabs.Tab>
                     </Tabs.List>
-
-                    <Tabs.Panel value="COMMON" pt="sm">
-                        <Accordion multiple={false}>
-                            {
-                                Object.entries(centersByCities).map(([city, items]) => (
-                                    <Accordion.Item key={city} value={city}>
-                                        <Accordion.Control style={{fontSize: "10pt"}}>{city}</Accordion.Control>
-                                        <Accordion.Panel>
-                                            {items
-                                                .filter((item) => item.type=='COMMON')
-                                                .map((item) => (
-                                                <div key={`${item.city}+${item.name}`}>
-                                                    <a href="#"
-                                                       className="search-center-link"
-                                                       onClick={()=>openSelectLocationPopup(item)}
-                                                    >{item.name}</a>
-                                                </div>
-                                            ))}
-                                        </Accordion.Panel>
-                                    </Accordion.Item>
-                                ))
-                            }
-                        </Accordion>
-                    </Tabs.Panel>
+                    {
+                        createTabPanelForType("COMMON")
+                    }
                 </Tabs>
             </Box>
         </Modal>

@@ -52,7 +52,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 onClick={() => {
                                     setSearchCenterDialogOpened(true);
                                 }}
-                                disabled={loading}><IconTarget/>&nbsp;Search Center</Button>
+                                disabled={loading}><IconTarget/>&nbsp;Search Centers</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => onSubmit(selectedLocation)}
                                 disabled={loading || !selectedLocation}><IconSelect/>&nbsp;Submit</Button>

@@ -40,7 +40,7 @@ const MapClickHandler: React.FC<{ onClickPoint: (pos: LatLng) => void }> = ({onC
 export const MapView: React.FC = () => {
     const defaultCenter = [49.0, 31.0];
 
-    const selectedLocation = useWidgetStateModel((s)=>s.selectedLocation);
+    const selectedLocation = useWidgetStateModel((s) => s.selectedLocation);
 
     const radius = useLocationFilterModel((s) => s.radius);
     const center = useLocationFilterModel((s) => s.center);
@@ -64,7 +64,7 @@ export const MapView: React.FC = () => {
             style={{width: 800, height: 640, borderRadius: 6}}
 
         >
-            <ScaleControl />
+            <ScaleControl/>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap contributors"
@@ -83,16 +83,28 @@ export const MapView: React.FC = () => {
             }
 
             {center && radius && radius > 0 &&
-            <Circle
-                center={[center.lat, center.lng]}
-                radius={radius}
-                pathOptions={{
-                    color: 'var(--mantine-color-blue-filled)',
-                    weight: 1,
-                    fillColor: 'var(--mantine-color-blue-filled)',
-                    fillOpacity: 0.15,
-                }}
-            />
+                <>
+                    <Circle
+                        center={[center.lat, center.lng]}
+                        radius={radius}
+                        pathOptions={{
+                            color: 'var(--mantine-color-blue-filled)',
+                            weight: 1,
+                            fillColor: 'var(--mantine-color-blue-filled)',
+                            fillOpacity: 0.15,
+                        }}
+                    />
+                    <Circle
+                        center={[center.lat, center.lng]}
+                        radius={50}
+                        pathOptions={{
+                            color: 'var(--mantine-color-blue-filled)',
+                            weight: 1,
+                            fillColor: 'var(--mantine-color-blue-filled)',
+                            fillOpacity: 0.8,
+                        }}
+                    />
+                </>
             }
 
             {selectedLocation &&
@@ -104,8 +116,7 @@ export const MapView: React.FC = () => {
                 </>
             }
 
-            <MapHint timeout={5000} text="Left-click the map to set search center" />
-
+            <MapHint timeout={5000} text="Left-click the map to set search center"/>
             <SearchCenterDialog/>
         </MapContainer>
     );

@@ -8,10 +8,10 @@ export class SearchCentersProvider {
 
 const SQL = `
     SELECT
-        city, name, latitude, longitude, type
+        country, city, name, latitude, longitude, type
     FROM
         search_center
     ORDER BY
-        type, city, name
+        type, country, city, name
     `;
 
