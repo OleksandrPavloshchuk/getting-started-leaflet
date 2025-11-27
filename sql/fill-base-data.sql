@@ -28,13 +28,13 @@ insert into public.search_center(city, name, latitude, longitude, type)
 VALUES ( 'New York', 'Statue of Liberty', 40.6892, -74.0445, 'COMMON');
 
 insert into public.search_center(city, name, latitude, longitude, type)
-VALUES ( 'Tokio', 'Tokio Tower', 35.6586, 139.7454, 'COMMON');
+VALUES ( 'Tokyo', 'Tokio Tower', 35.6586, 139.7454, 'COMMON');
 
 insert into public.search_center(city, name, latitude, longitude, type)
-VALUES ( 'Tokio', 'Sibuia Crossing', 35.6595, 139.7005, 'COMMON');
+VALUES ( 'Tokyo', 'Sibuia Crossing', 35.6595, 139.7005, 'COMMON');
 
 insert into public.search_center(city, name, latitude, longitude, type)
-VALUES ( 'Tokio', 'Imperator Palace', 35.6852, 139.7528, 'COMMON');
+VALUES ( 'Tokyo', 'Imperator Palace', 35.6852, 139.7528, 'COMMON');
 
 insert into public.search_center(city, name, latitude, longitude, type)
 VALUES ( 'Rome', 'Coliseum', 41.8902, 12.4922, 'COMMON');

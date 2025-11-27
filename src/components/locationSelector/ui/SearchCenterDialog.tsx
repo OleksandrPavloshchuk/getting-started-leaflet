@@ -10,6 +10,7 @@ import {useMap} from "react-leaflet";
 export const SearchCenterDialog: React.FC = () => {
 
     const setCenter = useLocationFilterModel((s)=>s.setCenter);
+    const setRadius = useLocationFilterModel((s) => s.setRadius);
     const searchCenterDialogOpened = useWidgetStateModel((s) => s.searchCenterDialogOpened);
     const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
     const setSelectRadiusPopuoOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
@@ -41,6 +42,7 @@ export const SearchCenterDialog: React.FC = () => {
         setSearchCenterDialogOpened(false);
         let center = new L.LatLng(item.latitude, item.longitude);
         setCenter(center);
+        setRadius(undefined);
         map.setView([item.latitude, item.longitude], 13);
         setCityAndName(`${item.city},`);
         setSelectedLocation(undefined);
