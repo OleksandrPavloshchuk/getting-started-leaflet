@@ -59,7 +59,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                         <Button style={{flex: 1}}
                                 onClick={() => setExtraFilterDialogOpened(true)}
                                 disabled={loading}
-                        ><IconFilterSearch/>&nbsp;Set Extra Filters</Button>
+                        ><IconFilterSearch/>&nbsp;Extra Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={clearAllFilters}
                                 disabled={loading || (!country && !radius && locationTypeIds.length === 0 && !cityAndName)}

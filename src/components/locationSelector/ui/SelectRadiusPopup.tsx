@@ -9,6 +9,7 @@ export const SelectRadiusPopup: React.FC = () => {
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
     const setSelectRadiusPopupOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
+    const setCreatePersonalSearchCenterOpened = useWidgetStateModel((s)=>s.setCreatePersonalSearchCenterOpened);
 
     const radiusLink = (r: number) => {
         return (
@@ -24,6 +25,20 @@ export const SelectRadiusPopup: React.FC = () => {
 
     return (<Popup position={center} closeOnEscapeKey={true} closeButton={true}>
         <div style={{textAlign: 'center'}}>
+            <div
+                className="radius-link"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    // TODO save personal search center to database
+
+
+                    setCreatePersonalSearchCenterOpened(true);
+                }}
+            >Create a personal search center
+            </div>
+            <hr/>
             <strong>Radius of selection:</strong>
             <hr/>
             {[500, 1000, 2000, 5000, 10000].map((r: number) => radiusLink(r))}

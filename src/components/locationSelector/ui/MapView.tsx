@@ -9,6 +9,7 @@ import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {MapHint} from "./MapHint.tsx";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import {SearchCenterDialog} from "./SearchCenterDialog.tsx";
+import {CreatePersonalSearchCenterDialog} from "./CreatePersonalSearchCenterDialog.tsx";
 
 // Simple marker
 const markerIcon = new L.Icon({
@@ -118,6 +119,7 @@ export const MapView: React.FC = () => {
 
             <MapHint timeout={5000} text="Left-click the map to set search center"/>
             <SearchCenterDialog/>
+            <CreatePersonalSearchCenterDialog/>
         </MapContainer>
     );
 };

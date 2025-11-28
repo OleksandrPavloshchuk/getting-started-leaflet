@@ -13,7 +13,9 @@ interface WidgetStateModel {
     selectedLocation: Location | undefined,
     setSelectedLocation: (loc: Location | undefined) => void,
     selectRadiusPopupOpened: boolean,
-    setSelectRadiusPopupOpened: (b:boolean) => void
+    setSelectRadiusPopupOpened: (b:boolean) => void,
+    createPersonalSearchCenterOpened: boolean,
+    setCreatePersonalSearchCenterOpened: (b:boolean) => void
 }
 
 export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
@@ -28,5 +30,7 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     searchCenterDialogOpened: false,
     setSearchCenterDialogOpened: (b: boolean) => set({searchCenterDialogOpened: b}),
     selectRadiusPopupOpened: false,
-    setSelectRadiusPopupOpened: (b:boolean)=> set({selectRadiusPopupOpened: b})
+    setSelectRadiusPopupOpened: (b:boolean)=> set({selectRadiusPopupOpened: b}),
+    createPersonalSearchCenterOpened: false,
+    setCreatePersonalSearchCenterOpened: (b:boolean)=> set({createPersonalSearchCenterOpened: b})
 }));

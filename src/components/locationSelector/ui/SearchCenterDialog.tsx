@@ -27,11 +27,12 @@ export const SearchCenterDialog: React.FC = () => {
         }
     }, [searchCenterDialogOpened]);
 
-    const centersByCities = useMemo(() => {
+    // TODO custom group names
+    const groupByCities = (src: SearchCenter[])=> {
         const accordionKey =
             (item: SearchCenter)=> `${getCountryData(item.country)?.flag} ${item.city}`;
 
-        return result.reduce((acc, item) => {
+        return src.reduce((acc, item) => {
             const key = accordionKey(item);
             if (!acc[key]) {
                 acc[key] = [];
@@ -39,6 +40,18 @@ export const SearchCenterDialog: React.FC = () => {
             acc[key].push(item);
             return acc;
         }, {} as Record<string, typeof result>);
+    }
+
+    const tabData = (type: string) => {
+        const arr = result.filter( (item:SearchCenter) => item.type==type);
+        return groupByCities(arr);
+    }
+
+    const groupedResult = useMemo(()=> {
+        const r = { COMMON: {}, PERSONAL: {}};
+        r.COMMON = tabData('COMMON');
+        r.PERSONAL = tabData('PERSONAL');
+        return r;
     }, [result]);
 
     const map = useMap();
@@ -65,16 +78,15 @@ export const SearchCenterDialog: React.FC = () => {
         setSelectRadiusPopuoOpened
     ]);
 
-    const createTabPanelForType = (type: string)=> (
+    const createTabPanelForType = (type: string, data: Record<string, typeof result>)=> (
         <Tabs.Panel value={type} pt="sm">
             <Accordion multiple={false}>
                 {
-                    Object.entries(centersByCities).map(([group, items]) => (
+                    Object.entries(data).map(([group, items]) => (
                         <Accordion.Item key={group} value={group}>
                             <Accordion.Control style={{fontSize: "10pt"}}>{group}</Accordion.Control>
                             <Accordion.Panel>
                                 {items
-                                    .filter((item) => item.type==type)
                                     .map((item) => (
                                         <div key={item.getKey()}>
                                             <a href="#"
@@ -132,9 +144,13 @@ export const SearchCenterDialog: React.FC = () => {
                 >
                     <Tabs.List>
                         <Tabs.Tab value="COMMON">Common</Tabs.Tab>
+                        <Tabs.Tab value="PERSONAL">Personal</Tabs.Tab>
                     </Tabs.List>
                     {
-                        createTabPanelForType("COMMON")
+                        createTabPanelForType("COMMON", groupedResult.COMMON)
+                    }
+                    {
+                        createTabPanelForType("PERSONAL", groupedResult.PERSONAL)
                     }
                 </Tabs>
             </Box>

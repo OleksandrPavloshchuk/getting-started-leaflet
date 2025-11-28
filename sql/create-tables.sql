@@ -7,7 +7,8 @@ create table public.search_center
     name        varchar(255) not null,
     latitude    double precision,
     longitude   double precision,
-    type        varchar(32) not null
+    type        varchar(32) not null,
+    user_id     integer null
 );
 
 create index idx_search_center on public.search_center(country, city, name, type);
