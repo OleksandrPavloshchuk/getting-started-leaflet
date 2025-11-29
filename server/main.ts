@@ -2,6 +2,7 @@ import * as express from "express";
 import * as cors from "cors";
 import {getLocations} from "./endpoints/locations";
 import {getSearchCenters} from "./endpoints/searchCenters";
+import {insertSearchCenter} from "./endpoints/createSearchCenter";
 
 const app = express();
 const port = 4000;
@@ -19,6 +20,12 @@ app.get("/api/locations", async (req, res) => {
 app.get("/api/searchCenters", async (req, res) => {
     getSearchCenters(res);
 });
+
+// Endpoint: create a search center
+app.post( "/api/searchCenters/create", async (req, res) => {
+        insertSearchCenter(req, res);
+    }
+)
 
 app.listen(port, () => {
     console.log(`✅ API server running at http://localhost:${port}`);

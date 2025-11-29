@@ -3,11 +3,16 @@ import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useCreatePersonalSearchCenterModel} from "../model/CreatePersonalSearchCenterModel.ts";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
 import {useState} from "react";
+import {SearchCenter} from "../model/SearchCenter.ts";
+import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import {updateSearchCenters} from "../service/CreateSearchCenter.ts";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
     const createPersonalSearchCenterOpened = useWidgetStateModel((s) => s.createPersonalSearchCenterOpened);
     const setCreatePersonalSearchCenterOpened = useWidgetStateModel((s) => s.setCreatePersonalSearchCenterOpened);
+
+    const center = useLocationFilterModel((s) => s.center);
 
     const country = useCreatePersonalSearchCenterModel((s) => s.country);
     const setCountry = useCreatePersonalSearchCenterModel((s) => s.setCountry);
@@ -18,16 +23,23 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
     const [submitted, setSubmitted] = useState(false);
 
-    const countryValid = () => country != undefined;
     const cityValid = () => city.trim().length>0;
     const nameValid = () => name.trim().length>0;
 
     const onSave = () => {
         setSubmitted(true);
-        if (countryValid() && cityValid() && nameValid()) {
+        if (center && country && cityValid() && nameValid()) {
 
-            // TODO implement saving:
-            console.log("TRACE", {country, city, name});
+            const newSearchCenter = new SearchCenter();
+            newSearchCenter.type = 'PERSONAL';
+            newSearchCenter.city = city;
+            newSearchCenter.country = country.iso;
+            newSearchCenter.name = name;
+            newSearchCenter.longitude = center.lng;
+            newSearchCenter.latitude = center.lat;
+
+            updateSearchCenters.create(newSearchCenter);
+            // TODO process error
 
             setCreatePersonalSearchCenterOpened(false);
             setCountry(undefined);
@@ -82,7 +94,7 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
                             />
                         </td>
                     </tr>
-                    {submitted && !countryValid() &&
+                    {submitted && !country &&
                         <tr>
                             <td colSpan={2} style={{color: "red"}}>Country is not defined</td>
                         </tr>

@@ -9,4 +9,4 @@ export class SearchCenter {
     public getKey = () => `${this.type}+${this.country}+${this.city}+${this.name}`;
 }
 
-export const createSearchCenter = (raw: any) => Object.assign(new SearchCenter(), raw);
+export const createSearchCenterFromRaw = (raw: any) => Object.assign(new SearchCenter(), raw);

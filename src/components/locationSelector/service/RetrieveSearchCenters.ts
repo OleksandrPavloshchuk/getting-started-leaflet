@@ -2,7 +2,7 @@
  * Retrieve search centers
  */
 import {create} from "zustand";
-import {createSearchCenter, type SearchCenter} from "../model/SearchCenter.ts";
+import {createSearchCenterFromRaw, type SearchCenter} from "../model/SearchCenter.ts";
 
 export namespace retrieveSearchCenters {
 
@@ -35,7 +35,7 @@ export namespace retrieveSearchCenters {
                     return res.json();
                 })
                 .then((searchCentersRaw: SearchCenter[]) => {
-                    set({result: searchCentersRaw.map((raw) => createSearchCenter(raw))});
+                    set({result: searchCentersRaw.map((raw) => createSearchCenterFromRaw(raw))});
                 })
                 .catch((e: Error) => console.log(`Retrieve error: ${e}`));
 

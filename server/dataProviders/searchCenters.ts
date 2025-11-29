@@ -12,6 +12,6 @@ const SQL = `
     FROM
         search_center
     ORDER BY
-        type, country, city, name
+        type, city, name, country
     `;
 

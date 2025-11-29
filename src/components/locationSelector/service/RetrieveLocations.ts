@@ -2,7 +2,7 @@
  * Retrieve locations from backend using filter parameters
  */
 import type {Country} from "../static/countries.ts";
-import {createLocation, type Location} from "../model/Location.ts";
+import {createLocationRaw, type Location} from "../model/Location.ts";
 import {create} from "zustand";
 
 export namespace retrieveLocations {
@@ -58,7 +58,7 @@ export namespace retrieveLocations {
                     return res.json();
                 })
                 .then((locationsRaw: Location[]) => {
-                    set({result: locationsRaw.map((raw) => createLocation(raw))});
+                    set({result: locationsRaw.map((raw) => createLocationRaw(raw))});
                 })
                 .catch((e: Error) => setError(`Retrieve error: ${e}`))
                 .finally(() => setLoading(false));

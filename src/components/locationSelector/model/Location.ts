@@ -34,4 +34,4 @@ export class Location {
     }
 }
 
-export const createLocation = (raw: any) => Object.assign(new Location(), raw);
+export const createLocationRaw = (raw: any) => Object.assign(new Location(), raw);
