@@ -7,6 +7,7 @@ import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
 export const ExtraFilterDialog: React.FC = () => {
 
+    const country = useLocationFilterModel((s) => s.country);
     const setCountry = useLocationFilterModel((s) => s.setCountry);
     const setHotelTypeIds = useLocationFilterModel((s) => s.setLocationTypeIds);
     const extraFilterDialogOpened = useWidgetStateModel((s) => s.extraFilterDialogOpened);
@@ -54,7 +55,7 @@ export const ExtraFilterDialog: React.FC = () => {
                 <tbody>
                 <tr>
                     <td style={{width: '100%'}}>
-                        <CountriesDropdown/>
+                        <CountriesDropdown value={country} setValue={setCountry}/>
                     </td>
                     <td>
                         <ActionIcon

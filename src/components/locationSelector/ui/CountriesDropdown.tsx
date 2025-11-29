@@ -3,22 +3,23 @@ import {Combobox, TextInput, useCombobox} from "@mantine/core";
 import {COUNTRIES, type Country, getCountryData} from "../static/countries.ts";
 import {DropdownArrow} from "./DropdownArrow.tsx";
 import {getDropdownItemStyle} from "../utils/utils.ts";
-import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 
-export const CountriesDropdown: React.FC = () => {
+type Props = {
+    value: Country| undefined,
+    setValue: (c:Country|undefined) => void
+};
+
+export const CountriesDropdown: React.FC<Props> = ({value, setValue}) => {
     const combobox = useCombobox();
-
-    const country = useLocationFilterModel((s) => s.country);
-    const setCountry = useLocationFilterModel((s) => s.setCountry);
 
     const handleSelect = (key: string) => {
         combobox.resetSelectedOption();
-        setCountry(getCountryData(key));
+        setValue(getCountryData(key));
         combobox.closeDropdown();
     }
 
     const handleChange = (s: string) => {
-        if (country) {
+        if (value) {
             const idx = COUNTRIES.findIndex((v: Country) =>
                 v.name.toUpperCase().startsWith(s.toUpperCase()));
             if (idx >= 0) {
@@ -39,7 +40,7 @@ export const CountriesDropdown: React.FC = () => {
             <Combobox.Target>
                 <TextInput
                     title={"Country"}
-                    value={country ? `${country.flag} ${country.name}` : ""}
+                    value={value ? `${value.flag} ${value.name}` : ""}
                     placeholder="Country"
                     onFocus={() => combobox.openDropdown()}
                     onClick={() => combobox.openDropdown()}
@@ -64,7 +65,7 @@ export const CountriesDropdown: React.FC = () => {
                                 <Combobox.Option
                                     value={item.iso}
                                     key={item.iso}
-                                    style={getDropdownItemStyle(() => country?.iso === item.iso)}
+                                    style={getDropdownItemStyle(() => value?.iso === item.iso)}
                                 >{item.flag}&nbsp;{item.name}</Combobox.Option>)
                     }
                 </Combobox.Options>
