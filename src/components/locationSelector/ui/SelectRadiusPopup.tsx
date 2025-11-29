@@ -30,13 +30,9 @@ export const SelectRadiusPopup: React.FC = () => {
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-
-                    // TODO save personal search center to database
-
-
                     setCreatePersonalSearchCenterOpened(true);
                 }}
-            >Create a personal search center
+            >Create Personal Search Center
             </div>
             <hr/>
             <strong>Radius of selection:</strong>

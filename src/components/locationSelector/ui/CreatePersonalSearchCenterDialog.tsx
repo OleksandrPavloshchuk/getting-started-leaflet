@@ -2,6 +2,7 @@ import {Box, Button, Modal, TextInput} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useCreatePersonalSearchCenterModel} from "../model/CreatePersonalSearchCenterModel.ts";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
+import {useState} from "react";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
@@ -9,17 +10,31 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
     const setCreatePersonalSearchCenterOpened = useWidgetStateModel((s) => s.setCreatePersonalSearchCenterOpened);
 
     const country = useCreatePersonalSearchCenterModel((s) => s.country);
-    const setCountry = useCreatePersonalSearchCenterModel((s)=>s.setCountry);
+    const setCountry = useCreatePersonalSearchCenterModel((s) => s.setCountry);
     const city = useCreatePersonalSearchCenterModel((s) => s.city);
-    const setCity = useCreatePersonalSearchCenterModel((s)=>s.setCity);
+    const setCity = useCreatePersonalSearchCenterModel((s) => s.setCity);
     const name = useCreatePersonalSearchCenterModel((s) => s.name);
-    const setName = useCreatePersonalSearchCenterModel((s)=>s.setName);
-    
-    const onSave = () => {
-        // TODO implement this
-        console.log("TRACE", {country, city, name});
+    const setName = useCreatePersonalSearchCenterModel((s) => s.setName);
 
-        setCreatePersonalSearchCenterOpened(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const countryValid = () => country != undefined;
+    const cityValid = () => city.trim().length>0;
+    const nameValid = () => name.trim().length>0;
+
+    const onSave = () => {
+        setSubmitted(true);
+        if (countryValid() && cityValid() && nameValid()) {
+
+            // TODO implement saving:
+            console.log("TRACE", {country, city, name});
+
+            setCreatePersonalSearchCenterOpened(false);
+            setCountry(undefined);
+            setCity("");
+            setName("");
+            setSubmitted(false);
+        }
     };
 
     return (
@@ -59,21 +74,37 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
                 <table width="100%">
                     <tbody>
                     <tr>
-                        <td>Country: </td>
+                        <td>Country:</td>
                         <td>
-                            <CountriesDropdown value={country} setValue={setCountry} />
+                            <CountriesDropdown
+                                value={country}
+                                setValue={setCountry}
+                            />
+                        </td>
+                    </tr>
+                    {submitted && !countryValid() &&
+                        <tr>
+                            <td colSpan={2} style={{color: "red"}}>Country is not defined</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>City:</td>
+                        <td>
+                            <TextInput
+                                value={city}
+                                onChange={(e) => setCity(e.currentTarget.value)}
+                                error={submitted && !cityValid() ? 'City is not defined' : null}
+                            />
                         </td>
                     </tr>
                     <tr>
-                        <td>City: </td>
+                        <td>Name:</td>
                         <td>
-                            <TextInput value={city} onChange={(e)=> setCity(e.currentTarget.value)}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Name: </td>
-                        <td>
-                            <TextInput value={name} onChange={(e)=> setName(e.currentTarget.value)}/>
+                            <TextInput
+                                value={name}
+                                onChange={(e) => setName(e.currentTarget.value)}
+                                error={submitted && !nameValid() ? 'Name is not defined' : null}
+                            />
                         </td>
                     </tr>
                     </tbody>
