@@ -5,6 +5,10 @@ let client = createClient({
 });
 client.on('error', (err) => console.error('Redis Client Error', err));
 
+export async function evict(prefix: string, key: any) {
+    await client.del(createKeyString(prefix, key));
+}
+
 export async function getOrCache(
     prefix: string,
     key: any,
