@@ -5,7 +5,7 @@ import {CountriesDropdown} from "./CountriesDropdown.tsx";
 import {useState} from "react";
 import {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
-import {updateSearchCenters} from "../service/CreateSearchCenter.ts";
+import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 

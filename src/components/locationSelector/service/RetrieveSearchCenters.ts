@@ -3,10 +3,9 @@
  */
 import {create} from "zustand";
 import {createSearchCenterFromRaw, type SearchCenter} from "../model/SearchCenter.ts";
+import {API} from "./api.ts";
 
 export namespace retrieveSearchCenters {
-
-    const ENDPOINT_URI = "http://localhost:4000/api/searchCenters";
 
     interface Model {
         result: SearchCenter[],
@@ -26,7 +25,7 @@ export namespace retrieveSearchCenters {
             // For request cancellation
             const controller = new AbortController();
 
-            fetch(ENDPOINT_URI,
+            fetch( API.searchCenters.retrieve,
                 {signal: controller.signal})
                 .then((res) => {
                     if (!res.ok) {

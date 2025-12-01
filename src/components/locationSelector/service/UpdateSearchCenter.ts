@@ -1,17 +1,22 @@
 /**
- * Create a new search center
+ * Update search centers: create or delete
  */
 import {type SearchCenter} from "../model/SearchCenter.ts";
+import {API} from "./api.ts";
 
 export namespace updateSearchCenters {
 
-    const ENDPOINT_URI = "http://localhost:4000/api/searchCenters/create";
+    export const create = (searchCenter: SearchCenter) =>
+        apply(searchCenter, 'Create', API.searchCenters.create);
 
-    export const create = (searchCenter: SearchCenter)=> {
+    export const remove = (searchCenter: SearchCenter) =>
+        apply(searchCenter, 'Delete', API.searchCenters.remove);
+
+    const apply = (searchCenter: SearchCenter, operation: string, uri: string,) => {
         // For request cancellation
         const controller = new AbortController();
 
-        fetch(ENDPOINT_URI,
+        fetch(uri,
             {
                 signal: controller.signal,
                 method: "POST",
@@ -26,7 +31,7 @@ export namespace updateSearchCenters {
                 }
                 return res.json();
             })
-            .catch((e: Error) => console.log(`Retrieve error: ${e}`));
+            .catch((e: Error) => console.log(`${operation} error: ${e}`));
 
         // Cancel too fast request
         return () => controller.abort();

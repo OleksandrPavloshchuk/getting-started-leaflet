@@ -1,16 +1,17 @@
-import {Accordion, Box, Modal, Tabs} from "@mantine/core";
+import {Accordion, ActionIcon, Box, CloseIcon, Modal, Tabs} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {retrieveSearchCenters} from "../service/RetrieveSearchCenters.ts";
-import {useCallback, useEffect, useMemo} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
 import type {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
 import {getCountryData} from "../static/countries.ts";
+import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
 
 export const SearchCenterDialog: React.FC = () => {
 
-    const setCenter = useLocationFilterModel((s)=>s.setCenter);
+    const setCenter = useLocationFilterModel((s) => s.setCenter);
     const setRadius = useLocationFilterModel((s) => s.setRadius);
     const searchCenterDialogOpened = useWidgetStateModel((s) => s.searchCenterDialogOpened);
     const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
@@ -28,9 +29,9 @@ export const SearchCenterDialog: React.FC = () => {
     }, [searchCenterDialogOpened]);
 
     // TODO custom group names
-    const groupByCities = (src: SearchCenter[])=> {
+    const groupByCities = (src: SearchCenter[]) => {
         const accordionKey =
-            (item: SearchCenter)=> `${getCountryData(item.country)?.flag} ${item.city}`;
+            (item: SearchCenter) => `${getCountryData(item.country)?.flag} ${item.city}`;
 
         return src.reduce((acc, item) => {
             const key = accordionKey(item);
@@ -43,12 +44,12 @@ export const SearchCenterDialog: React.FC = () => {
     }
 
     const tabData = (type: string) => {
-        const arr = result.filter( (item:SearchCenter) => item.type==type);
+        const arr = result.filter((item: SearchCenter) => item.type == type);
         return groupByCities(arr);
     }
 
-    const groupedResult = useMemo(()=> {
-        const r = { COMMON: {}, PERSONAL: {}};
+    const groupedResult = useMemo(() => {
+        const r = {COMMON: {}, PERSONAL: {}};
         r.COMMON = tabData('COMMON');
         r.PERSONAL = tabData('PERSONAL');
         return r;
@@ -56,7 +57,7 @@ export const SearchCenterDialog: React.FC = () => {
 
     const map = useMap();
 
-    const openSelectLocationPopup = useCallback((item: SearchCenter)=> {
+    const openSelectLocationPopup = useCallback((item: SearchCenter) => {
         setSearchCenterDialogOpened(false);
 
         const center = new L.LatLng(item.latitude, item.longitude);
@@ -78,7 +79,13 @@ export const SearchCenterDialog: React.FC = () => {
         setSelectRadiusPopuoOpened
     ]);
 
-    const createTabPanelForType = (type: string, data: Record<string, typeof result>)=> (
+    const onDeleteSearchCenter = (item: SearchCenter) => {
+        updateSearchCenters.remove(item);
+        // TODO process error
+        setSearchCenterDialogOpened(false);
+    };
+
+    const createTabPanelForType = (type: string, data: Record<string, typeof result>) => (
         <Tabs.Panel value={type} pt="sm">
             <Accordion multiple={false}>
                 {
@@ -91,8 +98,19 @@ export const SearchCenterDialog: React.FC = () => {
                                         <div key={item.getKey()}>
                                             <a href="#"
                                                className="search-center-link"
-                                               onClick={()=>openSelectLocationPopup(item)}
+                                               onClick={() => openSelectLocationPopup(item)}
                                             >{item.name}</a>
+                                            {item.type==='PERSONAL' && <>
+                                                &nbsp;
+                                                <ActionIcon
+                                                    onClick={() => onDeleteSearchCenter(item)}
+                                                    variant="light"
+                                                    size="xs"
+                                                    title="Delete search center">
+                                                    <CloseIcon/>
+                                                </ActionIcon>
+                                            </>
+                                            }
                                         </div>
                                     ))}
                             </Accordion.Panel>
