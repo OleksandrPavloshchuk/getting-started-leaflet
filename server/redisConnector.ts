@@ -5,26 +5,33 @@ let client = createClient({
 });
 client.on('error', (err) => console.error('Redis Client Error', err));
 
-export async function evict(prefix: string, key: any) {
-    await client.del(createKeyString(prefix, key));
+export async function evictWithFullKey(key: string) {
+    await client.del(key);
 }
 
-export async function getOrCache(
+export async function getOrCacheWithPrefixAndKey(
     prefix: string,
     key: any,
+    baseRetrieve: () => any,
+    ttlSeconds = 3600
+) {
+    return getOrCacheWithFullKey(createKeyString(prefix, key), baseRetrieve, ttlSeconds);
+}
+
+export async function getOrCacheWithFullKey(
+    fullKey: string,
     baseRetrieve: () => any,
     ttlSeconds = 3600
 ) {
     if (!client.isOpen) {
         await client.connect();
     }
-    const keyStr = createKeyString(prefix, key);
-    const valueStr = await client.get(keyStr);
+    const valueStr = await client.get(fullKey);
     if (valueStr) {
         return JSON.parse(valueStr.toString());
     } else {
         const value = await baseRetrieve();
-        await client.setEx(keyStr, ttlSeconds, JSON.stringify(value));
+        await client.setEx(fullKey, ttlSeconds, JSON.stringify(value));
         return value;
     }
 

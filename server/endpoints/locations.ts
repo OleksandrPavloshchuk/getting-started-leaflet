@@ -1,4 +1,4 @@
-import {getOrCache} from "../redisConnector";
+import {getOrCacheWithPrefixAndKey} from "../redisConnector";
 import {NuiteeProvider} from "../dataProviders/nuiteeLocations";
 import {RestelProvider} from "../dataProviders/restelLocations";
 import {handleError} from "./utils";
@@ -74,7 +74,7 @@ export const getLocations = (req, res) => {
 
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    getOrCache('location', queryParams,
+    getOrCacheWithPrefixAndKey('location', queryParams,
         () => Promise.all([
             NuiteeProvider.retrieve(queryParams),
             RestelProvider.retrieve(queryParams)
