@@ -27,7 +27,7 @@ const compareHotels = (hotel1, hotel2) => {
 
 const finalize = (startTs: number, count: number) => {
     const timeStr = ((performance.now() - startTs).toFixed(3)).toString();
-    console.log(`Executed in ${timeStr.padStart(12)} ms, Rows: ${count.toString().padStart(6)}`);
+    console.log(`Select location: executed in ${timeStr.padStart(12)} ms, Rows: ${count.toString().padStart(6)}`);
 };
 
 const gatherAndReturnResult = (

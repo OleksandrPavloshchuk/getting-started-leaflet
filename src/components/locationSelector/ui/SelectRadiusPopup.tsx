@@ -48,7 +48,7 @@ export const SelectRadiusPopup: React.FC = () => {
                     setCenter(undefined);
                     setSelectRadiusPopupOpened(false);
                 }}
-            >Reset
+            >Do not set radius
             </div>
         </div>
     </Popup>);

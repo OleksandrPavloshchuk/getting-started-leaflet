@@ -68,7 +68,7 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 onClick={() => {
                                     setSelectedLocation(undefined);
                                 }}
-                                disabled={loading || !selectedLocation}><IconDeselect/>&nbsp;Reset</Button>
+                                disabled={loading || !selectedLocation}><IconDeselect/>&nbsp;Clear Selection</Button>
                     </Flex>
                     <MapView/>
                 </Stack>
