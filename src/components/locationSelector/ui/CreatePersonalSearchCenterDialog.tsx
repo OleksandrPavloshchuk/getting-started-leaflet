@@ -6,6 +6,7 @@ import {useState} from "react";
 import {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
+import {notifyOK} from "../utils/utils.ts";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
@@ -26,6 +27,8 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
     const cityValid = () => city.trim().length>0;
     const nameValid = () => name.trim().length>0;
 
+    const showOK  = (s: string)=> notifyOK("Search Centers", s);
+
     const onSave = () => {
         setSubmitted(true);
         if (center && country && cityValid() && nameValid()) {
@@ -38,7 +41,7 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
             newSearchCenter.longitude = center.lng;
             newSearchCenter.latitude = center.lat;
 
-            updateSearchCenters.create(newSearchCenter);
+            updateSearchCenters.create(newSearchCenter, showOK);
             // TODO process error
 
             setCreatePersonalSearchCenterOpened(false);

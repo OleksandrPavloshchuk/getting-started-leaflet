@@ -1,5 +1,6 @@
 import {LocationSelector} from "./components/locationSelector/ui/LocationSelector.tsx";
 import {type Location} from "./components/locationSelector/model/Location.ts";
+import {Notifications} from "@mantine/notifications";
 
 export default function App() {
 
@@ -8,6 +9,7 @@ export default function App() {
     };
 
     return <>
+        <Notifications position="top-right" />
         <h5>getting started leaflet</h5>
         <LocationSelector onSubmit={handleSubmit} />
     </>;

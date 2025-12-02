@@ -48,7 +48,6 @@ const getParamNumber = (src: any | undefined) => {
 
 const normalize = (s:string)=> s ? s.replace("_", " ") : "";
 
-// Endpoints: list of connections
 export const getLocations = (req, res) => {
     const q = getParamString(req.query.q);
     const country = getParamString(req.query.c);

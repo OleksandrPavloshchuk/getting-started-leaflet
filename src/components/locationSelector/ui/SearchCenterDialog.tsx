@@ -8,6 +8,7 @@ import L from "leaflet";
 import {useMap} from "react-leaflet";
 import {getCountryData} from "../static/countries.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
+import {notifyWarning} from "../utils/utils.ts";
 
 export const SearchCenterDialog: React.FC = () => {
 
@@ -79,8 +80,10 @@ export const SearchCenterDialog: React.FC = () => {
         setSelectRadiusPopuoOpened
     ]);
 
+    const showWarning  = (s: string)=> notifyWarning("Search Centers", s);
+
     const onDeleteSearchCenter = (item: SearchCenter) => {
-        updateSearchCenters.remove(item);
+        updateSearchCenters.remove(item, showWarning);
         // TODO process error
         setSearchCenterDialogOpened(false);
     };

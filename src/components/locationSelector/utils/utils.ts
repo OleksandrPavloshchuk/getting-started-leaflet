@@ -1,3 +1,5 @@
+import {notifications} from "@mantine/notifications";
+
 export const getDropdownItemStyle = (isSelected: () => boolean) => {
     const selected = isSelected();
     return {
@@ -17,3 +19,16 @@ export const normalizeName =(src: string, limit: number) => {
     }
     return res;
 }
+
+export const notifyError = (title: string, text: string) => notify(title, text, 'red');
+export const notifyWarning = (title: string, text: string) => notify(title, text, 'yellow');
+export const notifyOK = (title: string, text: string) => notify(title, text, 'green');
+
+const notify = (title: string, text: string, color: string)=> {
+    notifications.show({
+        autoClose: 2000,
+        title: title,
+        message: text,
+        color: color
+    })
+};
