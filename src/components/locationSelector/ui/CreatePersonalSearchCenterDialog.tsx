@@ -6,7 +6,7 @@ import {useState} from "react";
 import {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
-import {notifyOK} from "../utils/utils.ts";
+import {getDialogStyles, notifyError, notifySuccess} from "../utils/utils.ts";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
@@ -27,7 +27,8 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
     const cityValid = () => city.trim().length>0;
     const nameValid = () => name.trim().length>0;
 
-    const showOK  = (s: string)=> notifyOK("Search Centers", s);
+    const showSuccess  = (s: string)=> notifySuccess("Search Centers", s);
+    const showError = (s:string)=> notifyError("Search Centers", s);
 
     const onSave = () => {
         setSubmitted(true);
@@ -41,8 +42,7 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
             newSearchCenter.longitude = center.lng;
             newSearchCenter.latitude = center.lat;
 
-            updateSearchCenters.create(newSearchCenter, showOK);
-            // TODO process error
+            updateSearchCenters.create(newSearchCenter, showSuccess, showError);
 
             setCreatePersonalSearchCenterOpened(false);
             setCountry(undefined);
@@ -60,30 +60,7 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
             opened={createPersonalSearchCenterOpened}
             onClose={() => setCreatePersonalSearchCenterOpened(false)}
             withinPortal={true}
-            styles={{
-                root: {
-                    borderRadius: 6
-                },
-                title: {
-                    fontSize: "small",
-                    fontWeight: 500,
-                },
-                header: {
-                    paddingTop: '4px',
-                    paddingBottom: '4px',
-                    minHeight: 'auto',
-                    backgroundColor: 'lightgrey'
-
-                },
-                content: {
-                    fontSize: "10pt",
-                    top: '20%',
-                    left: '-20%',
-                    transform: 'translate(-50%, -50%)',
-                    position: 'absolute',
-                    backgroundColor: 'white'
-                }
-            }}
+            styles={getDialogStyles()}
         >
             <Box maw={720} mx="auto" mt="md">
                 <table width="100%">

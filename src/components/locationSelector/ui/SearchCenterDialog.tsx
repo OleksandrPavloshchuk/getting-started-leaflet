@@ -8,7 +8,7 @@ import L from "leaflet";
 import {useMap} from "react-leaflet";
 import {getCountryData} from "../static/countries.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
-import {notifyWarning} from "../utils/utils.ts";
+import {getDialogStyles, notifyError, notifyWarning} from "../utils/utils.ts";
 
 export const SearchCenterDialog: React.FC = () => {
 
@@ -80,11 +80,11 @@ export const SearchCenterDialog: React.FC = () => {
         setSelectRadiusPopuoOpened
     ]);
 
-    const showWarning  = (s: string)=> notifyWarning("Search Centers", s);
+    const showWarning = (s: string) => notifyWarning("Search Centers", s);
+    const showError = (s: string) => notifyError("Search Centers", s);
 
     const onDeleteSearchCenter = (item: SearchCenter) => {
-        updateSearchCenters.remove(item, showWarning);
-        // TODO process error
+        updateSearchCenters.remove(item, showWarning, showError);
         setSearchCenterDialogOpened(false);
     };
 
@@ -103,7 +103,7 @@ export const SearchCenterDialog: React.FC = () => {
                                                className="search-center-link"
                                                onClick={() => openSelectLocationPopup(item)}
                                             >{item.name}</a>
-                                            {item.type==='PERSONAL' && <>
+                                            {item.type === 'PERSONAL' && <>
                                                 &nbsp;
                                                 <ActionIcon
                                                     onClick={() => onDeleteSearchCenter(item)}
@@ -132,30 +132,7 @@ export const SearchCenterDialog: React.FC = () => {
             opened={searchCenterDialogOpened}
             onClose={() => setSearchCenterDialogOpened(false)}
             withinPortal={true}
-            styles={{
-                root: {
-                    borderRadius: 6
-                },
-                title: {
-                    fontSize: "small",
-                    fontWeight: 500,
-                },
-                header: {
-                    paddingTop: '4px',
-                    paddingBottom: '4px',
-                    minHeight: 'auto',
-                    backgroundColor: 'lightgrey'
-
-                },
-                content: {
-                    fontSize: "10pt",
-                    top: '20%',
-                    left: '-20%',
-                    transform: 'translate(-50%, -50%)',
-                    position: 'absolute',
-                    backgroundColor: 'white'
-                }
-            }}
+            styles={getDialogStyles()}
         >
             <Box maw={720} mx="auto" mt="md">
                 <Tabs defaultValue="COMMON" keepMounted={false}

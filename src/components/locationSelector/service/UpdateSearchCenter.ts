@@ -8,26 +8,29 @@ export namespace updateSearchCenters {
 
     export const create = (
         searchCenter: SearchCenter,
-        showMessage: (s: string) => void
+        showSuccess: (s: string) => void,
+        showError: (s: string) => void
     ) =>
         apply(searchCenter, 'Create', API.searchCenters.create,
             `Search center "${searchCenter.name}" is created.`,
-            showMessage);
+            showSuccess, showError);
 
     export const remove = (
         searchCenter: SearchCenter,
-        showMessage: (s: string) => void
+        showSuccess: (s: string) => void,
+        showError: (s: string) => void
     ) =>
         apply(searchCenter, 'Delete', API.searchCenters.remove,
             `Search center "${searchCenter.name}" is deleted.`,
-            showMessage);
+            showSuccess, showError);
 
     const apply = (
         searchCenter: SearchCenter,
         operation: string,
         uri: string,
         message: string,
-        showMessage: (s: string) => void) => {
+        showSuccess: (s: string) => void,
+        showError: (s:string) => void) => {
         // For request cancellation
         const controller = new AbortController();
 
@@ -44,10 +47,14 @@ export namespace updateSearchCenters {
                 if (!res.ok) {
                     throw new Error(`HTTP ${res.status}`);
                 }
-                showMessage(message);
+                showSuccess(message);
                 return res.json();
             })
-            .catch((e: Error) => console.log(`${operation} error: ${e}`));
+            .catch((e: Error) => {
+                const str = `${operation} error: ${e}`;
+                console.log(str);
+                showError(str);
+            });
 
         // Cancel too fast request
         return () => controller.abort();

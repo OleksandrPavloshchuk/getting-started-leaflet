@@ -4,6 +4,7 @@ import {IconCancel} from "@tabler/icons-react";
 import {TypesSelector} from "./TypesSelector.tsx";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
+import {getDialogStyles} from "../utils/utils.ts";
 
 export const ExtraFilterDialog: React.FC = () => {
 
@@ -27,29 +28,7 @@ export const ExtraFilterDialog: React.FC = () => {
             opened={extraFilterDialogOpened}
             onClose={() => setExtraFilterDialogOpened(false)}
             withinPortal={true}
-            styles={{
-                root: {
-                    borderRadius: 6
-                },
-                title: {
-                    fontSize: "small",
-                    fontWeight: 500,
-                },
-                header: {
-                    paddingTop: '4px',
-                    paddingBottom: '4px',
-                    minHeight: 'auto',
-                    backgroundColor: 'lightgrey'
-
-                },
-                content: {
-                    top: '20%',
-                    left: '-20%',
-                    transform: 'translate(-50%, -50%)',
-                    position: 'absolute',
-                    backgroundColor: 'white'
-                }
-            }}
+            styles={getDialogStyles()}
         >
             <table width="100%">
                 <tbody>
