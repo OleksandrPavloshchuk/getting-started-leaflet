@@ -14,15 +14,17 @@ export const SearchCenterDetailsPopup: React.FC = () => {
     const center = useLocationFilterModel((s) => s.center);
     const selectedSearchCenterDetails = useWidgetStateModel((s) => s.selectedSearchCenterDetails);
 
-    if (!center || !selectedSearchCenterDetails) {
+    if (!center) {
         return null;
     }
 
     return (<Popup closeOnEscapeKey={true}>
         <p style={{textAlign: 'center'}}>
-            <strong>{`${selectedSearchCenterDetails.type}: ${selectedSearchCenterDetails.name}`}</strong><br/>
-            <span>{`${getCountryData(selectedSearchCenterDetails.country)?.flag} ${selectedSearchCenterDetails.city}`}</span>
-            <br/>
+            {selectedSearchCenterDetails && <>
+                <strong>{`${selectedSearchCenterDetails.type}: ${selectedSearchCenterDetails.name}`}</strong><br/>
+                <span>{`${getCountryData(selectedSearchCenterDetails.country)?.flag} ${selectedSearchCenterDetails.city}`}</span>
+                <br/>
+            </>}
             <span>{getLocationStr(center)}</span>
         </p>
     </Popup>);
