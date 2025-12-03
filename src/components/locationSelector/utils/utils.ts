@@ -2,6 +2,8 @@ import {notifications} from "@mantine/notifications";
 import type {ModalBaseStylesNames} from "@mantine/core";
 import type {CSSProperties} from "react";
 
+export const SEARCH_CENTER_COLOR = '#33cc99';
+
 export const getDropdownItemStyle = (isSelected: () => boolean) => {
     const selected = isSelected();
     return {

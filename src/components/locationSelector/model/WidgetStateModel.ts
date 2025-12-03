@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import {type Location} from "./Location.ts";
+import type {SearchCenter} from "./SearchCenter.ts";
 
 interface WidgetStateModel {
     error: string | undefined,
@@ -15,7 +16,9 @@ interface WidgetStateModel {
     selectRadiusPopupOpened: boolean,
     setSelectRadiusPopupOpened: (b:boolean) => void,
     createPersonalSearchCenterOpened: boolean,
-    setCreatePersonalSearchCenterOpened: (b:boolean) => void
+    setCreatePersonalSearchCenterOpened: (b:boolean) => void,
+    selectedSearchCenterDetails: SearchCenter|undefined,
+    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => void
 }
 
 export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
@@ -32,5 +35,7 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     selectRadiusPopupOpened: false,
     setSelectRadiusPopupOpened: (b:boolean)=> set({selectRadiusPopupOpened: b}),
     createPersonalSearchCenterOpened: false,
-    setCreatePersonalSearchCenterOpened: (b:boolean)=> set({createPersonalSearchCenterOpened: b})
+    setCreatePersonalSearchCenterOpened: (b:boolean)=> set({createPersonalSearchCenterOpened: b}),
+    selectedSearchCenterDetails: undefined,
+    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => set({selectedSearchCenterDetails: c})
 }));

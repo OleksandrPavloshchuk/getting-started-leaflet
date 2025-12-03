@@ -19,6 +19,7 @@ export const SearchCenterDialog: React.FC = () => {
     const setSelectRadiusPopuoOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
     const setCityAndName = useLocationFilterModel((s) => s.setCityAndName);
     const setSelectedLocation = useWidgetStateModel((s) => s.setSelectedLocation);
+    const setSelectedSearchCenterDetails = useWidgetStateModel((s)=>s.setSelectedSearchCenterDetails);
 
     const retrieve = retrieveSearchCenters.useModel((s) => s.call);
     const result = retrieveSearchCenters.useModel((s) => s.result);
@@ -59,6 +60,7 @@ export const SearchCenterDialog: React.FC = () => {
     const map = useMap();
 
     const openSelectLocationPopup = useCallback((item: SearchCenter) => {
+        setSelectedSearchCenterDetails(item);
         setSearchCenterDialogOpened(false);
 
         const center = new L.LatLng(item.latitude, item.longitude);

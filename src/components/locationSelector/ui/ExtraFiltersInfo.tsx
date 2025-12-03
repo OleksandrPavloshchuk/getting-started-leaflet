@@ -71,7 +71,8 @@ export const ExtraFiltersInfo: React.FC = () => {
         {country &&
             <tr>
                 <td className="extra-filter-info line">Country</td>
-                <td className="extra-filter-info line">{`${country.flag} ${country.name}`}&nbsp;
+                <td className="extra-filter-info line">
+                    <span style={{marginLeft: 6}}>{`${country.flag} ${country.name}`}</span>&nbsp;
                     <RemoveSearchParameterIcon onClick={() => setCountry(undefined)}/>
                 </td>
             </tr>

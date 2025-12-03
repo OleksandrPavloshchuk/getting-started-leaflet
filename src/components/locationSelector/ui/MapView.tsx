@@ -10,11 +10,19 @@ import {MapHint} from "./MapHint.tsx";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import {SearchCenterDialog} from "./SearchCenterDialog.tsx";
 import {CreatePersonalSearchCenterDialog} from "./CreatePersonalSearchCenterDialog.tsx";
+import {SEARCH_CENTER_COLOR} from "../utils/utils.ts";
+import {SearchCenterDetailsPopup} from "./SearchCenterDetailsPopup.tsx";
 
-// Simple marker
-const markerIcon = new L.Icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+// Markers
+const markerSelected = new L.Icon({
+    iconUrl: '../../../../public/marker-selected.svg',
+    shadowUrl: '../../../../public/shadow.svg',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+const markerSearchCenter = new L.Icon({
+    iconUrl: '../../../../public/marker-search-center.svg',
+    shadowUrl: '../../../../public/shadow.svg',
     iconSize: [25, 41],
     iconAnchor: [12, 41]
 });
@@ -89,34 +97,26 @@ export const MapView: React.FC = () => {
                         center={[center.lat, center.lng]}
                         radius={radius}
                         pathOptions={{
-                            color: 'var(--mantine-color-blue-filled)',
+                            color: SEARCH_CENTER_COLOR,
                             weight: 1,
-                            fillColor: 'var(--mantine-color-blue-filled)',
+                            fillColor: SEARCH_CENTER_COLOR,
                             fillOpacity: 0.15,
                         }}
                     />
-                    <Circle
-                        center={[center.lat, center.lng]}
-                        radius={50}
-                        pathOptions={{
-                            color: 'var(--mantine-color-blue-filled)',
-                            weight: 1,
-                            fillColor: 'var(--mantine-color-blue-filled)',
-                            fillOpacity: 0.8,
-                        }}
-                    />
+                    <Marker position={[center.lat, center.lng]} icon={markerSearchCenter}>
+                        <SearchCenterDetailsPopup/>
+                    </Marker>
                 </>
             }
 
             {selectedLocation &&
                 <>
-                    <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={markerIcon}>
+                    <Marker position={[selectedLocation.lat, selectedLocation.lng]} icon={markerSelected}>
                         <HotelDetailsPopup/>
                     </Marker>
                     <Recenter lat={selectedLocation.lat} lng={selectedLocation.lng}/>
                 </>
             }
-
             <MapHint timeout={5000} text="Left-click the map to set search center"/>
             <SearchCenterDialog/>
             <CreatePersonalSearchCenterDialog/>

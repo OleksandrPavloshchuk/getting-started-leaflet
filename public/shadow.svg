@@ -1,0 +1,18 @@
+<!-- marker-shadow.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" aria-hidden="true">
+    <defs>
+        <filter id="fBlur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="b"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.5"/>
+            </feComponentTransfer>
+        </filter>
+        <radialGradient id="sgrad" cx="50%" cy="45%" r="50%">
+            <stop offset="0%" stop-color="black" stop-opacity="0.65" />
+            <stop offset="100%" stop-color="black" stop-opacity="0.05" />
+        </radialGradient>
+    </defs>
+
+    <!-- shadow as dispersed ellipse -->
+    <ellipse cx="20.5" cy="27" rx="12.5" ry="5.5" fill="url(#sgrad)" filter="url(#fBlur)"/>
+</svg>
