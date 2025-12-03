@@ -20,11 +20,14 @@ export const SearchCenterDetailsPopup: React.FC = () => {
 
     return (<Popup closeOnEscapeKey={true}>
         <p style={{textAlign: 'center'}}>
-            {selectedSearchCenterDetails && <>
-                <strong>{`${selectedSearchCenterDetails.type}: ${selectedSearchCenterDetails.name}`}</strong><br/>
-                <span>{`${getCountryData(selectedSearchCenterDetails.country)?.flag} ${selectedSearchCenterDetails.city}`}</span>
-                <br/>
-            </>}
+            {selectedSearchCenterDetails
+                && selectedSearchCenterDetails.longitude == center.lng
+                && selectedSearchCenterDetails.latitude == center.lat
+                && <>
+                    <strong>{`${selectedSearchCenterDetails.type}: ${selectedSearchCenterDetails.name}`}</strong><br/>
+                    <span>{`${getCountryData(selectedSearchCenterDetails.country)?.flag} ${selectedSearchCenterDetails.city}`}</span>
+                    <br/>
+                </>}
             <span>{getLocationStr(center)}</span>
         </p>
     </Popup>);

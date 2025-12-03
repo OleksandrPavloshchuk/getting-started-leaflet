@@ -71,7 +71,6 @@ export const SearchCenterDialog: React.FC = () => {
 
         setCityAndName(`${item.city},`);
         setSelectedLocation(undefined);
-        setSelectedSearchCenterDetails(undefined);
         setSelectRadiusPopuoOpened(true);
     }, [
         map,
