@@ -70,7 +70,7 @@ export const MapView: React.FC = () => {
         <MapContainer
             center={defaultCenter as [number, number]}
             zoom={6}
-            style={{width: 800, height: 640, borderRadius: 6}}
+            style={{width: 900, height: 720, borderRadius: 6}}
 
         >
             <ScaleControl/>

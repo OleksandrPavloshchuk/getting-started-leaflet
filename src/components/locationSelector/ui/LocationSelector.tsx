@@ -4,7 +4,6 @@ import {LocationsDropdown} from "./LocationsDropdown.tsx";
 import {MapView} from "./MapView.tsx";
 import {LocationInfo} from "./LocationInfo.tsx";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
-import {IconDeselect, IconFilterCancel, IconFilterSearch, IconSelect, IconTarget} from "@tabler/icons-react";
 import {ExtraFiltersInfo} from "./ExtraFiltersInfo.tsx";
 import {ExtraFilterDialog} from "./ExtraFilterDialog.tsx";
 import React from "react";
@@ -52,23 +51,23 @@ export const LocationSelector: React.FC<Props> = ({onSubmit}) => {
                                 onClick={() => {
                                     setSearchCenterDialogOpened(true);
                                 }}
-                                disabled={loading}><IconTarget/>&nbsp;Search Centers</Button>
+                                disabled={loading}>Search Centers</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => onSubmit(selectedLocation)}
-                                disabled={loading || !selectedLocation}><IconSelect/>&nbsp;Submit</Button>
+                                disabled={loading || !selectedLocation}>Submit</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => setExtraFilterDialogOpened(true)}
                                 disabled={loading}
-                        ><IconFilterSearch/>&nbsp;Extra Filters</Button>
+                        >Extra Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={clearAllFilters}
                                 disabled={loading || (!country && !radius && locationTypeIds.length === 0 && !cityAndName)}
-                        ><IconFilterCancel/>&nbsp;Clear All Filters</Button>
+                        >Clear All Filters</Button>
                         <Button style={{flex: 1}}
                                 onClick={() => {
                                     setSelectedLocation(undefined);
                                 }}
-                                disabled={loading || !selectedLocation}><IconDeselect/>&nbsp;Clear Selection</Button>
+                                disabled={loading || !selectedLocation}>Clear Selection</Button>
                     </Flex>
                     <MapView/>
                 </Stack>
