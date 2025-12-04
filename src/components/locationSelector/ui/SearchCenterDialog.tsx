@@ -30,19 +30,19 @@ export const SearchCenterDialog: React.FC = () => {
         }
     }, [searchCenterDialogOpened]);
 
-    // TODO custom group names
     const groupByCities = (src: SearchCenter[]) => {
         const accordionKey =
             (item: SearchCenter) => `${getCountryData(item.country)?.flag} ${item.city}`;
 
-        return src.reduce((acc, item) => {
+        const r = new Map<string, SearchCenter[]>();
+        src.forEach( (item) => {
             const key = accordionKey(item);
-            if (!acc[key]) {
-                acc[key] = [];
+            if (!r.has(key)) {
+                r.set(key, []);
             }
-            acc[key].push(item);
-            return acc;
-        }, {} as Record<string, typeof result>);
+            r.get(key)?.push(item);
+        });
+        return r;
     }
 
     const tabData = (group_id: number) => {
@@ -97,11 +97,11 @@ export const SearchCenterDialog: React.FC = () => {
         setSearchCenterDialogOpened(false);
     };
 
-    const createTabPanelForType = (group_name: string, data: Record<string, typeof result>) => (
-        <Tabs.Panel value={group_name} pt="sm">
+    const createTabPanelForGroup = (group_name: string, data: Map<string, SearchCenter[]>) => (
+        <Tabs.Panel key={group_name} value={group_name} pt="sm">
             <Accordion multiple={false}>
                 {
-                    Object.entries(data).map(([group, items]) => (
+                    Array.from(data).map(([group, items]) => (
                         <Accordion.Item key={group} value={group}>
                             <Accordion.Control style={{fontSize: "10pt"}}>{group}</Accordion.Control>
                             <Accordion.Panel>
@@ -150,14 +150,14 @@ export const SearchCenterDialog: React.FC = () => {
                       }}
                 >
                     <Tabs.List>
-                    {
-                        Array.from(groupedResult).map(([name]) =>
-                            <Tabs.Tab value={name}>{name}</Tabs.Tab>)
-                    }
+                        {
+                            Array.from(groupedResult).map(([name]) =>
+                                <Tabs.Tab key={name} value={name}>{name}</Tabs.Tab>)
+                        }
                     </Tabs.List>
                     {
                         Array.from(groupedResult).map(([name, value]) =>
-                            createTabPanelForType(name, value)
+                            createTabPanelForGroup(name, value)
                         )
                     }
                 </Tabs>

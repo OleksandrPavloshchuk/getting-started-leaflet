@@ -42,6 +42,7 @@ td.line {
 .search-center-link {
     cursor: pointer;
     color: var(--mantine-color-blue-filled);
+    font-size: 10pt;
 }
 
 .search-center-link:hover {
