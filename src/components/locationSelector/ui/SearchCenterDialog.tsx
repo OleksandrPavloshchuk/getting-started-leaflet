@@ -19,7 +19,7 @@ export const SearchCenterDialog: React.FC = () => {
     const setSelectRadiusPopuoOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
     const setCityAndName = useLocationFilterModel((s) => s.setCityAndName);
     const setSelectedLocation = useWidgetStateModel((s) => s.setSelectedLocation);
-    const setSelectedSearchCenterDetails = useWidgetStateModel((s)=>s.setSelectedSearchCenterDetails);
+    const setSelectedSearchCenterDetails = useWidgetStateModel((s) => s.setSelectedSearchCenterDetails);
 
     const retrieve = retrieveSearchCenters.useModel((s) => s.call);
     const result = retrieveSearchCenters.useModel((s) => s.result);
@@ -45,15 +45,22 @@ export const SearchCenterDialog: React.FC = () => {
         }, {} as Record<string, typeof result>);
     }
 
-    const tabData = (type: string) => {
-        const arr = result.filter((item: SearchCenter) => item.type == type);
+    const tabData = (group_id: number) => {
+        const arr = result.filter((item: SearchCenter) => item.group_id == group_id);
         return groupByCities(arr);
     }
 
     const groupedResult = useMemo(() => {
-        const r = {COMMON: {}, PERSONAL: {}};
-        r.COMMON = tabData('COMMON');
-        r.PERSONAL = tabData('PERSONAL');
+
+        const groups = new Map<number, string>();
+        result.filter((item) => {
+            groups.set(item.group_id, item.group_name);
+        });
+
+        const r = new Map<string, ReturnType<typeof groupByCities>>();
+        groups.forEach((group_name, group_id) => {
+            r.set(group_name, tabData(group_id));
+        })
         return r;
     }, [result]);
 
@@ -90,8 +97,8 @@ export const SearchCenterDialog: React.FC = () => {
         setSearchCenterDialogOpened(false);
     };
 
-    const createTabPanelForType = (type: string, data: Record<string, typeof result>) => (
-        <Tabs.Panel value={type} pt="sm">
+    const createTabPanelForType = (group_name: string, data: Record<string, typeof result>) => (
+        <Tabs.Panel value={group_name} pt="sm">
             <Accordion multiple={false}>
                 {
                     Object.entries(data).map(([group, items]) => (
@@ -105,7 +112,7 @@ export const SearchCenterDialog: React.FC = () => {
                                                className="search-center-link"
                                                onClick={() => openSelectLocationPopup(item)}
                                             >{item.name}</a>
-                                            {item.type === 'PERSONAL' && <>
+                                            {!item.is_public && <>
                                                 &nbsp;
                                                 <ActionIcon
                                                     onClick={() => onDeleteSearchCenter(item)}
@@ -137,20 +144,21 @@ export const SearchCenterDialog: React.FC = () => {
             styles={getDialogStyles()}
         >
             <Box maw={720} mx="auto" mt="md">
-                <Tabs defaultValue="COMMON" keepMounted={false}
+                <Tabs defaultValue="Common" keepMounted={false}
                       styles={{
                           tab: {fontSize: "10pt"}
                       }}
                 >
                     <Tabs.List>
-                        <Tabs.Tab value="COMMON">Common</Tabs.Tab>
-                        <Tabs.Tab value="PERSONAL">Personal</Tabs.Tab>
+                    {
+                        Array.from(groupedResult).map(([name]) =>
+                            <Tabs.Tab value={name}>{name}</Tabs.Tab>)
+                    }
                     </Tabs.List>
                     {
-                        createTabPanelForType("COMMON", groupedResult.COMMON)
-                    }
-                    {
-                        createTabPanelForType("PERSONAL", groupedResult.PERSONAL)
+                        Array.from(groupedResult).map(([name, value]) =>
+                            createTabPanelForType(name, value)
+                        )
                     }
                 </Tabs>
             </Box>

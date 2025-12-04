@@ -5,33 +5,36 @@ export class SearchCentersProvider {
         return getDatabasePool().query(sql.retrieve);
     }
 
-    public static create({country, city, name, latitude, longitude, type}) {
-        getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, type]);
+    public static create({country, city, name, latitude, longitude, group_id}) {
+        getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, group_id]);
     }
 
-    public static remove({country, city, name, type}) {
-        getDatabasePool().query(sql.remove, [country, city, name, type]);
+    public static remove({country, city, name, group_id}) {
+        getDatabasePool().query(sql.remove, [country, city, name, group_id]);
     }
 }
 
 const sql = {
     retrieve: `
-        SELECT country,
-               city,
-               name,
-               latitude,
-               longitude,
-               type
-        FROM search_center
-        ORDER BY type, city, name, country
+        SELECT c.country country ,
+               c.city city,
+               c.name name,
+               c.latitude latitude,
+               c.longitude longitude,
+               c.group_id group_id,
+               g.name group_name,
+               g.is_public is_public
+        FROM search_center c
+            FULL JOIN search_center_group g ON c.group_id=g.id
+        ORDER BY g.name, c.city, c.name, c.country
     `,
     create: `
-        INSERT INTO public.search_center(country, city, name, latitude, longitude, type)
+        INSERT INTO public.search_center(country, city, name, latitude, longitude, group_id)
         VALUES ($1, $2, $3, $4, $5, $6);
     `,
 
     remove: `
         DELETE FROM public.search_center
-        WHERE country=$1 AND city=$2 AND name=$3 AND type=$4;
+        WHERE country=$1 AND city=$2 AND name=$3 AND group_id=$4;
     `
 }

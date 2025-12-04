@@ -48,3 +48,7 @@ td.line {
     text-decoration: underline;
     color: var(--mantine-color-blue-filled);
 }
+
+.leaflet-popup-content-wrapper {
+    background-color: white;
+}

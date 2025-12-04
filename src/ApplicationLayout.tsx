@@ -5,6 +5,7 @@ export const ApplicationLayout = () => <AppShell
     header={{height: 60}}
     padding="md"
     styles={(theme) => ({
+        main: {backgroundColor: theme.white},
         header: {
             backgroundColor: theme.colors.gray[1],
             color: theme.colors.gray[6]
