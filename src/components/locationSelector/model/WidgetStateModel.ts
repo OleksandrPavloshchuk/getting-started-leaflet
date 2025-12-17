@@ -20,7 +20,9 @@ interface WidgetStateModel {
     editPersonalSearchCenterGroupOpened: boolean,
     setEditPersonalSearchCenterGroupOpened: (b:boolean) => void,
     selectedSearchCenterDetails: SearchCenter|undefined,
-    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => void
+    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => void,
+    refreshSearchCenterGroupsKey: number,
+    setRefreshSearchCenterGroupsKey: (n:number) => void
 }
 
 export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
@@ -41,5 +43,7 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     editPersonalSearchCenterGroupOpened: false,
     setEditPersonalSearchCenterGroupOpened: (b:boolean) => set({editPersonalSearchCenterGroupOpened: b}),
     selectedSearchCenterDetails: undefined,
-    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => set({selectedSearchCenterDetails: c})
+    setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => set({selectedSearchCenterDetails: c}),
+    refreshSearchCenterGroupsKey: 0,
+    setRefreshSearchCenterGroupsKey: (n: number)=> set({refreshSearchCenterGroupsKey: n})
 }));

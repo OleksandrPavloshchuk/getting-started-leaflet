@@ -3,8 +3,12 @@ import {useWidgetStateModel} from "../components/locationSelector/model/WidgetSt
 import {
     EditPersonalSearchCenterGroupDialog
 } from "../components/locationSelector/ui/EditPersonalSearchCenterGroupDialog.tsx";
+import {SelectSearchCenterGroupTable} from "../components/locationSelector/ui/SelectSearchCenterGroupTable.tsx";
 
 export const PersonalSearchCenterGroupsPage = () => {
+
+    const refreshSearchCenterGroupsKey = useWidgetStateModel((s) => s.refreshSearchCenterGroupsKey);
+    const setRefreshSearchCenterGroupsKey = useWidgetStateModel((s) => s.setRefreshSearchCenterGroupsKey);
 
     const setEditPersonalSearchCenterGroupOpened = useWidgetStateModel((s) => s.setEditPersonalSearchCenterGroupOpened);
 
@@ -13,9 +17,11 @@ export const PersonalSearchCenterGroupsPage = () => {
             onClick={() => setEditPersonalSearchCenterGroupOpened(true)}
         >New Personal Search Center Group</Button>
 
-        <div style={{backgroundColor: 'lightblue'}}>
-            TODO select personal search center groups page
-        </div>
+        <Button
+            onClick={() => setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1)}
+        >Refresh</Button>
+
+        <SelectSearchCenterGroupTable/>
         <EditPersonalSearchCenterGroupDialog/>
     </>;
 }
