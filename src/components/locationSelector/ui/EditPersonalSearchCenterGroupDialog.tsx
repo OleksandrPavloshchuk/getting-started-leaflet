@@ -48,6 +48,7 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
     const onDelete = () => {
         const newSearchCenterGroup = new SearchCenterGroup();
         newSearchCenterGroup.id = id;
+        newSearchCenterGroup.name = name;
         updateSearchCenterGroups.remove(newSearchCenterGroup, showSuccess, showError);
         setName("");
         setSubmitted(false);

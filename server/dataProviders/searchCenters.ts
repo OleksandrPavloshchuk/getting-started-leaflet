@@ -2,7 +2,8 @@ import {getDatabasePool} from "../DatabasePool";
 
 export class SearchCentersProvider {
     public static async retrieve() {
-        return await getDatabasePool().query(sql.retrieve).rows;
+        const r = await getDatabasePool().query(sql.retrieve);
+        return r.rows;
     }
 
     public static async create({country, city, name, latitude, longitude, group_id}) {

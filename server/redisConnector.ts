@@ -27,14 +27,18 @@ export async function getOrCacheWithFullKey<T>(
     return ensureConnected()
         .then(() => client.get(fullKey))
         .then((valueStr) => {
+
             if (valueStr) {
                 return JSON.parse(valueStr.toString());
             }
             return baseRetrieve()
-                .then((value: T) =>
-                    client
-                        .setEx(fullKey, ttlSeconds, JSON.stringify(value))
-                        .then(() => value));
+                .then((value: T) => {
+                        client
+                            .setEx(fullKey, ttlSeconds, JSON.stringify(value))
+                            .then(() => value);
+                    }
+                )
+                ;
         });
 }
 

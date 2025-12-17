@@ -2,15 +2,14 @@ import {getDatabasePool} from "../DatabasePool";
 import { startCase, toLower } from "lodash";
 
 export class RestelProvider {
-    public static retrieve({cityLike, nameLike, country, radius, lat, lng, }) {
+    public static async retrieve({cityLike, nameLike, country, radius, lat, lng, }): Promise<Location[]> {
         return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, ])
             .then((result) => {
-                const converted = result.rows.map((row) => {
+                const converted: Location[] = result.rows?? [].map((row) => {
                     row.city = startCase(toLower(row.city));
                     return row;
                 })
-                result.rows = converted;
-                return result;
+                return converted;
             });
     }
 }

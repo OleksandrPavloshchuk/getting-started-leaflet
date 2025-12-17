@@ -1,5 +1,5 @@
 import {getDatabasePool} from "../DatabasePool";
-import {SearchCenterGroup} from "../types/SearchCenterGroup";
+import {SearchCenterGroup} from "../queryResults/SearchCenterGroup";
 
 export class SearchCenterGroupsProvider {
     public static retrieve(): Promise<SearchCenterGroup[]> {

@@ -1,8 +1,10 @@
 import {getDatabasePool} from "../DatabasePool";
 
 export class NuiteeProvider {
-    public static retrieve({cityLike, nameLike, country, radius, lat, lng, types}) {
-        return getDatabasePool().query(SQL, [cityLike, nameLike, country, radius, lat, lng, types]);
+    public static async retrieve({cityLike, nameLike, country, radius, lat, lng, types}) : Promise<Location[]> {
+        return await getDatabasePool()
+            .query(SQL, [cityLike, nameLike, country, radius, lat, lng, types])
+            .rows??[];
     }
 }
 

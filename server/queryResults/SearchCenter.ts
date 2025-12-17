@@ -5,6 +5,6 @@ export type SearchCenter = {
     latitude: number;
     longitude: number;
     group_id: string;
-    group_name: string;
-    is_public: string
+    group_name: string | undefined;
+    is_public: boolean
 };

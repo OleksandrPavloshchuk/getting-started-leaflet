@@ -1,4 +1,3 @@
-import {getOrCacheWithPrefixAndKey} from "../redisConnector";
 import {NuiteeProvider} from "../dataProviders/nuiteeLocations";
 import {RestelProvider} from "../dataProviders/restelLocations";
 import {handleError} from "./utils";
@@ -32,9 +31,9 @@ const finalize = (startTs: number, count: number) => {
 
 const gatherAndReturnResult = (
     res,
-    [nuiteeResult, restelResult],
+    [nuiteeResult, restelResult]: [Location[], Location[]],
     setCount: (n: number) => void) => {
-    let rows = [nuiteeResult.rows, restelResult.rows].flat();
+    let rows = [nuiteeResult, restelResult].flat();
     setCount(rows.length);
     rows = rows.sort(compareHotels);
     return res.json(rows);
@@ -46,7 +45,7 @@ const getParamNumber = (src: any | undefined) => {
     return s.length > 0 ? Number.parseFloat(s) : 0;
 }
 
-const normalize = (s:string)=> s ? s.replace("_", " ") : "";
+const normalize = (s: string) => s ? s.replace("_", " ") : "";
 
 export const getLocations = (req, res) => {
     const q = getParamString(req.query.q);
@@ -73,11 +72,10 @@ export const getLocations = (req, res) => {
 
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    getOrCacheWithPrefixAndKey<[Location[], Location[]]>('location', queryParams,
-        () => Promise.all([
+    Promise.all([
             NuiteeProvider.retrieve(queryParams),
             RestelProvider.retrieve(queryParams)
-        ])
+        ]
     ).then(([nuiteeResult, restelResult]) => gatherAndReturnResult(res, [nuiteeResult, restelResult], setCount))
         .catch((err) => handleError(res, err))
         .finally(() => finalize(start, count));

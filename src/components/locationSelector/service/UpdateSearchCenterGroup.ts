@@ -19,7 +19,7 @@ export namespace updateSearchCenterGroups {
         showSuccess: (s: string) => void,
         showError: (s: string) => void
     ) =>
-        apply(searchCenterGroup, 'Update', API.searchCenters.create,
+        apply(searchCenterGroup, 'Update', API.searchCenterGroups.create,
             `Search center group "${searchCenterGroup.name}" is updated.`,
             showSuccess, showError);
 
@@ -28,7 +28,7 @@ export namespace updateSearchCenterGroups {
         showSuccess: (s: string) => void,
         showError: (s: string) => void
     ) =>
-        apply(searchCenterGroup, 'Delete', API.searchCenters.remove,
+        apply(searchCenterGroup, 'Delete', API.searchCenterGroups.remove,
             `Search center group "${searchCenterGroup.name}" is deleted.`,
             showSuccess, showError);
 

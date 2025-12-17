@@ -1,6 +1,6 @@
 import {SearchCenterGroupsProvider} from "../dataProviders/searchCenterGroups";
 import {handleError} from "./utils";
-import {SearchCenterGroup} from "../types/SearchCenterGroup";
+import {SearchCenterGroup} from "../queryResults/SearchCenterGroup";
 
 // TODO (2026/12/17) add cache here
 
