@@ -6,35 +6,42 @@ let client = createClient({
 client.on('error', (err) => console.error('Redis Client Error', err));
 
 export async function evictWithFullKey(key: string) {
-    await client.del(key);
+    ensureConnected()
+        .then(() => client.del(key));
 }
 
-export async function getOrCacheWithPrefixAndKey(
+export async function getOrCacheWithPrefixAndKey<T>(
     prefix: string,
     key: any,
     baseRetrieve: () => any,
     ttlSeconds = 3600
-) {
-    return getOrCacheWithFullKey(createKeyString(prefix, key), baseRetrieve, ttlSeconds);
+): Promise<T> {
+    return getOrCacheWithFullKey<T>(createKeyString(prefix, key), baseRetrieve, ttlSeconds);
 }
 
-export async function getOrCacheWithFullKey(
+export async function getOrCacheWithFullKey<T>(
     fullKey: string,
     baseRetrieve: () => any,
     ttlSeconds = 3600
-) {
+): Promise<T> {
+    return ensureConnected()
+        .then(() => client.get(fullKey))
+        .then((valueStr) => {
+            if (valueStr) {
+                return JSON.parse(valueStr.toString());
+            }
+            return baseRetrieve()
+                .then((value: T) =>
+                    client
+                        .setEx(fullKey, ttlSeconds, JSON.stringify(value))
+                        .then(() => value));
+        });
+}
+
+const ensureConnected = async () => {
     if (!client.isOpen) {
         await client.connect();
     }
-    const valueStr = await client.get(fullKey);
-    if (valueStr) {
-        return JSON.parse(valueStr.toString());
-    } else {
-        const value = await baseRetrieve();
-        await client.setEx(fullKey, ttlSeconds, JSON.stringify(value));
-        return value;
-    }
-
 }
 
 const createKeyString = (prefix: string, src) => `${prefix}:${JSON.stringify(src, Object.keys(src).sort())}`;

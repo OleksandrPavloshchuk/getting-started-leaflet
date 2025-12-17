@@ -73,7 +73,7 @@ export const getLocations = (req, res) => {
 
     const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
-    getOrCacheWithPrefixAndKey('location', queryParams,
+    getOrCacheWithPrefixAndKey<[Location[], Location[]]>('location', queryParams,
         () => Promise.all([
             NuiteeProvider.retrieve(queryParams),
             RestelProvider.retrieve(queryParams)

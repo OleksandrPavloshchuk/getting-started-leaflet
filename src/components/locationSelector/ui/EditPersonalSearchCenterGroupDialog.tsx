@@ -11,15 +11,19 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
     const editPersonalSearchCenterGroupOpened = useWidgetStateModel((s) => s.editPersonalSearchCenterGroupOpened);
     const setEditPersonalSearchCenterGroupOpened = useWidgetStateModel((s) => s.setEditPersonalSearchCenterGroupOpened);
 
+    const refreshSearchCenterGroupsKey = useWidgetStateModel((s) => s.refreshSearchCenterGroupsKey);
+    const setRefreshSearchCenterGroupsKey = useWidgetStateModel((s) => s.setRefreshSearchCenterGroupsKey);
+
     const name = useEditPersonalSearchCenterGroupModel((s) => s.name);
     const setName = useEditPersonalSearchCenterGroupModel((s) => s.setName);
+    const id = useEditPersonalSearchCenterGroupModel((s) => s.id);
 
     const [submitted, setSubmitted] = useState(false);
 
-    const nameValid = () => name.trim().length>0;
+    const nameValid = () => name.trim().length > 0;
 
-    const showSuccess  = (s: string)=> notifySuccess("Search Center Group", s);
-    const showError = (s:string)=> notifyError("Search Center Group", s);
+    const showSuccess = (s: string) => notifySuccess("Search Center Group", s);
+    const showError = (s: string) => notifyError("Search Center Group", s);
 
     const onSave = () => {
         setSubmitted(true);
@@ -27,12 +31,30 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
             const newSearchCenterGroup = new SearchCenterGroup();
             newSearchCenterGroup.name = name;
 
-            updateSearchCenterGroups.create(newSearchCenterGroup, showSuccess, showError);
+            if (id) {
+                newSearchCenterGroup.id = id;
+                updateSearchCenterGroups.update(newSearchCenterGroup, showSuccess, showError);
+            } else {
+                updateSearchCenterGroups.create(newSearchCenterGroup, showSuccess, showError);
+            }
             setName("");
             setSubmitted(false);
             setEditPersonalSearchCenterGroupOpened(false);
+            // Refresh:
+            setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1);
         }
     };
+
+    const onDelete = () => {
+        const newSearchCenterGroup = new SearchCenterGroup();
+        newSearchCenterGroup.id = id;
+        updateSearchCenterGroups.remove(newSearchCenterGroup, showSuccess, showError);
+        setName("");
+        setSubmitted(false);
+        setEditPersonalSearchCenterGroupOpened(false);
+        // Refresh:
+        setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1);
+    }
 
     return (
         <Modal
@@ -61,6 +83,9 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
                 </table>
                 <Flex w="100%" gap="sm">
                     <Button onClick={onSave}>Save</Button>
+                    {id &&
+                        <Button onClick={onDelete}>Delete</Button>
+                    }
                 </Flex>
             </Box>
         </Modal>

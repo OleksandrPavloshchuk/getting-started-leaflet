@@ -1,20 +1,22 @@
 import {getDatabasePool} from "../DatabasePool";
+import {SearchCenterGroup} from "../types/SearchCenterGroup";
 
 export class SearchCenterGroupsProvider {
-    public static retrieve() {
-        return getDatabasePool().query(sql.retrieve);
+    public static retrieve(): Promise<SearchCenterGroup[]> {
+        return getDatabasePool().query(sql.retrieve)
+            .then( (result) => result.rows);
     }
 
-    public static create({name, is_public}) {
-        getDatabasePool().query(sql.create, [name, is_public]);
+    public static async create({name, is_public}) {
+        return await getDatabasePool().query(sql.create, [name, is_public]);
     }
 
-    public static update({id, name}) {
-        getDatabasePool().query(sql.update, [id, name]);
+    public static async update({id, name}) {
+        return await getDatabasePool().query(sql.update, [id, name]);
     }
 
-    public static remove({id}) {
-        getDatabasePool().query(sql.remove, [id]);
+    public static async remove({id}) {
+        return await getDatabasePool().query(sql.remove, [id]);
     }
 }
 

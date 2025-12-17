@@ -1,16 +1,16 @@
 import {getDatabasePool} from "../DatabasePool";
 
 export class SearchCentersProvider {
-    public static retrieve() {
-        return getDatabasePool().query(sql.retrieve);
+    public static async retrieve() {
+        return await getDatabasePool().query(sql.retrieve).rows;
     }
 
-    public static create({country, city, name, latitude, longitude, group_id}) {
-        getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, group_id]);
+    public static async create({country, city, name, latitude, longitude, group_id}) {
+        return await getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, group_id]);
     }
 
-    public static remove({country, city, name, group_id}) {
-        getDatabasePool().query(sql.remove, [country, city, name, group_id]);
+    public static async remove({country, city, name, group_id}) {
+        return await getDatabasePool().query(sql.remove, [country, city, name, group_id]);
     }
 }
 
