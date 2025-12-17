@@ -3,6 +3,12 @@ import * as cors from "cors";
 import {getLocations} from "./endpoints/locations";
 import {getSearchCenters} from "./endpoints/searchCenters";
 import {insertSearchCenter, removeSearchCenter} from "./endpoints/updateSearchCenters";
+import {getSearchCenterGroups} from "./endpoints/searchCenterGroups";
+import {
+    insertSearchCenterGroup,
+    removeSearchCenterGroup,
+    updateSearchCenterGroup
+} from "./endpoints/updateSearchCenterGroups";
 
 const app = express();
 const port = 4000;
@@ -35,6 +41,28 @@ registerEndpoint("post", "/api/searchCenters/create", async (req, res) => {
 registerEndpoint("post", "/api/searchCenters/remove", async (req, res) => {
     removeSearchCenter(req, res);
 });
+
+// Endpoint: list of personal search center groups
+registerEndpoint("get", "/api/searchCenterGroups", async (req, res) => {
+    getSearchCenterGroups(res);
+});
+
+// Endpoint: create a personal search center group
+registerEndpoint("post", "/api/searchCenterGroups/create", async (req, res) => {
+    insertSearchCenterGroup(req, res);
+});
+
+// Endpoint: update a personal search center group
+registerEndpoint("post", "/api/searchCenterGroups/update", async (req, res) => {
+    updateSearchCenterGroup(req, res);
+});
+
+// Endpoint: remove a personal search center group
+registerEndpoint("post", "/api/searchCenterGroups/remove", async (req, res) => {
+    removeSearchCenterGroup(req, res);
+});
+
+
 
 app.listen(port, () => {
     console.log(`✅ API server running at http://localhost:${port}`);

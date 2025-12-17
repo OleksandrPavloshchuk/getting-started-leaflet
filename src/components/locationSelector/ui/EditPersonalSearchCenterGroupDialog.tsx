@@ -1,9 +1,10 @@
 import {Box, Button, Flex, Modal, TextInput} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useState} from "react";
-import {getDialogStyles} from "../utils/utils.ts";
+import {getDialogStyles, notifyError, notifySuccess} from "../utils/utils.ts";
 import {useEditPersonalSearchCenterGroupModel} from "../model/EditPersonalSearchCenterGroupModel.ts";
 import {SearchCenterGroup} from "../model/SearchCenterGroup.ts";
+import {updateSearchCenterGroups} from "../service/UpdateSearchCenterGroup.ts";
 
 export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
 
@@ -17,8 +18,8 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
 
     const nameValid = () => name.trim().length>0;
 
-    //const showSuccess  = (s: string)=> notifySuccess("Search Center Group", s);
-    //const showError = (s:string)=> notifyError("Search Center Group", s);
+    const showSuccess  = (s: string)=> notifySuccess("Search Center Group", s);
+    const showError = (s:string)=> notifyError("Search Center Group", s);
 
     const onSave = () => {
         setSubmitted(true);
@@ -26,10 +27,10 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
             const newSearchCenterGroup = new SearchCenterGroup();
             newSearchCenterGroup.name = name;
 
-            // TODO write the save
-            // updateSearchCenters.create(newSearchCenter, showSuccess, showError);
+            updateSearchCenterGroups.create(newSearchCenterGroup, showSuccess, showError);
             setName("");
             setSubmitted(false);
+            setEditPersonalSearchCenterGroupOpened(false);
         }
     };
 
