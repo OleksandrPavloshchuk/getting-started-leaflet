@@ -12,7 +12,7 @@ export const getDropdownItemStyle = (isSelected: () => boolean) => {
     };
 };
 
-export const getDialogStyles = () => {
+export const getDialogStyles = (left: string = '-20%') => {
     return {
         root: {
             borderRadius: 6
@@ -37,8 +37,7 @@ export const getDialogStyles = () => {
         ,
         content: {
             top: '20%',
-            left:
-                '-20%',
+            left: left,
             transform:
                 'translate(-50%, -50%)',
             position:

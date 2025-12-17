@@ -17,6 +17,8 @@ interface WidgetStateModel {
     setSelectRadiusPopupOpened: (b:boolean) => void,
     createPersonalSearchCenterOpened: boolean,
     setCreatePersonalSearchCenterOpened: (b:boolean) => void,
+    editPersonalSearchCenterGroupOpened: boolean,
+    setEditPersonalSearchCenterGroupOpened: (b:boolean) => void,
     selectedSearchCenterDetails: SearchCenter|undefined,
     setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => void
 }
@@ -36,6 +38,8 @@ export const useWidgetStateModel = create<WidgetStateModel>((set) => ({
     setSelectRadiusPopupOpened: (b:boolean)=> set({selectRadiusPopupOpened: b}),
     createPersonalSearchCenterOpened: false,
     setCreatePersonalSearchCenterOpened: (b:boolean)=> set({createPersonalSearchCenterOpened: b}),
+    editPersonalSearchCenterGroupOpened: false,
+    setEditPersonalSearchCenterGroupOpened: (b:boolean) => set({editPersonalSearchCenterGroupOpened: b}),
     selectedSearchCenterDetails: undefined,
     setSelectedSearchCenterDetails: (c: SearchCenter|undefined) => set({selectedSearchCenterDetails: c})
 }));
