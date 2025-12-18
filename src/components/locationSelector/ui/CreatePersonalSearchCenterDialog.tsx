@@ -7,6 +7,7 @@ import {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
 import {getDialogStyles, notifyError, notifySuccess} from "../utils/utils.ts";
+import {SearchCenterGroupsDropdown} from "./SearchCenterGroupsDropdown.tsx";
 
 export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
@@ -21,6 +22,8 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
     const setCity = useCreatePersonalSearchCenterModel((s) => s.setCity);
     const name = useCreatePersonalSearchCenterModel((s) => s.name);
     const setName = useCreatePersonalSearchCenterModel((s) => s.setName);
+    const group = useCreatePersonalSearchCenterModel((s)=>s.group);
+    const setGroup = useCreatePersonalSearchCenterModel((s)=>s.setGroup);
 
     const [submitted, setSubmitted] = useState(false);
 
@@ -32,10 +35,10 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
 
     const onSave = () => {
         setSubmitted(true);
-        if (center && country && cityValid() && nameValid()) {
+        if (group && group.id && center && country && cityValid() && nameValid()) {
 
             const newSearchCenter = new SearchCenter();
-            newSearchCenter.type = 'PERSONAL';
+            newSearchCenter.group_id = group.id;
             newSearchCenter.city = city;
             newSearchCenter.country = country.iso;
             newSearchCenter.name = name;
@@ -65,6 +68,12 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
             <Box maw={720} mx="auto" mt="md">
                 <table width="100%">
                     <tbody>
+                    <tr>
+                        <td>Group:</td>
+                        <td>
+                            <SearchCenterGroupsDropdown value={group} setValue={setGroup} />
+                        </td>
+                    </tr>
                     <tr>
                         <td>Country:</td>
                         <td>

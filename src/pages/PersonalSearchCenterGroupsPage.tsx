@@ -1,4 +1,4 @@
-import {Button} from "@mantine/core";
+import {Button, Flex} from "@mantine/core";
 import {useWidgetStateModel} from "../components/locationSelector/model/WidgetStateModel.ts";
 import {
     EditPersonalSearchCenterGroupDialog
@@ -13,13 +13,15 @@ export const PersonalSearchCenterGroupsPage = () => {
     const setEditPersonalSearchCenterGroupOpened = useWidgetStateModel((s) => s.setEditPersonalSearchCenterGroupOpened);
 
     return <>
-        <Button
-            onClick={() => setEditPersonalSearchCenterGroupOpened(true)}
-        >New Personal Search Center Group</Button>
+        <Flex w="100%" gap="sm">
+            <Button
+                onClick={() => setEditPersonalSearchCenterGroupOpened(true)}
+            >New Group</Button>
 
-        <Button
-            onClick={() => setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1)}
-        >Refresh</Button>
+            <Button
+                onClick={() => setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1)}
+            >Refresh</Button>
+        </Flex>
 
         <SelectSearchCenterGroupTable/>
         <EditPersonalSearchCenterGroupDialog/>

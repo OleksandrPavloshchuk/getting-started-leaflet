@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import type {Country} from "../static/countries.ts";
+import type {SearchCenterGroup} from "./SearchCenterGroup.ts";
 
 interface CreatePersonalSearchCenterModel {
     country: Country | undefined,
@@ -7,7 +8,9 @@ interface CreatePersonalSearchCenterModel {
     city: string,
     setCity: (s: string) => void,
     name: string,
-    setName: (s: string) => void
+    setName: (s: string) => void,
+    group: SearchCenterGroup|undefined,
+    setGroup: (s: SearchCenterGroup|undefined) => void
 }
 
 export const useCreatePersonalSearchCenterModel = create<CreatePersonalSearchCenterModel>((set) => ({
@@ -16,5 +19,7 @@ export const useCreatePersonalSearchCenterModel = create<CreatePersonalSearchCen
     city: "",
     setCity: (s: string) => set({city: s}),
     name: "",
-    setName: (s: string) => set({name: s})
+    setName: (s: string) => set({name: s}),
+    group: undefined,
+    setGroup: (s: SearchCenterGroup|undefined)=> set({group: s})
 }));

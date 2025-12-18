@@ -24,7 +24,7 @@ export const SearchCenterDetailsPopup: React.FC = () => {
                 && selectedSearchCenterDetails.longitude == center.lng
                 && selectedSearchCenterDetails.latitude == center.lat
                 && <>
-                    <strong>{`${selectedSearchCenterDetails.type}: ${selectedSearchCenterDetails.name}`}</strong><br/>
+                    <strong>{`${selectedSearchCenterDetails.group_name}: ${selectedSearchCenterDetails.name}`}</strong><br/>
                     <span>{`${getCountryData(selectedSearchCenterDetails.country)?.flag} ${selectedSearchCenterDetails.city}`}</span>
                     <br/>
                 </>}

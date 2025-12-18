@@ -4,7 +4,7 @@ export class SearchCenter {
     name: string = "";
     longitude: number = 0;
     latitude: number = 0;
-    group_id: number = 0;
+    group_id: string = "";
     group_name: string = "";
     is_public: boolean = false;
 

@@ -59,7 +59,7 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
 
     return (
         <Modal
-            title="Create Personal Search Center"
+            title="Personal Search Center Group"
             trapFocus={false}
             zIndex={8000}
             opened={editPersonalSearchCenterGroupOpened}

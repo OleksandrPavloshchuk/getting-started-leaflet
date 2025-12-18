@@ -1,5 +1,5 @@
 export class SearchCenterGroup {
-    id: string | undefined = undefined;
+    id: string = "";
     name: string = "";
     description: string | null = null;
     is_public: boolean = false;

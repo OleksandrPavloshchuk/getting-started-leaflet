@@ -45,14 +45,14 @@ export const SearchCenterDialog: React.FC = () => {
         return r;
     }
 
-    const tabData = (group_id: number) => {
+    const tabData = (group_id: string) => {
         const arr = result.filter((item: SearchCenter) => item.group_id == group_id);
         return groupByCities(arr);
     }
 
     const groupedResult = useMemo(() => {
 
-        const groups = new Map<number, string>();
+        const groups = new Map<string, string>();
         result.filter((item) => {
             groups.set(item.group_id, item.group_name);
         });
@@ -103,7 +103,7 @@ export const SearchCenterDialog: React.FC = () => {
                 {
                     Array.from(data).map(([group, items]) => (
                         <Accordion.Item key={group} value={group}>
-                            <Accordion.Control style={{fontSize: "10pt"}}>{group}</Accordion.Control>
+                            <Accordion.Control style={{fontSize: "10pt"}}>{`${group} (${items.length})`}</Accordion.Control>
                             <Accordion.Panel>
                                 {items
                                     .map((item) => (
