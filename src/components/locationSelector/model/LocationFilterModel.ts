@@ -1,5 +1,5 @@
 /**
- * Location filter parameters and base methods
+ * LocationRow filter parameters and base methods
  */
 import type {Country} from "../static/countries.ts";
 import {retrieveLocations} from "../service/RetrieveLocations.ts";

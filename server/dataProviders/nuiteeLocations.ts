@@ -1,10 +1,11 @@
 import {getDatabasePool} from "../DatabasePool";
+import {LocationRow} from "./LocationRow";
 
 export class NuiteeProvider {
-    public static async retrieve({cityLike, nameLike, country, radius, lat, lng, types}) : Promise<Location[]> {
-        return await getDatabasePool()
-            .query(SQL, [cityLike, nameLike, country, radius, lat, lng, types])
-            .rows??[];
+    public static retrieve({cityLike, nameLike, country, radius, lat, lng, types}) : Promise<LocationRow[]> {
+        return getDatabasePool()
+            .query<LocationRow>(SQL, [cityLike, nameLike, country, radius, lat, lng, types])
+            .then( (result) => result.rows);
     }
 }
 

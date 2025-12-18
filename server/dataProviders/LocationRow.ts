@@ -1,4 +1,4 @@
-export type Location = {
+export interface LocationRow {
     id: number;
     name: string;
     lng: number;

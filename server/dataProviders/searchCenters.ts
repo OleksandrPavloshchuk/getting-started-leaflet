@@ -1,13 +1,24 @@
 import {getDatabasePool} from "../DatabasePool";
 
+export interface SearchCenter {
+    country: string;
+    city: string;
+    name: string;
+    latitude: number;
+    longitude: number;
+    group_id: string;
+    group_name: string | undefined;
+    is_public: boolean
+};
+
 export class SearchCentersProvider {
-    public static async retrieve() {
-        const r = await getDatabasePool().query(sql.retrieve);
-        return r.rows;
+    public static async retrieve(): Promise<SearchCenter[]> {
+        const r = await getDatabasePool().query<SearchCenter>(sql.retrieve);
+        return r.rows?? [];
     }
 
-    public static async create({country, city, name, latitude, longitude, group_id}) {
-        return await getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, group_id]);
+    public static async create({country, city, name, latitude, longitude, group_id}): Promise<SearchCenter[]> {
+        return await getDatabasePool().query<SearchCenter>(sql.create, [country, city, name, latitude, longitude, group_id]);
     }
 
     public static async remove({country, city, name, group_id}) {
@@ -17,16 +28,16 @@ export class SearchCentersProvider {
 
 const sql = {
     retrieve: `
-        SELECT c.country country ,
-               c.city city,
-               c.name name,
-               c.latitude latitude,
+        SELECT c.country   country,
+               c.city      city,
+               c.name      name,
+               c.latitude  latitude,
                c.longitude longitude,
-               c.group_id group_id,
-               g.name group_name,
+               c.group_id  group_id,
+               g.name      group_name,
                g.is_public is_public
-        FROM search_center c
-            FULL JOIN search_center_group g ON c.group_id=g.id
+        FROM search_center c INNER JOIN search_center_group g
+        ON c.group_id=g.id
         ORDER BY g.name, c.city, c.name, c.country
     `,
     create: `
@@ -35,7 +46,11 @@ const sql = {
     `,
 
     remove: `
-        DELETE FROM public.search_center
-        WHERE country=$1 AND city=$2 AND name=$3 AND group_id=$4;
+        DELETE
+        FROM public.search_center
+        WHERE country = $1
+          AND city = $2
+          AND name = $3
+          AND group_id = $4;
     `
 }

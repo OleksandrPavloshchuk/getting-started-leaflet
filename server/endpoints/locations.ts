@@ -1,6 +1,7 @@
 import {NuiteeProvider} from "../dataProviders/nuiteeLocations";
 import {RestelProvider} from "../dataProviders/restelLocations";
 import {handleError} from "./utils";
+import {LocationRow} from "../dataProviders/LocationRow";
 
 const compareHotels = (hotel1, hotel2) => {
     if (hotel1.country < hotel2.country) {
@@ -31,8 +32,9 @@ const finalize = (startTs: number, count: number) => {
 
 const gatherAndReturnResult = (
     res,
-    [nuiteeResult, restelResult]: [Location[], Location[]],
+    [nuiteeResult, restelResult]: [LocationRow[], LocationRow[]],
     setCount: (n: number) => void) => {
+
     let rows = [nuiteeResult, restelResult].flat();
     setCount(rows.length);
     rows = rows.sort(compareHotels);
