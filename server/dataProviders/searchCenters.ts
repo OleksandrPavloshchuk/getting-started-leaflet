@@ -13,12 +13,12 @@ export interface SearchCenter {
 
 export class SearchCentersProvider {
     public static async retrieve(): Promise<SearchCenter[]> {
-        const r = await getDatabasePool().query<SearchCenter>(sql.retrieve);
-        return r.rows?? [];
+        return getDatabasePool().query<SearchCenter>(sql.retrieve)
+            .then((result) => result.rows);
     }
 
-    public static async create({country, city, name, latitude, longitude, group_id}): Promise<SearchCenter[]> {
-        return await getDatabasePool().query<SearchCenter>(sql.create, [country, city, name, latitude, longitude, group_id]);
+    public static async create({country, city, name, latitude, longitude, group_id}) {
+        return await getDatabasePool().query(sql.create, [country, city, name, latitude, longitude, group_id]);
     }
 
     public static async remove({country, city, name, group_id}) {
