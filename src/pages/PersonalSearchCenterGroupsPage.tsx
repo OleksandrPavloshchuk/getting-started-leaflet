@@ -17,11 +17,11 @@ export const PersonalSearchCenterGroupsPage = () => {
             <Button
                 onClick={() => setEditPersonalSearchCenterGroupOpened(true)}
             >New Group</Button>
-
             <Button
                 onClick={() => setRefreshSearchCenterGroupsKey(refreshSearchCenterGroupsKey + 1)}
             >Refresh</Button>
         </Flex>
+        <hr/>
 
         <SelectSearchCenterGroupTable/>
         <EditPersonalSearchCenterGroupDialog/>

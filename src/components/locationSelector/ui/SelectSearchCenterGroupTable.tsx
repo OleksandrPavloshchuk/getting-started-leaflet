@@ -25,7 +25,7 @@ export const SelectSearchCenterGroupTable: React.FC = () => {
     return <table width="100%">
         <thead>
         <tr>
-            <th>Name</th>
+            <td><strong>Name</strong></td>
         </tr>
         </thead>
         <tbody>
