@@ -1,4 +1,4 @@
-import {Box, Button, Flex, Modal, TextInput} from "@mantine/core";
+import {Box, Button, Flex, Modal, TextInput, Paper, Stack} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useState} from "react";
 import {getDialogStyles, notifyError, notifySuccess} from "../utils/utils.ts";
@@ -67,28 +67,24 @@ export const EditPersonalSearchCenterGroupDialog: React.FC = () => {
             withinPortal={true}
             styles={getDialogStyles('20%')}
         >
-            <Box maw={720} mx="auto" mt="md">
-                <table width="100%">
-                    <tbody>
-                    <tr>
-                        <td>Name:</td>
-                        <td>
-                            <TextInput
-                                value={name}
-                                onChange={(e) => setName(e.currentTarget.value)}
-                                error={submitted && !nameValid() ? 'Name is not defined' : null}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Flex w="100%" gap="sm">
-                    <Button onClick={onSave}>Save</Button>
-                    {id &&
-                        <Button onClick={onDelete}>Delete</Button>
-                    }
-                </Flex>
-            </Box>
+            <Paper p="xs">
+                <Stack gap="xs">
+                    <div className="field-label">Name:</div>
+                    <TextInput
+                        value={name}
+                        onChange={(e) => setName(e.currentTarget.value)}
+                        error={submitted && !nameValid() ? 'Name is not defined' : null}
+                    />
+                    <Box style={{textAlign: "center", width: "100%"}}>
+                        <Flex w="100%" gap="sm">
+                            <Button onClick={onSave}>Save</Button>
+                            {id &&
+                                <Button onClick={onDelete}>Delete</Button>
+                            }
+                        </Flex>
+                    </Box>
+                </Stack>
+            </Paper>
         </Modal>
     );
 }

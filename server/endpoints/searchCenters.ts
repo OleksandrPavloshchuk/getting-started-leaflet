@@ -1,10 +1,9 @@
+import {Request, Response} from "express";
 import {handleError} from "./utils";
 import {SearchCentersProvider} from "../dataProviders/searchCenters";
 
-export const getSearchCenters = (res) => {
+export const getSearchCenters = (req: Request, res: Response) => {
     SearchCentersProvider.retrieve()
-        .then((result) => {
-            return res.json(result);
-        })
+        .then((result) => res.json(result))
         .catch((err) => handleError(res, err));
 }

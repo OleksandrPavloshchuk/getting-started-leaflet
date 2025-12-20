@@ -1,3 +1,5 @@
+import {Request, Response} from "express";
+
 import {NuiteeProvider} from "../dataProviders/nuiteeLocations";
 import {RestelProvider} from "../dataProviders/restelLocations";
 import {handleError} from "./utils";
@@ -31,7 +33,7 @@ const finalize = (startTs: number, count: number) => {
 };
 
 const gatherAndReturnResult = (
-    res,
+    res: Response,
     [nuiteeResult, restelResult]: [LocationRow[], LocationRow[]],
     setCount: (n: number) => void) => {
 
@@ -49,7 +51,7 @@ const getParamNumber = (src: any | undefined) => {
 
 const normalize = (s: string) => s ? s.replace("_", " ") : "";
 
-export const getLocations = (req, res) => {
+export const getLocations = (req: Request, res: Response) => {
     const q = getParamString(req.query.q);
     const country = getParamString(req.query.c);
     const typesStr = getParamString(req.query.t);

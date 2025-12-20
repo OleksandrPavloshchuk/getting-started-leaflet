@@ -53,3 +53,7 @@ td.line {
 .leaflet-popup-content-wrapper {
     background-color: white;
 }
+
+div.field-label {
+    font-size: 10pt;
+}

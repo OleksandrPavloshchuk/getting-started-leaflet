@@ -1,4 +1,6 @@
-export const handleError = (res, err) => {
+import {Response} from "express";
+
+export const handleError = (res: Response, err) => {
     console.error("Database error:", err);
     res.status(500).json({error: "Database query failed"});
 };

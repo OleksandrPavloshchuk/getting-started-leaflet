@@ -1,4 +1,4 @@
-import {Box, Button, Modal, TextInput} from "@mantine/core";
+import {Box, Button, Modal, Paper, Stack, TextInput} from "@mantine/core";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useCreatePersonalSearchCenterModel} from "../model/CreatePersonalSearchCenterModel.ts";
 import {CountriesDropdown} from "./CountriesDropdown.tsx";
@@ -22,16 +22,16 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
     const setCity = useCreatePersonalSearchCenterModel((s) => s.setCity);
     const name = useCreatePersonalSearchCenterModel((s) => s.name);
     const setName = useCreatePersonalSearchCenterModel((s) => s.setName);
-    const group = useCreatePersonalSearchCenterModel((s)=>s.group);
-    const setGroup = useCreatePersonalSearchCenterModel((s)=>s.setGroup);
+    const group = useCreatePersonalSearchCenterModel((s) => s.group);
+    const setGroup = useCreatePersonalSearchCenterModel((s) => s.setGroup);
 
     const [submitted, setSubmitted] = useState(false);
 
-    const cityValid = () => city.trim().length>0;
-    const nameValid = () => name.trim().length>0;
+    const cityValid = () => city.trim().length > 0;
+    const nameValid = () => name.trim().length > 0;
 
-    const showSuccess  = (s: string)=> notifySuccess("Search Centers", s);
-    const showError = (s:string)=> notifyError("Search Centers", s);
+    const showSuccess = (s: string) => notifySuccess("Search Centers", s);
+    const showError = (s: string) => notifyError("Search Centers", s);
 
     const onSave = () => {
         setSubmitted(true);
@@ -65,55 +65,35 @@ export const CreatePersonalSearchCenterDialog: React.FC = () => {
             withinPortal={true}
             styles={getDialogStyles()}
         >
-            <Box maw={720} mx="auto" mt="md">
-                <table width="100%">
-                    <tbody>
-                    <tr>
-                        <td>Group:</td>
-                        <td>
-                            <SearchCenterGroupsDropdown value={group} setValue={setGroup} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Country:</td>
-                        <td>
-                            <CountriesDropdown
-                                value={country}
-                                setValue={setCountry}
-                            />
-                        </td>
-                    </tr>
-                    {submitted && !country &&
-                        <tr>
-                            <td colSpan={2} style={{color: "red"}}>Country is not defined</td>
-                        </tr>
+            <Paper p="xs">
+                <Stack gap="xs">
+                    <div className="field-label">Group:</div>
+                    <SearchCenterGroupsDropdown value={group} setValue={setGroup}/>
+                    {submitted && !group &&
+                        <div style={{color: "red"}}>Group is not defined</div>
                     }
-                    <tr>
-                        <td>City:</td>
-                        <td>
-                            <TextInput
-                                value={city}
-                                onChange={(e) => setCity(e.currentTarget.value)}
-                                error={submitted && !cityValid() ? 'City is not defined' : null}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Name:</td>
-                        <td>
-                            <TextInput
-                                value={name}
-                                onChange={(e) => setName(e.currentTarget.value)}
-                                error={submitted && !nameValid() ? 'Name is not defined' : null}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Box style={{textAlign: "center"}}>
-                    <Button onClick={onSave}>Save</Button>
-                </Box>
-            </Box>
+                    <div className="field-label">Country:</div>
+                    <CountriesDropdown value={country} setValue={setCountry}/>
+                    {submitted && !country &&
+                        <div style={{color: "red"}}>Country is not defined</div>
+                    }
+                    <div className="field-label">City:</div>
+                    <TextInput
+                        value={city}
+                        onChange={(e) => setCity(e.currentTarget.value)}
+                        error={submitted && !cityValid() ? 'City is not defined' : null}
+                    />
+                    <div className="field-label">Name:</div>
+                    <TextInput
+                        value={name}
+                        onChange={(e) => setName(e.currentTarget.value)}
+                        error={submitted && !nameValid() ? 'Name is not defined' : null}
+                    />
+                    <Box style={{textAlign: "center"}}>
+                        <Button onClick={onSave}>Save</Button>
+                    </Box>
+                </Stack>
+            </Paper>
         </Modal>
     );
 }
