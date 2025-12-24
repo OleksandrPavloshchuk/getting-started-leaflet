@@ -51,7 +51,7 @@ const getParamNumber = (src: any | undefined) => {
 
 const normalize = (s: string) => s ? s.replace("_", " ") : "";
 
-export const getLocations = (req: Request, res: Response) => {
+const getRequestParams = (req: Request)=> {
     const q = getParamString(req.query.q);
     const country = getParamString(req.query.c);
     const typesStr = getParamString(req.query.t);
@@ -62,19 +62,26 @@ export const getLocations = (req: Request, res: Response) => {
     types = types[0] === '' ? [] : types;
 
     if (!q) {
-        return res.json([]);
+        return undefined;
     }
-
     let [cityLike, nameLike] = q.split(/,/);
     cityLike = normalize(cityLike);
     nameLike = normalize(nameLike);
 
+    return {
+        cityLike, nameLike, country, radius, lat, lng, types
+    };
+}
+
+export const getLocations = (req: Request, res: Response) => {
+    const queryParams = getRequestParams(req);
+    if (!queryParams) {
+        return res.json([]);
+    }
     let count = -1;
     const setCount = (n: number) => {
         count = n;
     };
-
-    const queryParams = {cityLike, nameLike, country, radius, lat, lng, types};
     const start = performance.now();
     Promise.all([
             NuiteeProvider.retrieve(queryParams),
