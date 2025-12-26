@@ -25,7 +25,7 @@ const groupForSearchGroup = (src: SearchCenter[], groupId: string) =>
 
 const getGroupIdNameMap = (src: SearchCenter[]) => {
     const result = new Map<string, string>();
-    src.filter((item) => {
+    src.forEach((item) => {
         result.set(item.group_id, item.group_name);
     });
     return result;
