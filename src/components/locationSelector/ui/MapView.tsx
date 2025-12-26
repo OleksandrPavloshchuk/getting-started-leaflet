@@ -54,6 +54,7 @@ export const MapView: React.FC = () => {
     const radius = useLocationFilterModel((s) => s.radius);
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const setCenterName = useLocationFilterModel((s) => s.setCenterName);
     const selectRadiusPopupOpened = useWidgetStateModel((s) => s.selectRadiusPopupOpened);
     const setSelectRadiusPopupOpened = useWidgetStateModel((s) => s.setSelectRadiusPopupOpened);
 
@@ -81,6 +82,7 @@ export const MapView: React.FC = () => {
             />
             <MapClickHandler onClickPoint={(point: LatLng) => {
                 setCenter(point);
+                setCenterName(undefined);
                 setSelectRadiusPopupOpened(true);
             }}/>
 

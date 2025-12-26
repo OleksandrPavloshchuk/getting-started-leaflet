@@ -6,13 +6,14 @@ import type {SearchCenter} from "../model/SearchCenter.ts";
 import {useLocationFilterModel} from "../model/LocationFilterModel.ts";
 import L from "leaflet";
 import {useMap} from "react-leaflet";
-import {getCountryData} from "../static/countries.ts";
 import {updateSearchCenters} from "../service/UpdateSearchCenter.ts";
 import {getDialogStyles, notifyError, notifyWarning} from "../utils/utils.ts";
+import {groupByGroupsAndCities} from "../utils/searchCenterGrouping.ts";
 
 export const SearchCenterDialog: React.FC = () => {
 
     const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const setCenterName = useLocationFilterModel((s) => s.setCenterName);
     const setRadius = useLocationFilterModel((s) => s.setRadius);
     const searchCenterDialogOpened = useWidgetStateModel((s) => s.searchCenterDialogOpened);
     const setSearchCenterDialogOpened = useWidgetStateModel((s) => s.setSearchCenterDialogOpened);
@@ -30,39 +31,9 @@ export const SearchCenterDialog: React.FC = () => {
         }
     }, [searchCenterDialogOpened]);
 
-    const groupByCities = (src: SearchCenter[]) => {
-        const accordionKey =
-            (item: SearchCenter) => `${getCountryData(item.country)?.flag} ${item.city}`;
-
-        const r = new Map<string, SearchCenter[]>();
-        src.forEach( (item) => {
-            const key = accordionKey(item);
-            if (!r.has(key)) {
-                r.set(key, []);
-            }
-            r.get(key)?.push(item);
-        });
-        return r;
-    }
-
-    const tabData = (group_id: string) => {
-        const arr = result.filter((item: SearchCenter) => item.group_id == group_id);
-        return groupByCities(arr);
-    }
-
-    const groupedResult = useMemo(() => {
-
-        const groups = new Map<string, string>();
-        result.filter((item) => {
-            groups.set(item.group_id, item.group_name);
-        });
-
-        const r = new Map<string, ReturnType<typeof groupByCities>>();
-        groups.forEach((group_name, group_id) => {
-            r.set(group_name, tabData(group_id));
-        })
-        return r;
-    }, [result]);
+    const groupedResult = useMemo(
+        () => groupByGroupsAndCities(result),
+        [result]);
 
     const map = useMap();
 
@@ -70,8 +41,8 @@ export const SearchCenterDialog: React.FC = () => {
         setSelectedSearchCenterDetails(item);
         setSearchCenterDialogOpened(false);
 
-        const center = new L.LatLng(item.latitude, item.longitude);
-        setCenter(center);
+        setCenter(new L.LatLng(item.latitude, item.longitude));
+        setCenterName(item.name);
 
         setRadius(undefined);
         map.setView([item.latitude, item.longitude], 13);
@@ -97,6 +68,24 @@ export const SearchCenterDialog: React.FC = () => {
         setSearchCenterDialogOpened(false);
     };
 
+    const toSearchCenterControl = (c: SearchCenter) => <div key={c.getKey()}>
+        <a href="#"
+           className="search-center-link"
+           onClick={() => openSelectLocationPopup(c)}
+        >{c.name}</a>
+        {!c.is_public && <>
+            &nbsp;
+            <ActionIcon
+                onClick={() => onDeleteSearchCenter(c)}
+                variant="light"
+                size="xs"
+                title="Delete search center">
+                <CloseIcon/>
+            </ActionIcon>
+        </>
+        }
+    </div>;
+
     const createTabPanelForGroup = (group_name: string, data: Map<string, SearchCenter[]>) => (
         <Tabs.Panel key={group_name} value={group_name} pt="sm">
             <Accordion multiple={false}>
@@ -105,26 +94,7 @@ export const SearchCenterDialog: React.FC = () => {
                         <Accordion.Item key={group} value={group}>
                             <Accordion.Control style={{fontSize: "10pt"}}>{`${group} (${items.length})`}</Accordion.Control>
                             <Accordion.Panel>
-                                {items
-                                    .map((item) => (
-                                        <div key={item.getKey()}>
-                                            <a href="#"
-                                               className="search-center-link"
-                                               onClick={() => openSelectLocationPopup(item)}
-                                            >{item.name}</a>
-                                            {!item.is_public && <>
-                                                &nbsp;
-                                                <ActionIcon
-                                                    onClick={() => onDeleteSearchCenter(item)}
-                                                    variant="light"
-                                                    size="xs"
-                                                    title="Delete search center">
-                                                    <CloseIcon/>
-                                                </ActionIcon>
-                                            </>
-                                            }
-                                        </div>
-                                    ))}
+                                {items.map((item) => toSearchCenterControl(item))}
                             </Accordion.Panel>
                         </Accordion.Item>
                     ))

@@ -19,6 +19,8 @@ export const ExtraFiltersInfo: React.FC = () => {
     const setRadius = useLocationFilterModel((s) => s.setRadius);
     const center = useLocationFilterModel((s) => s.center);
     const setCenter = useLocationFilterModel((s) => s.setCenter);
+    const centerName = useLocationFilterModel((s) => s.centerName);
+    const setCenterName = useLocationFilterModel((s) => s.setCenterName);
     const country = useLocationFilterModel((s) => s.country);
     const setCountry = useLocationFilterModel((s) => s.setCountry);
     const locationTypeIds = useLocationFilterModel((s) => s.locationTypeIds);
@@ -54,15 +56,24 @@ export const ExtraFiltersInfo: React.FC = () => {
         </div>;
     }
 
+    const getCenterStr = () => {
+        if (center && radius) {
+            const name = centerName ? centerName + ' ' : '';
+            return `${name}${getLocationStr(center)}, ${getRadiusStr(radius)}`;
+        } else {
+            return undefined;
+        }
+    };
+
     return <table style={{width: "100%", fontSize: "10pt"}}>
         <tbody>
         {center && radius && radius > 0 &&
             <tr>
                 <td className="extra-filter-info line">Center Coordinates and Radius</td>
-                <td className="extra-filter-info line" width="75%">
-                    {`${getLocationStr(center)}, ${getRadiusStr(radius)}`}&nbsp;
+                <td className="extra-filter-info line" width="75%">{getCenterStr()}&nbsp;
                     <RemoveSearchParameterIcon onClick={() => {
                         setCenter(undefined);
+                        setCenterName(undefined);
                         setRadius(undefined);
                     }}/>
                 </td>
