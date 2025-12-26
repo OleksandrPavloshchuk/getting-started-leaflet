@@ -16,6 +16,8 @@ interface LocationFilterModel {
     setRadius: (r: number | undefined) => void,
     center: L.LatLng | undefined,
     setCenter: (l: L.LatLng | undefined) => void,
+    centerName: string | undefined,
+    setCenterName: (s: string|undefined) => void,
     getFilters: () => retrieveLocations.Filters,
     clearFilters: () => void
 }
@@ -31,6 +33,8 @@ export const useLocationFilterModel = create<LocationFilterModel>((set, get) => 
     setRadius: (r: number | undefined) => set({radius: r}),
     center: undefined,
     setCenter: (c: L.LatLng | undefined) => set({center: c}),
+    centerName: undefined,
+    setCenterName: (s:string|undefined)=> set({centerName: s}),
     getFilters: () => {
         return {
             cityAndName: get().cityAndName,
