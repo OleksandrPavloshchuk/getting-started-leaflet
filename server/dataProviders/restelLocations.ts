@@ -3,7 +3,7 @@ import { startCase, toLower } from "lodash";
 import {LocationRow} from "./LocationRow";
 
 export class RestelProvider {
-    public static retrieve({cityLike, nameLike, country, radius, lat, lng, }):Promise<LocationRow[]> {
+    public static async retrieve({cityLike, nameLike, country, radius, lat, lng, }):Promise<LocationRow[]> {
         return getDatabasePool().query<LocationRow>(SQL, [cityLike, nameLike, country, radius, lat, lng, ])
             .then((result) => {
                 const converted: Location[] = result.rows?? [].map((row) => {
@@ -19,7 +19,7 @@ const SQL = `
     SELECT
      id, name, longitude as lng, latitude as lat, 
      ext -> 'hotel' ->> 'city' city, 
-     country, 
+     UPPER(country), 
      ext -> 'hotel' ->> 'main_photo' thumbnail, 
      ext -> 'hotel' ->> 'address' address, 
      ext -> 'hotel' ->> 'description' description, 

@@ -2,7 +2,7 @@ import {getDatabasePool} from "../DatabasePool";
 import {LocationRow} from "./LocationRow";
 
 export class NuiteeProvider {
-    public static retrieve({cityLike, nameLike, country, radius, lat, lng, types}) : Promise<LocationRow[]> {
+    public static async retrieve({cityLike, nameLike, country, radius, lat, lng, types}) : Promise<LocationRow[]> {
         return getDatabasePool()
             .query<LocationRow>(SQL, [cityLike, nameLike, country, radius, lat, lng, types])
             .then( (result) => result.rows);

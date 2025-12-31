@@ -6,7 +6,7 @@ export interface SearchCenterGroup {
 }
 
 export class SearchCenterGroupsProvider {
-    public static retrieve(): Promise<SearchCenterGroup[]> {
+    public static async retrieve(): Promise<SearchCenterGroup[]> {
         return getDatabasePool().query<SearchCenterGroup>(sql.retrieve)
             .then( (result) => result.rows);
     }
