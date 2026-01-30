@@ -2,6 +2,7 @@ import {retrievePersonalSearchCenterGroups} from "../service/RetrievePersonalSea
 import React, {useEffect} from "react";
 import {useWidgetStateModel} from "../model/WidgetStateModel.ts";
 import {useEditPersonalSearchCenterGroupModel} from "../model/EditPersonalSearchCenterGroupModel.ts";
+import {Table} from "@mantine/core";
 
 export const SelectSearchCenterGroupTable: React.FC = () => {
 
@@ -22,17 +23,19 @@ export const SelectSearchCenterGroupTable: React.FC = () => {
         retrieve();
     }, [refreshSearchCenterGroupsKey]);
 
-    return <table width="100%">
-        <thead>
-        <tr>
-            <td><strong>Name</strong></td>
-        </tr>
-        </thead>
-        <tbody>
+    return (<Table>
+        <Table.Thead>
+            <Table.Tr>
+                <Table.Td>
+                    <strong>Name</strong>
+                </Table.Td>
+            </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
         {
             result.map((searchCenterGroup) => (
-                <tr key={searchCenterGroup.id}>
-                    <td>
+                <Table.Tr key={searchCenterGroup.id}>
+                    <Table.Td>
                         <a href="#"
                            className="search-center-link"
                            onClick={() => {
@@ -41,10 +44,10 @@ export const SelectSearchCenterGroupTable: React.FC = () => {
                                setEditPersonalSearchCenterGroupOpened(true);
                            }}
                         >{searchCenterGroup.name}</a>
-                    </td>
-                </tr>
+                    </Table.Td>
+                </Table.Tr>
             ))
         }
-        </tbody>
-    </table>
+        </Table.Tbody>
+    </Table>);
 }

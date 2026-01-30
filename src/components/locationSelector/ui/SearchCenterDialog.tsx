@@ -103,6 +103,10 @@ export const SearchCenterDialog: React.FC = () => {
         </Tabs.Panel>
     );
 
+    const getSize = (name: string) => {
+        return result.filter( (item) => item.group_name==name).length;
+    }
+
     return (
         <Modal
             title="Search Centers"
@@ -122,7 +126,7 @@ export const SearchCenterDialog: React.FC = () => {
                     <Tabs.List>
                         {
                             Array.from(groupedResult).map(([name]) =>
-                                <Tabs.Tab key={name} value={name}>{name}</Tabs.Tab>)
+                                <Tabs.Tab key={name} value={name}>{name} ({getSize(name)})</Tabs.Tab>)
                         }
                     </Tabs.List>
                     {
